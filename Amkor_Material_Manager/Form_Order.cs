@@ -611,7 +611,7 @@ namespace Amkor_Material_Manager
                             strSelSid = dataGridView_view.Rows[nIndex + nLoopCount].Cells[0].Value.ToString();
                             strSelLotid = dataGridView_view.Rows[nIndex + nLoopCount].Cells[1].Value.ToString();
 
-                            nKeepCount = Convert.ToInt32(dataGridView_view.Rows[nIndex + nLoopCount].Cells[1].Value.ToString());
+                            nKeepCount = Convert.ToInt32(dataGridView_view.Rows[nIndex + nLoopCount].Cells[2].Value.ToString());
 
                             if (nRequestcount <= nKeepCount)
                             {
@@ -656,8 +656,6 @@ namespace Amkor_Material_Manager
                             Fnc_Picklist_Comfirm();
 
                             nRequestcount -= nKeepCount;
-
-                            nLoopCount++;
                         }
 
                     }
@@ -2672,6 +2670,11 @@ namespace Amkor_Material_Manager
 
             string strJudge = "";
 
+
+            bool[] bFlag_Group = new bool[3];
+            int[] nCount_Group = new int[3];
+
+
             for (int i = 0; i < nCount; i++)
             {
                 data.Linecode = dt.Rows[i]["LINE_CODE"].ToString(); data.Linecode = data.Linecode.Trim();
@@ -2689,6 +2692,16 @@ namespace Amkor_Material_Manager
 
                 strJudge = AMM_Main.AMM.SetPicking_Listinfo(strlincode, "TWR"+data.Tower_no.Substring(2,1), strPickID, data.UID, AMM_Main.strRequestor_id, data.Tower_no, data.SID, data.LOTID, data.Quantity, data.Manufacturer, data.Production_date, data.Inch, data.Input_type, "AMM");
 
+                try
+                {
+                    bFlag_Group[Convert.ToInt32(data.Tower_no.Substring(2, 1)) - 1] = true;
+                    nCount_Group[Convert.ToInt32(data.Tower_no.Substring(2, 1)) - 1]++;
+                }
+                catch
+                {
+
+                }
+
                 if (strJudge == "NG")
                 {
                     string str = string.Format("DB 연결을 할 수 없습니다.\n네트워크 연결 상태를 확인 하십시오.");
@@ -2703,7 +2716,48 @@ namespace Amkor_Material_Manager
                     Fnc_AlartMessage(str, 1);
                 }
             }
+            strJudge = AMM_Main.AMM.Delete_PickReadyinfo(strlincode, strPickID);
 
+            if (strJudge == "NG")
+            {
+                string str = string.Format("DB 연결을 할 수 없습니다.\n네트워크 연결 상태를 확인 하십시오.");
+                Fnc_AlartMessage(str, 1000);
+                AMM_Main.strAMM_Connect = "NG";
+
+                return;
+            }
+            ///Pick ID Info
+            ///
+            //strJudge = AMM_Main.AMM.SetPickingID(strlincode, strequip, strPickID, nReadyMTLcount.ToString(), AMM_Main.strRequestor_id);
+            if (bFlag_Group[0] == true) strJudge = AMM_Main.AMM.SetPickingID(strlincode, "TWR1", strPickID, nCount_Group[0].ToString(), AMM_Main.strRequestor_id);
+            if (bFlag_Group[1] == true) strJudge = AMM_Main.AMM.SetPickingID(strlincode, "TWR2", strPickID, nCount_Group[1].ToString(), AMM_Main.strRequestor_id);
+            if (bFlag_Group[2] == true) strJudge = AMM_Main.AMM.SetPickingID(strlincode, "TWR3", strPickID, nCount_Group[2].ToString(), AMM_Main.strRequestor_id);
+
+            if (strJudge == "NG")
+            {
+                string str = string.Format("DB 연결을 할 수 없습니다.\n네트워크 연결 상태를 확인 하십시오.");
+                Fnc_AlartMessage(str, 1000);
+                AMM_Main.strAMM_Connect = "NG";
+            }
+
+            tabControl_Order.SelectedIndex = 2;
+
+            Fnc_Monitor_GetPickingid(AMM_Main.strRequestor_id);
+
+            string strReturn = Fnc_ListCheck();
+
+            if (strReturn == "NO_INFO")
+                Fnc_Monitor_GetOutList(strlincode, strPickID);
+            else
+                Fnc_Monitor_GetOutList(strlincode, strReturn);
+
+            nMonitorIndex = 2;
+
+            AMM_Main.strRequestor_id = "";
+            AMM_Main.strRequestor_name = "";
+
+            string strLog = string.Format("PICK LIST 생성 완료 - 사번:{0}, PICKID:{1}, 수량:{2}", label_Requestor.Text, strPickingID, nCount.ToString());
+            Fnc_SaveLog(strLog, 1);
         }
             public void Fnc_AlartMessage(string strMsg, int nindex)
         {
