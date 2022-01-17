@@ -2266,20 +2266,25 @@ namespace Amkor_Material_Manager
 
             List_Sort1 = List_Sort1.OrderByDescending(x => x.Quantity).ToList(); // 220112 bykim List 수량 기준 정렬
 
-
-            if ((Int32.Parse(List_Sort1[0].Quantity)) > (Int32.Parse(List_Sort1[List_Sort1.Count - 1].Quantity)))
+            if(List_Sort1.Count != 0)
             {
-                List_Sort1 = List_Sort1.OrderBy(x => x.Quantity).ToList();
+                if ((Int32.Parse(List_Sort1[0].Quantity)) > (Int32.Parse(List_Sort1[List_Sort1.Count - 1].Quantity)))
+                {
+                    List_Sort1 = List_Sort1.OrderBy(x => x.Quantity).ToList();
+                }
+
             }
 
 
             List_Sort2 = List_Sort2.OrderBy(x => x.Input_date).ToList();
-            if ((Int64.Parse(List_Sort2[0].Input_date)) > (Int64.Parse(List_Sort2[List_Sort2.Count - 1].Input_date)))
+            if (List_Sort2.Count != 0)
             {
-                List_Sort2 = List_Sort2.OrderByDescending(x => x.Input_date).ToList();
+                if ((Int64.Parse(List_Sort2[0].Input_date)) > (Int64.Parse(List_Sort2[List_Sort2.Count - 1].Input_date)))
+                {
+                    List_Sort2 = List_Sort2.OrderByDescending(x => x.Input_date).ToList();
 
+                }
             }
-
             for (int n = 0; n < nCount; n++)
             {
 
@@ -2526,12 +2531,13 @@ namespace Amkor_Material_Manager
 
         private void button_out_Click(object sender, EventArgs e)
         {
+            
             int nGroup = nSelected_groupid;
             string strGroup = (nGroup + 1).ToString();
 
             if (strPickingID != "")
             {
-                if(nGroup != 3)
+                if(comboBox_group.SelectedIndex != 3)
                 {
                     Fnc_Picklist_Comfirm();
                     Fnc_Save_TowerUseInfo();
@@ -2539,7 +2545,7 @@ namespace Amkor_Material_Manager
                 }
                 else
                 {
-                    Fnc_Picklist_Comfirm();
+                    //Fnc_Picklist_Comfirm();
                     Fnc_Save_TowerUseInfo();
                     Fnc_Picklist_Send_All(AMM_Main.strDefault_linecode, strPickingID);
                 }
