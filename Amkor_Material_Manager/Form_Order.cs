@@ -1742,7 +1742,7 @@ namespace Amkor_Material_Manager
                         if (strSetLotid != "" && strTWID == list[i].Tower_no.ToString().Substring(2, 1))
                         {
 
-                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TW" + list[i].Tower_no.Substring(2, 1) });
+                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + list[i].Tower_no.Substring(2, 1) });
 
                             strSetLotid = list[i].LOTID;
                             strSetSID = list[i].SID;
@@ -1764,7 +1764,7 @@ namespace Amkor_Material_Manager
 
                         if (strTWID != list[i].Tower_no.Substring(2, 1))
                         {
-                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TW" + strTWID });
+                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + strTWID });
                             strSetLotid = list[i].LOTID;
                             strSetSID = list[i].SID;
                             strTWID = list[i].Tower_no.Substring(2, 1);
@@ -1775,7 +1775,7 @@ namespace Amkor_Material_Manager
 
                     if (i == list.Count - 1)
                     {
-                        dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TW" + list[i].Tower_no.Substring(2, 1) });
+                        dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + list[i].Tower_no.Substring(2, 1) });
                     }
                 }
             }
@@ -1797,7 +1797,7 @@ namespace Amkor_Material_Manager
                         if (strSetLotid != "" && strTWID == list2[i].Tower_no.ToString().Substring(2, 1))
                         {
 
-                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TW" + list2[i].Tower_no.Substring(2, 1) });
+                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + list2[i].Tower_no.Substring(2, 1) });
 
                             strSetLotid = list2[i].LOTID;
                             strSetSID = list2[i].SID;
@@ -1819,7 +1819,7 @@ namespace Amkor_Material_Manager
 
                         if (strTWID != list2[i].Tower_no.Substring(2, 1))
                         {
-                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TW" + strTWID });
+                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + strTWID });
                             strSetLotid = list2[i].LOTID;
                             strSetSID = list2[i].SID;
                             strTWID = list2[i].Tower_no.Substring(2, 1);
@@ -1830,7 +1830,7 @@ namespace Amkor_Material_Manager
 
                     if (i == list2.Count - 1)
                     {
-                        dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TW" + list2[i].Tower_no.Substring(2, 1) });
+                        dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + list2[i].Tower_no.Substring(2, 1) });
                     }
                 }
             }
@@ -1852,7 +1852,7 @@ namespace Amkor_Material_Manager
                         if (strSetLotid != "" && strTWID == list3[i].Tower_no.ToString().Substring(2, 1))
                         {
 
-                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TW" + list3[i].Tower_no.Substring(2, 1) });
+                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + list3[i].Tower_no.Substring(2, 1) });
 
                             strSetLotid = list3[i].LOTID;
                             strSetSID = list3[i].SID;
@@ -1874,7 +1874,7 @@ namespace Amkor_Material_Manager
 
                         if (strTWID != list3[i].Tower_no.Substring(2, 1))
                         {
-                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TW" + strTWID });
+                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + strTWID });
                             strSetLotid = list3[i].LOTID;
                             strSetSID = list3[i].SID;
                             strTWID = list3[i].Tower_no.Substring(2, 1);
@@ -1885,7 +1885,7 @@ namespace Amkor_Material_Manager
 
                     if (i == list3.Count - 1)
                     {
-                        dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TW" + list3[i].Tower_no.Substring(2, 1) });
+                        dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + list3[i].Tower_no.Substring(2, 1) });
                     }
                 }
             }
@@ -2224,8 +2224,6 @@ namespace Amkor_Material_Manager
                     if (strTowerNo == "2")
                         strJudge3 = "NG";
                 }
-
-
 
                 if (strJudge == "OK" && strJudge2 == "OK" && strJudge3 == "OK")
                     list_first.Add(data);
