@@ -2189,9 +2189,6 @@ namespace Amkor_Material_Manager
             List<StorageData> List_Sort1 = new List<StorageData>();
             List<StorageData> List_Sort2 = new List<StorageData>();
 
-            List<StorageData> List_Sort7 = new List<StorageData>();
-            List<StorageData> List_Sort13 = new List<StorageData>();
-
 
             for (int i = 0; i < MtlList.Rows.Count; i++)
             {
@@ -2318,9 +2315,6 @@ namespace Amkor_Material_Manager
                 }
                
             }
-
-
-
             label_Totalcount.Text = nReadyMTLcount.ToString();
 
             return 0;
