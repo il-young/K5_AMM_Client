@@ -170,3 +170,81 @@ C:\Users\157332\Documents\Auto GR\AMM\AMM_Client_K5\Amkor_Material_Manager\obj\x
 C:\Users\157332\Documents\Auto GR\AMM\AMM_Client_K5\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.exe
 C:\Users\157332\Documents\Auto GR\AMM\AMM_Client_K5\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.pdb
 C:\Users\157332\Documents\Auto GR\AMM\AMM_Client_K5\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csprojAssemblyReference.cache
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\bin\x64\Debug\Amkor_Material_Manager.exe.config
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\bin\x64\Debug\Amkor_Material_Manager.exe
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\bin\x64\Debug\Amkor_Material_Manager.pdb
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\bin\x64\Debug\AMM.dll
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csproj.ResolveComReference.cache
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.AMM_Main.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Excel.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_History.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_ITS.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_KeyPad.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Login.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Monitor.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_NumberPad.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Order.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Processing.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Progress.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Set.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_StripMark.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Timeset.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Properties.Resources.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csproj.GenerateResource.cache
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csproj.CoreCompileInputs.cache
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csproj.CopyComplete
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.exe
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.pdb
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_Comp\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csprojAssemblyReference.cache
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\bin\x64\Debug\Amkor_Material_Manager.exe.config
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\bin\x64\Debug\Amkor_Material_Manager.exe
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\bin\x64\Debug\Amkor_Material_Manager.pdb
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\bin\x64\Debug\AMM.dll
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csprojAssemblyReference.cache
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csproj.ResolveComReference.cache
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.AMM_Main.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Excel.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_History.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_ITS.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_KeyPad.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Login.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Monitor.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_NumberPad.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Order.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Processing.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Progress.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Set.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_StripMark.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Timeset.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Properties.Resources.resources
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csproj.GenerateResource.cache
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csproj.CoreCompileInputs.cache
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csproj.CopyComplete
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.exe
+C:\Users\157332\Documents\자동화기술팀\Auto GR\AMM\AMM_Client_K5_0517\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.pdb
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\bin\x64\Debug\Amkor_Material_Manager.exe.config
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\bin\x64\Debug\Amkor_Material_Manager.exe
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\bin\x64\Debug\Amkor_Material_Manager.pdb
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\bin\x64\Debug\AMM.dll
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csprojAssemblyReference.cache
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csproj.ResolveComReference.cache
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.AMM_Main.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Excel.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_History.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_ITS.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_KeyPad.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Login.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Monitor.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_NumberPad.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Order.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Processing.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Progress.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Set.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_StripMark.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Form_Timeset.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.Properties.Resources.resources
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csproj.GenerateResource.cache
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csproj.CoreCompileInputs.cache
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.csproj.CopyComplete
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.exe
+D:\Project\AMM\K5\AMM_Client_K5_0704\Amkor_Material_Manager\obj\x64\Debug\Amkor_Material_Manager.pdb

@@ -23,7 +23,8 @@ namespace Amkor_Material_Manager
 
         private void button_Start_Click(object sender, EventArgs e)
         {
-            if (checkBox_G1.Checked == false && checkBox_G2.Checked == false && checkBox_G3.Checked == false) 
+            if (checkBox_G1.Checked == false && checkBox_G2.Checked == false && checkBox_G3.Checked == false
+                && checkBox_G4.Checked == false && checkBox_G5.Checked == false)//220829_ilyoung_타워그룹추가 
             {
                 MessageBox.Show("그룹은 최소 하나 이상 선택 되어야 합니다.");
                 checkBox_G1.Checked = true;
@@ -88,6 +89,8 @@ namespace Amkor_Material_Manager
             Form_ITS.bGroupUse[0] = checkBox_G1.Checked;
             Form_ITS.bGroupUse[1] = checkBox_G2.Checked;
             Form_ITS.bGroupUse[2] = checkBox_G3.Checked;
+            Form_ITS.bGroupUse[3] = checkBox_G4.Checked;    //220829_ilyoung_타워그룹추가
+            Form_ITS.bGroupUse[4] = checkBox_G5.Checked;    //220829_ilyoung_타워그룹추가
 
 
             Form_ITS.bExcel_Start = true;
@@ -127,6 +130,18 @@ namespace Amkor_Material_Manager
                             checkBox_G3.Checked = true;
                         else
                             checkBox_G3.Checked = false;
+
+                        //220829_ilyoung_타워그룹추가
+                        if (strSplit[3] == "True")
+                            checkBox_G4.Checked = true;
+                        else
+                            checkBox_G4.Checked = false;
+
+                        if (strSplit[4] == "True")
+                            checkBox_G5.Checked = true;
+                        else
+                            checkBox_G5.Checked = false;
+                        //220829_ilyoung_타워그룹추가
 
 
                         if (strSplit[7] == "True")

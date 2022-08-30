@@ -261,6 +261,8 @@ namespace Amkor_Material_Manager
                                 
                 string strLog = string.Format("PICK LIST 생성 시작 - 사번:{0}, PICKID:{1}", label_Requestor.Text, strPickingID);
                 Fnc_SaveLog(strLog, 1);
+
+                comboBox_group.SelectedIndex = 3;
             }
         }
         private void Fnc_Get_PickID(string strGroupinfo)
@@ -387,7 +389,7 @@ namespace Amkor_Material_Manager
                         string strLog = string.Format("릴 조회 - 사번:{0}, PICKID:{1}, SID:{2}", label_Requestor.Text, strPickingID, strSid);
                         Fnc_SaveLog(strLog, 1);
                     }
-                    else // 220112 bykim  ALL List 조회
+                    else //BYK 220112 ALL List 조회
                     {
                         if (strSid == "")
                             return;
@@ -541,6 +543,7 @@ namespace Amkor_Material_Manager
                     if (nRequestcount == 0)
                     {
                         string str = string.Format("수량을 입력 하여 주십시오", 1);
+                        
                         Frm_Process.Form_Show(str, 1);
 
                         while (Frm_Process.bState)
@@ -556,9 +559,10 @@ namespace Amkor_Material_Manager
 
 
                     int nCheckcount = nReadyMTLcount + nRequestcount;
-                    if (nCheckcount > 20)
+                    if (nCheckcount > 25)
                     {
-                        string str = string.Format("배출 수량이 너무 많습니다.20개 초과!\n한 개 리스트에 자재 20개 까지 담을 수 있습니다.", 1);
+                        string str = string.Format("배출 수량이 너무 많습니다.25개 초과!\n한 개 리스트에 자재 25개 까지 담을 수 있습니다.", 1);
+                        
                         Frm_Process.Form_Show(str, 1);
 
                         while (Frm_Process.bState)
@@ -566,7 +570,7 @@ namespace Amkor_Material_Manager
                             Application.DoEvents();
                             Thread.Sleep(1);
                         }
-                        textBox_reelcount.Text = (nCheckcount - 20).ToString();
+                        textBox_reelcount.Text = (nCheckcount - 25).ToString();
                         textBox_reelcount.Focus();
                         return;
                     }
@@ -582,7 +586,7 @@ namespace Amkor_Material_Manager
 
                         }
 
-                        if (nRequestcount > nAllCount)
+                        if (nRequestcount > nAllCount) //BYK 220112 Reel 주문 초과수량 처리
                         {
                             string str = string.Format("보유 수량 보다 요청 수량이 많습니다.\n다시 입력 하여 주십시오", 1);
                             Frm_Process.Form_Show(str, 1);
@@ -711,7 +715,7 @@ namespace Amkor_Material_Manager
 
                     }
                 }
-                else //220112 All Data 반출대기 리스트 보내기
+                else //BYK 220112 All Data 반출대기 리스트 보내기
                 {
                     if (textBox_reelcount.Text == "")
                         return;
@@ -742,7 +746,26 @@ namespace Amkor_Material_Manager
                         nKeepCount += Int32.Parse(strKeepingcount);
                     }
 
-                    if(nRequestcount > nKeepCount)
+
+                    int nCheckcount = nReadyMTLcount + nRequestcount;
+                    if (nCheckcount > 25)
+                    {
+                        string str = string.Format("배출 수량이 너무 많습니다.25개 초과!\n한 개 리스트에 자재 25개 까지 담을 수 있습니다.", 1);
+                        
+                        Frm_Process.Form_Show(str, 1);
+
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
+                        textBox_reelcount.Text = (nCheckcount - 25).ToString();
+                        textBox_reelcount.Focus();
+                        return;
+                    }
+
+
+                    if (nRequestcount > nKeepCount)
                     {
                         string str = string.Format("보유 수량 보다 요청 수량이 많습니다.\n다시 입력 하여 주십시오", 1);
                         Frm_Process.Form_Show(str, 1);
@@ -842,7 +865,7 @@ namespace Amkor_Material_Manager
             int nGroup = nSelected_groupid;
             string strGroup = (nGroup + 1).ToString();
 
-            Fnc_SetMtlInfo_FromSID(AMM_Main.strDefault_linecode, strGroup, textBox_sid.Text, false);
+            if(comboBox_group.SelectedIndex != 3) Fnc_SetMtlInfo_FromSID(AMM_Main.strDefault_linecode, strGroup, textBox_sid.Text, false);
         }
 
         public void Fnc_Check_TwrUse(int nGroup)
@@ -1586,7 +1609,7 @@ namespace Amkor_Material_Manager
 
 
 
-        public int Fnc_GetMtlInfo_SID_ALL(string strlinecode, string sid, bool lastmtl)
+        public int Fnc_GetMtlInfo_SID_ALL(string strlinecode, string sid, bool lastmtl) //BYK 220112 SID ALL 조회기능 추가
         {
 
             dataGridView_view.Columns.Clear();
@@ -1666,16 +1689,23 @@ namespace Amkor_Material_Manager
                             if (strTowerNo == "2")
                                 strJudge3 = "NG";
                         }
-
+                        
 
                         if (strJudge == "OK" && strJudge2 == "OK" && strJudge3 == "OK")
                         {
-                            if(data.Tower_no.Substring(2,1) == "1")  list.Add(data);
+                            if (data.Tower_no.Substring(2, 1) == "1") list.Add(data);
                             else if (data.Tower_no.Substring(2, 1) == "2") list2.Add(data);
                             else if (data.Tower_no.Substring(2, 1) == "3") list3.Add(data);
                         }
                         else if (strJudge == "ERROR")
+                        {
                             AMM_Main.strAMM_Connect = "NG";
+                        }
+                        else
+                        {
+                            int a = 0;
+                        }
+                        
 
                     }
                 }
@@ -2141,7 +2171,7 @@ namespace Amkor_Material_Manager
 
 
             list.Sort(CompareStorageData);
-            list = list_first.OrderByDescending(x => x.Quantity).ToList();  // 220112 bykim List 수량 기준 정렬
+            list = list_first.OrderByDescending(x => x.Quantity).ToList();  //BYK 220112 List 수량 기준 정렬
 
 
 
@@ -2178,7 +2208,7 @@ namespace Amkor_Material_Manager
 
             return 0;
         }
-        public int Fnc_RequestMaterial_ALL(string strlinecode, string strSid, string strLotid, int nCount, string strPickingid)
+        public int Fnc_RequestMaterial_ALL(string strlinecode, string strSid, string strLotid, int nCount, string strPickingid) //BYK ALL Data 조회에서 자재 반출대기 List로 이동. 
         {
             var MtlList = AMM_Main.AMM.GetMTLInfo_SID_ALL(strlinecode, strSid);
 
@@ -2234,7 +2264,7 @@ namespace Amkor_Material_Manager
 
             list_first.Sort(CompareStorageData);
 
-            list = list_first.OrderByDescending(x => x.Quantity).ToList(); // 220112 bykim List 수량 기준 정렬
+            list = list_first.OrderByDescending(x => x.Quantity).ToList(); //BYK 220112 List 수량 기준 정렬
             if ((Int32.Parse(list[0].Quantity)) > (Int32.Parse(list[list.Count - 1].Quantity)))
             {
                 list = list_first.OrderBy(x => x.Quantity).ToList();
@@ -2243,7 +2273,7 @@ namespace Amkor_Material_Manager
             string equipid = "";
 
 
-            for (int n = 0; n<MtlList.Rows.Count; n++)
+            for (int n = 0; n<list.Count; n++)
             {
                 if (nCount == 0) break;
 
@@ -2259,9 +2289,9 @@ namespace Amkor_Material_Manager
 
             }
 
-            List_Sort1 = List_Sort1.OrderByDescending(x => x.Quantity).ToList(); // 220112 bykim List 수량 기준 정렬
+            List_Sort1 = List_Sort1.OrderByDescending(x => x.Quantity).ToList(); //BYK 220112 List 수량 기준 정렬
 
-            if(List_Sort1.Count != 0)
+            if (List_Sort1.Count != 0)
             {
                 if ((Int32.Parse(List_Sort1[0].Quantity)) > (Int32.Parse(List_Sort1[List_Sort1.Count - 1].Quantity)))
                 {
@@ -2424,7 +2454,7 @@ namespace Amkor_Material_Manager
             return obj1.Quantity.CompareTo(obj2.Quantity);
         }
 
-    private void dataGridView_view_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_view_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int rowIndex = e.RowIndex;
             int colIndex = e.ColumnIndex;
@@ -2492,7 +2522,7 @@ namespace Amkor_Material_Manager
 
                     if (tabControl_Order.InvokeRequired)
                     {
-                        //tabControl_Order.Invoke(new Action(() => { tabControl_Order.SelectedIndex = 0; }));
+                        //tabControl_Order.Invoke(new Action(() => { /\tabControl_Order.SelectedIndex = 0; }));
                     }
 
                     return;
@@ -2521,7 +2551,7 @@ namespace Amkor_Material_Manager
             Fnc_UpdateReadyInfo(strPickingID);
         }
 
-        private void button_out_Click(object sender, EventArgs e)
+        private void button_out_Click(object sender, EventArgs e) //BYK 전체 배출 기능 분기.
         {
             
             int nGroup = nSelected_groupid;
@@ -2644,7 +2674,7 @@ namespace Amkor_Material_Manager
         }
 
 
-        private void Fnc_Picklist_Send_All(string strlincode, string strPickID)
+        private void Fnc_Picklist_Send_All(string strlincode, string strPickID) // BYK 220112 전체 Data 배출기능.
         {
             if (strPickID == "")
             {
@@ -2816,8 +2846,8 @@ namespace Amkor_Material_Manager
                 if(nTab == 2)
                 {
                     listBox_Outlist.DataSource = null;
-                    string str = string.Format("진행 중인 항목이 없습니다.");
-                    Fnc_AlartMessage(str, 1);
+                    //string str = string.Format("진행 중인 항목이 없습니다.");
+                    //Fnc_AlartMessage(str, 1);
 
                     tabControl_Order.SelectedIndex = 0;
                 }                
@@ -3021,12 +3051,16 @@ namespace Amkor_Material_Manager
                     Fnc_Monitor_GetPickingid(strSid);
                     strReturn = Fnc_ListCheck();
                 }
-                                
+
                 /////////////////////////
                 if (strReturn == "NO_INFO")
                 {
-                    //string str = string.Format("완료 되었습니다.");
-                    //Fnc_AlartMessage(str, 0);
+                    string strSid = dtNamme.Rows[0]["SID"].ToString();
+                    string strEName = dtNamme.Rows[0]["NAME"].ToString().Trim();
+                    strSid = strSid.Trim();
+                    string str = string.Format("Employee ID : {0}({1}) 완료 되었습니다.", strEName, strSid);
+
+                    Fnc_AlartMessage(str, 1005);
 
                     nMonitorIndex = 0;
                     label_OutID.Text = "-";
@@ -3347,12 +3381,14 @@ namespace Amkor_Material_Manager
             {
                 checkBox_tower1.Checked = true;
                 checkBox_tower2.Checked = true;
+                checkBox_tower3.Checked = true;
+                checkBox_tower4.Checked = true;
 
 
                 Form_ITS.bTowerUse[0] = checkBox_tower1.Checked;
-                Form_ITS.bTowerUse[1] = checkBox_tower1.Checked;
-                Form_ITS.bTowerUse[2] = checkBox_tower1.Checked;
-                Form_ITS.bTowerUse[3] = checkBox_tower1.Checked;
+                Form_ITS.bTowerUse[1] = checkBox_tower2.Checked;
+                Form_ITS.bTowerUse[2] = checkBox_tower3.Checked;
+                Form_ITS.bTowerUse[3] = checkBox_tower4.Checked;
 
                 return;
             }
@@ -3376,18 +3412,36 @@ namespace Amkor_Material_Manager
                         else
                             checkBox_tower2.Checked = false;
 
+
+                        if(strSplit.Length > 3)
+                        {
+                            if (strSplit[2] == "True")
+                                checkBox_tower3.Checked = true;
+                            else
+                                checkBox_tower3.Checked = false;
+                        }
+
+                        if (strSplit.Length > 4)
+                        {
+                            if (strSplit[3] == "True")
+                                checkBox_tower4.Checked = true;
+                            else
+                                checkBox_tower4.Checked = false;
+                        }
+
                     }
                     else
                     {
                         checkBox_tower1.Checked = true;
                         checkBox_tower2.Checked = true;
-
+                        checkBox_tower3.Checked = true;
+                        checkBox_tower4.Checked = true;
                     }
 
                     Form_ITS.bTowerUse[0] = checkBox_tower1.Checked;
-                    Form_ITS.bTowerUse[1] = checkBox_tower1.Checked;
-                    Form_ITS.bTowerUse[2] = checkBox_tower1.Checked;
-                    Form_ITS.bTowerUse[3] = checkBox_tower1.Checked;
+                    Form_ITS.bTowerUse[1] = checkBox_tower2.Checked;
+                    Form_ITS.bTowerUse[2] = checkBox_tower3.Checked;
+                    Form_ITS.bTowerUse[3] = checkBox_tower4.Checked;
                 }
                 catch
                 { }
@@ -3750,9 +3804,9 @@ namespace Amkor_Material_Manager
                 }
 
                 int nCheckcount = nReadyMTLcount + nRequestcount;
-                if (nCheckcount > 20)
+                if (nCheckcount > 25)
                 {
-                    string str = string.Format("배출 수량이 너무 많습니다.20개 초과!\n한 개 리스트에 자재 20개 까지 담을 수 있습니다.", 1);
+                    string str = string.Format("배출 수량이 너무 많습니다.25개 초과!\n한 개 리스트에 자재 25개 까지 담을 수 있습니다.", 1);
                     Frm_Process.Form_Show(str, 1);
 
                     while (Frm_Process.bState)
@@ -3760,7 +3814,7 @@ namespace Amkor_Material_Manager
                         Application.DoEvents();
                         Thread.Sleep(1);
                     }
-                    textBox_reelcount.Text = (nCheckcount - 20).ToString();
+                    textBox_reelcount.Text = (nCheckcount - 25).ToString();
                     textBox_reelcount.Focus();
                     return;
                 }
@@ -3851,6 +3905,12 @@ namespace Amkor_Material_Manager
                 }
 
                 Fnc_UpdateReadyInfo(strPickingID);
+
+                string strSid = textBox_sid.Text;
+
+                dataGridView_view.Rows.Clear();
+
+                //Fnc_GetMtlInfo_SID_ALL(AMM_Main.strDefault_linecode, strSid, false);
             }
 
         }

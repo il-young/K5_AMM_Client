@@ -29,7 +29,7 @@ namespace Amkor_Material_Manager
         public static int nDefaultGroup = 0, nProgress = 0, nSelectedWin = 0;
         public static bool bThread_Order = false;
         //public static bool[] bTAlarm = { false, false, false, false, false, false };
-        public static bool[] bTAlarm = { false, false, false};
+        public static bool[] bTAlarm = { false, false, false, false, false}; //220829_ilyoung_타워그룹추가
 
         int nColorindex = 0;
 

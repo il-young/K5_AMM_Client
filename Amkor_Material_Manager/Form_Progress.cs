@@ -55,6 +55,11 @@ namespace Amkor_Material_Manager
                 {
                     bState = true;
                 }
+                else if (nType == 1005)
+                {
+                    bState = true;
+                    Show();
+                }
                 else
                 {
                     bState = true;
@@ -87,6 +92,11 @@ namespace Amkor_Material_Manager
             else if(n > 0 && n < 1000)
             {
                 label1.BackColor = System.Drawing.Color.RoyalBlue;
+                nChangeIndex = 0;
+            }
+            else if(n == 1005)
+            {
+                label1.BackColor = System.Drawing.Color.DarkGreen;
                 nChangeIndex = 0;
             }
             else

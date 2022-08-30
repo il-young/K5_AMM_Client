@@ -24,9 +24,9 @@ namespace Amkor_Material_Manager
         public static bool[] bExcelUse = new bool[5] { true, true, true, true, true }; //Excel 변환 작업 수앻 List
 
         //public static bool[] bGroupUse = new bool[6] { true, true, true, true, true, true }; 
-        public static bool[] bGroupUse = new bool[3] { true, true, true }; 
+        public static bool[] bGroupUse = new bool[5] { true, true, true, true, true }; //220829_ilyoung_타워그룹추가
 
-        public static bool[] bTowerUse = new bool[2] { true, true};
+        public static bool[] bTowerUse = new bool[4] { true, true, true, true};
         public static bool bExcel_Start = false;
         public string strExcelfilePath = "";
         public static int nExcelIndex = 0;
@@ -217,6 +217,10 @@ namespace Amkor_Material_Manager
             list.Add(dataGridView_group1);
             list.Add(dataGridView_group2);
             list.Add(dataGridView_group3);
+            //220829_ilyoung_타워그룹추가
+            list.Add(dataGridView_group4);
+            list.Add(dataGridView_group5);
+            //220829_ilyoung_타워그룹추가
 
 
             for ( int i = 0; i<list.Count; i++)
@@ -1391,7 +1395,7 @@ namespace Amkor_Material_Manager
                 comboBox_sid.Items.Clear();
 
 
-            for (int j = 1; j < 8; j++)
+            for (int j = 1; j < 4; j++)
             {
                 MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquipid+j.ToString());
 

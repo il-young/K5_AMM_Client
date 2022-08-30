@@ -71,6 +71,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.textBox_input_sid = new System.Windows.Forms.TextBox();
             this.tabPage_order = new System.Windows.Forms.TabPage();
+            this.button_All_Del = new System.Windows.Forms.Button();
             this.dataGridView_LotList = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.checkBox_tower2 = new System.Windows.Forms.CheckBox();
@@ -110,7 +111,12 @@
             this.label6 = new System.Windows.Forms.Label();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.button_All_Del = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label_G5 = new System.Windows.Forms.Label();
+            this.label_G4 = new System.Windows.Forms.Label();
+            this.checkBox_tower3 = new System.Windows.Forms.CheckBox();
+            this.checkBox_tower4 = new System.Windows.Forms.CheckBox();
             this.tabControl_Order.SuspendLayout();
             this.tabPage_input_sid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
@@ -143,6 +149,10 @@
             // tabPage_input_sid
             // 
             this.tabPage_input_sid.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.tabPage_input_sid.Controls.Add(this.label3);
+            this.tabPage_input_sid.Controls.Add(this.label8);
+            this.tabPage_input_sid.Controls.Add(this.label_G5);
+            this.tabPage_input_sid.Controls.Add(this.label_G4);
             this.tabPage_input_sid.Controls.Add(this.label10);
             this.tabPage_input_sid.Controls.Add(this.chart1);
             this.tabPage_input_sid.Controls.Add(this.label20);
@@ -318,6 +328,19 @@
             this.tabPage_order.TabIndex = 1;
             this.tabPage_order.Text = "릴 주문";
             // 
+            // button_All_Del
+            // 
+            this.button_All_Del.BackColor = System.Drawing.Color.White;
+            this.button_All_Del.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_All_Del.ForeColor = System.Drawing.Color.Red;
+            this.button_All_Del.Location = new System.Drawing.Point(880, 164);
+            this.button_All_Del.Name = "button_All_Del";
+            this.button_All_Del.Size = new System.Drawing.Size(119, 49);
+            this.button_All_Del.TabIndex = 8;
+            this.button_All_Del.Text = "전체 삭제";
+            this.button_All_Del.UseVisualStyleBackColor = false;
+            this.button_All_Del.Click += new System.EventHandler(this.button_All_Del_Click);
+            // 
             // dataGridView_LotList
             // 
             this.dataGridView_LotList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -332,11 +355,13 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.SlateGray;
+            this.panel1.Controls.Add(this.checkBox_tower4);
+            this.panel1.Controls.Add(this.checkBox_tower3);
             this.panel1.Controls.Add(this.checkBox_tower2);
             this.panel1.Controls.Add(this.checkBox_tower1);
             this.panel1.Location = new System.Drawing.Point(372, 10);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(155, 68);
+            this.panel1.Size = new System.Drawing.Size(155, 127);
             this.panel1.TabIndex = 6;
             // 
             // checkBox_tower2
@@ -558,6 +583,8 @@
             "Group #1",
             "Group #2",
             "Group #3",
+            "Group #4",
+            "Group #5",
             "ALL"});
             this.comboBox_group.Location = new System.Drawing.Point(154, 55);
             this.comboBox_group.Name = "comboBox_group";
@@ -993,18 +1020,73 @@
             this.timer1.Interval = 3000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // button_All_Del
+            // label3
             // 
-            this.button_All_Del.BackColor = System.Drawing.Color.White;
-            this.button_All_Del.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_All_Del.ForeColor = System.Drawing.Color.Red;
-            this.button_All_Del.Location = new System.Drawing.Point(880, 164);
-            this.button_All_Del.Name = "button_All_Del";
-            this.button_All_Del.Size = new System.Drawing.Size(119, 49);
-            this.button_All_Del.TabIndex = 8;
-            this.button_All_Del.Text = "전체 삭제";
-            this.button_All_Del.UseVisualStyleBackColor = false;
-            this.button_All_Del.Click += new System.EventHandler(this.button_All_Del_Click);
+            this.label3.BackColor = System.Drawing.Color.SlateGray;
+            this.label3.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(19, 210);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(79, 36);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "G5";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label8
+            // 
+            this.label8.BackColor = System.Drawing.Color.SlateGray;
+            this.label8.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(19, 166);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(79, 36);
+            this.label8.TabIndex = 5;
+            this.label8.Text = "G4";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_G5
+            // 
+            this.label_G5.BackColor = System.Drawing.Color.DarkBlue;
+            this.label_G5.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_G5.ForeColor = System.Drawing.Color.White;
+            this.label_G5.Location = new System.Drawing.Point(100, 210);
+            this.label_G5.Name = "label_G5";
+            this.label_G5.Size = new System.Drawing.Size(187, 36);
+            this.label_G5.TabIndex = 6;
+            this.label_G5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_G4
+            // 
+            this.label_G4.BackColor = System.Drawing.Color.DarkBlue;
+            this.label_G4.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_G4.ForeColor = System.Drawing.Color.White;
+            this.label_G4.Location = new System.Drawing.Point(100, 166);
+            this.label_G4.Name = "label_G4";
+            this.label_G4.Size = new System.Drawing.Size(187, 36);
+            this.label_G4.TabIndex = 7;
+            this.label_G4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // checkBox_tower3
+            // 
+            this.checkBox_tower3.AutoSize = true;
+            this.checkBox_tower3.ForeColor = System.Drawing.SystemColors.Info;
+            this.checkBox_tower3.Location = new System.Drawing.Point(9, 66);
+            this.checkBox_tower3.Name = "checkBox_tower3";
+            this.checkBox_tower3.Size = new System.Drawing.Size(100, 27);
+            this.checkBox_tower3.TabIndex = 1;
+            this.checkBox_tower3.Text = "TOWER 2";
+            this.checkBox_tower3.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_tower4
+            // 
+            this.checkBox_tower4.AutoSize = true;
+            this.checkBox_tower4.ForeColor = System.Drawing.SystemColors.Info;
+            this.checkBox_tower4.Location = new System.Drawing.Point(9, 96);
+            this.checkBox_tower4.Name = "checkBox_tower4";
+            this.checkBox_tower4.Size = new System.Drawing.Size(100, 27);
+            this.checkBox_tower4.TabIndex = 2;
+            this.checkBox_tower4.Text = "TOWER 2";
+            this.checkBox_tower4.UseVisualStyleBackColor = true;
             // 
             // Form_Order
             // 
@@ -1096,5 +1178,11 @@
         private System.Windows.Forms.DataGridView dataGridView_LotList;
         private System.Windows.Forms.ListBox listBox_Outlist;
         private System.Windows.Forms.Button button_All_Del;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label_G5;
+        private System.Windows.Forms.Label label_G4;
+        private System.Windows.Forms.CheckBox checkBox_tower4;
+        private System.Windows.Forms.CheckBox checkBox_tower3;
     }
 }

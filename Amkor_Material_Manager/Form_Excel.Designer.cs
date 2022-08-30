@@ -40,18 +40,22 @@
             this.checkBox_Dsel2 = new System.Windows.Forms.CheckBox();
             this.checkBox_Dsel1 = new System.Windows.Forms.CheckBox();
             this.button_Start = new System.Windows.Forms.Button();
+            this.checkBox_G5 = new System.Windows.Forms.CheckBox();
+            this.checkBox_G4 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBox_G5);
+            this.groupBox1.Controls.Add(this.checkBox_G4);
             this.groupBox1.Controls.Add(this.checkBox_G3);
             this.groupBox1.Controls.Add(this.checkBox_G2);
             this.groupBox1.Controls.Add(this.checkBox_G1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(448, 89);
+            this.groupBox1.Size = new System.Drawing.Size(448, 124);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Option1 - 타워 선택";
@@ -93,9 +97,9 @@
             this.groupBox2.Controls.Add(this.checkBox_Dsel3);
             this.groupBox2.Controls.Add(this.checkBox_Dsel2);
             this.groupBox2.Controls.Add(this.checkBox_Dsel1);
-            this.groupBox2.Location = new System.Drawing.Point(12, 107);
+            this.groupBox2.Location = new System.Drawing.Point(12, 142);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(448, 308);
+            this.groupBox2.Size = new System.Drawing.Size(448, 273);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "데이터 선택";
@@ -163,6 +167,26 @@
             this.button_Start.Click += new System.EventHandler(this.button_Start_Click);
             this.button_Start.MouseHover += new System.EventHandler(this.button_Start_MouseHover);
             // 
+            // checkBox_G5
+            // 
+            this.checkBox_G5.AutoSize = true;
+            this.checkBox_G5.Location = new System.Drawing.Point(177, 73);
+            this.checkBox_G5.Name = "checkBox_G5";
+            this.checkBox_G5.Size = new System.Drawing.Size(79, 23);
+            this.checkBox_G5.TabIndex = 1;
+            this.checkBox_G5.Text = "Group 5";
+            this.checkBox_G5.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_G4
+            // 
+            this.checkBox_G4.AutoSize = true;
+            this.checkBox_G4.Location = new System.Drawing.Point(33, 71);
+            this.checkBox_G4.Name = "checkBox_G4";
+            this.checkBox_G4.Size = new System.Drawing.Size(79, 23);
+            this.checkBox_G4.TabIndex = 2;
+            this.checkBox_G4.Text = "Group 4";
+            this.checkBox_G4.UseVisualStyleBackColor = true;
+            // 
             // Form_Excel
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -197,5 +221,7 @@
         private System.Windows.Forms.CheckBox checkBox_Dsel2;
         private System.Windows.Forms.CheckBox checkBox_Dsel1;
         private System.Windows.Forms.Button button_Start;
+        private System.Windows.Forms.CheckBox checkBox_G5;
+        private System.Windows.Forms.CheckBox checkBox_G4;
     }
 }
