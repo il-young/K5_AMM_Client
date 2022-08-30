@@ -15,13 +15,15 @@ namespace Amkor_Material_Manager
         System.Diagnostics.Stopwatch sw_AliveTime_1 = new System.Diagnostics.Stopwatch();
         System.Diagnostics.Stopwatch sw_AliveTime_2 = new System.Diagnostics.Stopwatch();
         System.Diagnostics.Stopwatch sw_AliveTime_3 = new System.Diagnostics.Stopwatch();
+        System.Diagnostics.Stopwatch sw_AliveTime_4 = new System.Diagnostics.Stopwatch();	//220829_ilyoung_타워그룹추가
+        System.Diagnostics.Stopwatch sw_AliveTime_5 = new System.Diagnostics.Stopwatch();	//220829_ilyoung_타워그룹추가
 
 
-        bool[] bStopwatch_Alve = { false, false, false };
-        bool[] bAliveAlarm = { false, false, false};
+        bool[] bStopwatch_Alve = { false, false, false, false, false };	//220829_ilyoung_타워그룹추가
+        bool[] bAliveAlarm = { false, false, false, false, false};	//220829_ilyoung_타워그룹추가
 
-        int[] nAlive = { -1, -1, -1};
-        string[] strAlive = { "", "", ""};
+        int[] nAlive = { -1, -1, -1, -1, -1};	//220829_ilyoung_타워그룹추가
+        string[] strAlive = { "", "", "", "", ""};	//220829_ilyoung_타워그룹추가
 
         public Form_Monitor()
         {
@@ -78,7 +80,32 @@ namespace Amkor_Material_Manager
 
                 label_Info_G3.Text = "SID: " + strSid + "\n" + "UID: " + strUid;
             }
-            
+
+            //220829_ilyoung_타워그룹추가
+            else if (strGroup == "TWR4")
+            {
+                label_Status_G4.BackColor = Color.DarkGreen;
+                label_Status_G4.ForeColor = Color.White;
+                if (strType == "LOAD")
+                    label_Status_G4.Text = "LOAD";
+                else
+                    label_Status_G4.Text = "LOAD-" + strType;
+
+                label_Info_G4.Text = "SID: " + strSid + "\n" + "UID: " + strUid;
+            }
+
+            else if (strGroup == "TWR5")
+            {
+                label_Status_G5.BackColor = Color.DarkGreen;
+                label_Status_G5.ForeColor = Color.White;
+                if (strType == "LOAD")
+                    label_Status_G5.Text = "LOAD";
+                else
+                    label_Status_G5.Text = "LOAD-" + strType;
+
+                label_Info_G5.Text = "SID: " + strSid + "\n" + "UID: " + strUid;
+            }
+            //220829_ilyoung_타워그룹추가
         }
 
         public void Fnc_Status_Unload(string strGroup, string strRequestor, string strPickid, string strUid)
@@ -113,7 +140,26 @@ namespace Amkor_Material_Manager
                 //label_Info_G3.Text = "REQ: " + strRequestor + "\n" + "ID: " + strPickid + "\n" + "UID: " + strUid;
                 label_Info_G3.Text = "REQ: " + strRequestor + "\n" + "ID: " + strPickid;
             }
-            
+            //220829_ilyoung_타워그룹추가
+            else if (strGroup == "TWR4")
+            {
+                label_Status_G4.BackColor = Color.DarkGreen;
+                label_Status_G4.ForeColor = Color.White;
+                label_Status_G4.Text = "UNLOAD";
+                //label_Info_G3.Text = "REQ: " + strRequestor + "\n" + "ID: " + strPickid + "\n" + "UID: " + strUid;
+                label_Info_G4.Text = "REQ: " + strRequestor + "\n" + "ID: " + strPickid;
+            }
+            else if (strGroup == "TWR5")
+            {
+                label_Status_G5.BackColor = Color.DarkGreen;
+                label_Status_G5.ForeColor = Color.White;
+                label_Status_G5.Text = "UNLOAD";
+                //label_Info_G3.Text = "REQ: " + strRequestor + "\n" + "ID: " + strPickid + "\n" + "UID: " + strUid;
+                label_Info_G5.Text = "REQ: " + strRequestor + "\n" + "ID: " + strPickid;
+            }
+
+            //220829_ilyoung_타워그룹추가
+
 
         }
         public void Fnc_Status_Idle(string strGroup)
@@ -145,7 +191,24 @@ namespace Amkor_Material_Manager
                 label_Status_G3.Text = "IDLE";
                 label_Info_G3.Text = "";
             }
-           
+
+            //220829_ilyoung_타워그룹추가
+            else if (strGroup == "TWR4")
+            {
+                label_Status_G4.BackColor = Color.FromArgb(150, 150, 150);
+                label_Status_G4.ForeColor = Color.White;
+                label_Status_G4.Text = "IDLE";
+                label_Info_G4.Text = "";
+            }
+            else if (strGroup == "TWR5")
+            {
+                label_Status_G5.BackColor = Color.FromArgb(150, 150, 150);
+                label_Status_G5.ForeColor = Color.White;
+                label_Status_G5.Text = "IDLE";
+                label_Info_G5.Text = "";
+            }
+            //220829_ilyoung_타워그룹추가
+
 
         }
         public void Fnc_Status_Ready(string strGroup)
@@ -177,7 +240,23 @@ namespace Amkor_Material_Manager
                 label_Status_G3.Text = "READY";
                 label_Info_G3.Text = "";
             }
-            
+            //220829_ilyoung_타워그룹추가
+            else if (strGroup == "TWR4")
+            {
+                label_Status_G4.BackColor = Color.FromArgb(225, 225, 225);
+                label_Status_G4.ForeColor = Color.Black;
+                label_Status_G4.Text = "READY";
+                label_Info_G4.Text = "";
+            }
+            else if (strGroup == "TWR5")
+            {
+                label_Status_G5.BackColor = Color.FromArgb(225, 225, 225);
+                label_Status_G5.ForeColor = Color.Black;
+                label_Status_G5.Text = "READY";
+                label_Info_G5.Text = "";
+            }
+            //220829_ilyoung_타워그룹추가
+
 
         }
         public void Fnc_Status_Alarm(string strGroup)
@@ -209,7 +288,22 @@ namespace Amkor_Material_Manager
                 label_Status_G3.Text = "ALARM";
                 label_Info_G3.Text = "";
             }
-           
+            //220829_ilyoung_타워그룹추가
+            else if (strGroup == "TWR4")
+            {
+                label_Status_G4.BackColor = Color.Red;
+                label_Status_G4.ForeColor = Color.White;
+                label_Status_G4.Text = "ALARM";
+                label_Info_G4.Text = "";
+            }
+            else if (strGroup == "TWR5")
+            {
+                label_Status_G5.BackColor = Color.Red;
+                label_Status_G5.ForeColor = Color.White;
+                label_Status_G5.Text = "ALARM";
+                label_Info_G5.Text = "";
+            }
+            //220829_ilyoung_타워그룹추가
 
         }
 
@@ -242,8 +336,22 @@ namespace Amkor_Material_Manager
                 label_Status_G3.Text = "ALARM";
                 label_Info_G3.Text = "";
             }
-          
-
+            //220829_ilyoung_타워그룹추가
+            else if (strGroup == "TWR4")
+            {
+                label_Status_G4.BackColor = Color.Red;
+                label_Status_G4.ForeColor = Color.White;
+                label_Status_G4.Text = "ALARM";
+                label_Info_G4.Text = "";
+            }
+            else if (strGroup == "TWR5")
+            {
+                label_Status_G5.BackColor = Color.Red;
+                label_Status_G5.ForeColor = Color.White;
+                label_Status_G5.Text = "ALARM";
+                label_Info_G5.Text = "";
+            }
+            //220829_ilyoung_타워그룹추가
         }
 
         public void Fnc_Status_Noinfo(string strGroup)
@@ -269,8 +377,22 @@ namespace Amkor_Material_Manager
                 label_Status_G3.Text = "Not connected";
                 label_Info_G3.Text = "";
             }
-      
-
+            //220829_ilyoung_타워그룹추가
+            else if (strGroup == "TWR4")
+            {
+                label_Status_G4.BackColor = Color.White;
+                label_Status_G4.ForeColor = Color.Black;
+                label_Status_G4.Text = "Not connected";
+                label_Info_G4.Text = "";
+            }
+            else if (strGroup == "TWR5")
+            {
+                label_Status_G5.BackColor = Color.White;
+                label_Status_G5.ForeColor = Color.Black;
+                label_Status_G5.Text = "Not connected";
+                label_Info_G5.Text = "";
+            }
+            //220829_ilyoung_타워그룹추가
         }
         public void Fnc_Status_Alive(string strGroup, int nValue)
         {
@@ -436,6 +558,117 @@ namespace Amkor_Material_Manager
                     }
                 }
             }
+            //220829_ilyoung_타워그룹추가
+            else if (strGroup == "TWR4")
+            {
+                if (!bAliveAlarm[3])
+                {
+                    if (nValue == 0)
+                        label_alive4.BackColor = Color.FromArgb(0, 190, 0);
+                    else
+                        label_alive4.BackColor = Color.FromArgb(0, 190, 0);
+                }
+                else
+                    Fnc_Status_Alarm(strGroup);
+
+                strAlive[3] = nValue.ToString();
+
+                if (strAlive[3] == "0")
+                {
+                    if (nAlive[3] == 1)
+                    {
+                        bStopwatch_Alve[3] = false;
+                        sw_AliveTime_4.Stop();
+                        sw_AliveTime_4.Reset();
+
+                        bAliveAlarm[3] = false;
+                    }
+                    else
+                    {
+                        if (!bStopwatch_Alve[3])
+                        {
+                            sw_AliveTime_4.Start();
+                            bStopwatch_Alve[3] = true;
+                            nAlive[3] = 0;
+                        }
+                    }
+                }
+                else if (strAlive[3] == "1")
+                {
+                    if (nAlive[3] == 0)
+                    {
+                        bStopwatch_Alve[3] = false;
+                        sw_AliveTime_4.Stop();
+                        sw_AliveTime_4.Reset();
+                        bAliveAlarm[3] = false;
+                    }
+                    else
+                    {
+                        if (!bStopwatch_Alve[3])
+                        {
+                            sw_AliveTime_4.Start();
+                            bStopwatch_Alve[3] = true;
+                            nAlive[3] = 1;
+                        }
+                    }
+                }
+
+                else if (strGroup == "TWR5")
+                {
+                    if (!bAliveAlarm[4])
+                    {
+                        if (nValue == 0)
+                            label_alive5.BackColor = Color.FromArgb(0, 190, 0);
+                        else
+                            label_alive5.BackColor = Color.FromArgb(0, 190, 0);
+                    }
+                    else
+                        Fnc_Status_Alarm(strGroup);
+
+                    strAlive[4] = nValue.ToString();
+
+                    if (strAlive[4] == "0")
+                    {
+                        if (nAlive[4] == 1)
+                        {
+                            bStopwatch_Alve[4] = false;
+                            sw_AliveTime_5.Stop();
+                            sw_AliveTime_5.Reset();
+
+                            bAliveAlarm[4] = false;
+                        }
+                        else
+                        {
+                            if (!bStopwatch_Alve[4])
+                            {
+                                sw_AliveTime_5.Start();
+                                bStopwatch_Alve[4] = true;
+                                nAlive[4] = 0;
+                            }
+                        }
+                    }
+                    else if (strAlive[4] == "1")
+                    {
+                        if (nAlive[4] == 0)
+                        {
+                            bStopwatch_Alve[4] = false;
+                            sw_AliveTime_5.Stop();
+                            sw_AliveTime_5.Reset();
+                            bAliveAlarm[4] = false;
+                        }
+                        else
+                        {
+                            if (!bStopwatch_Alve[4])
+                            {
+                                sw_AliveTime_5.Start();
+                                bStopwatch_Alve[4] = true;
+                                nAlive[4] = 1;
+                            }
+                        }
+                    }
+                }
+            }
+            //220829_ilyoung_타워그룹추가
 
 
         }
@@ -450,7 +683,7 @@ namespace Amkor_Material_Manager
             //for (int n = 1; n < 7; n++) //210824_Sangik.choi_타워그룹추가
 
 
-            for (int n = 1; n < 4; n++)
+            for (int n = 1; n < 6; n++) //220829_ilyoung_타워그룹추가
             {
                 // GetStatus - query = string.Format(@"SELECT * FROM TB_STATUS WITH (NOLOCK) WHERE LINE_CODE='{0}' and EQUIP_ID='{1}'", strLinecode, strEquipid);
                 string strGroup = "TWR" + n.ToString();
@@ -550,6 +783,27 @@ namespace Amkor_Material_Manager
                 }
             }
 
+            //220829_ilyoung_타워그룹추가
+            if (sw_AliveTime_4.ElapsedMilliseconds > 3 * 60 * 1000) //10분, 600초  ==> 옵션 입력 추가
+            {
+                if (!bAliveAlarm[3])
+                {
+                    label_alive4.BackColor = System.Drawing.Color.Red;
+
+                    bAliveAlarm[3] = true;
+                }
+            }
+
+            if (sw_AliveTime_5.ElapsedMilliseconds > 3 * 60 * 1000) //10분, 600초  ==> 옵션 입력 추가
+            {
+                if (!bAliveAlarm[4])
+                {
+                    label_alive5.BackColor = System.Drawing.Color.Red;
+
+                    bAliveAlarm[4] = true;
+                }
+            }
+            //220829_ilyoung_타워그룹추가
         }
 
         private void timer1_Tick(object sender, EventArgs e)

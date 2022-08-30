@@ -54,8 +54,8 @@
             this.label_Info_G4 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
+            this.label_alive5 = new System.Windows.Forms.Label();
+            this.label_alive4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label4
@@ -327,21 +327,21 @@
             this.label14.Text = "GROUP #4";
             this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label15
+            // label_alive5
             // 
-            this.label15.BackColor = System.Drawing.Color.Silver;
-            this.label15.Location = new System.Drawing.Point(721, 45);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(164, 113);
-            this.label15.TabIndex = 18;
+            this.label_alive5.BackColor = System.Drawing.Color.Silver;
+            this.label_alive5.Location = new System.Drawing.Point(721, 45);
+            this.label_alive5.Name = "label_alive5";
+            this.label_alive5.Size = new System.Drawing.Size(164, 113);
+            this.label_alive5.TabIndex = 18;
             // 
-            // label16
+            // label_alive4
             // 
-            this.label16.BackColor = System.Drawing.Color.Silver;
-            this.label16.Location = new System.Drawing.Point(538, 45);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(165, 113);
-            this.label16.TabIndex = 19;
+            this.label_alive4.BackColor = System.Drawing.Color.Silver;
+            this.label_alive4.Location = new System.Drawing.Point(538, 45);
+            this.label_alive4.Name = "label_alive4";
+            this.label_alive4.Size = new System.Drawing.Size(165, 113);
+            this.label_alive4.TabIndex = 19;
             // 
             // Form_Monitor
             // 
@@ -358,8 +358,8 @@
             this.Controls.Add(this.label_Info_G4);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.label14);
-            this.Controls.Add(this.label15);
-            this.Controls.Add(this.label16);
+            this.Controls.Add(this.label_alive5);
+            this.Controls.Add(this.label_alive4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label2);
@@ -412,7 +412,7 @@
         private System.Windows.Forms.Label label_Info_G4;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label_alive5;
+        private System.Windows.Forms.Label label_alive4;
     }
 }

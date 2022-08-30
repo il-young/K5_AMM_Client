@@ -282,6 +282,12 @@ namespace Amkor_Material_Manager
                 else if (strGroupinfo == "3")
                     label_pickid.Text = "PN0000001";
 
+                //220829_ilyoung_타워그룹추가
+                else if (strGroupinfo == "4")
+                    label_pickid.Text = "PO0000001";
+                else if (strGroupinfo == "5")
+                    label_pickid.Text = "PP0000001";
+                //220829_ilyoung_타워그룹추가
 
             }
             else
@@ -1264,7 +1270,7 @@ namespace Amkor_Material_Manager
 
             if (MtlList.Rows.Count < 1)
             {
-                for (int n = 1; n < 4; n++) //210923_Sangik.choi_자재 조회 시 7번 그룹 표기 안되는 문제 조치
+                for (int n = 1; n < 6; n++) //210923_Sangik.choi_자재 조회 시 7번 그룹 표기 안되는 문제 조치  //220829_ilyoung_타워그룹추가
                 {
                     equipid = "TWR" + n.ToString();
 
@@ -1393,7 +1399,7 @@ namespace Amkor_Material_Manager
                 {
                     strMsg = "";
 
-                    for (int n = 1; n < 4; n++)
+                    for (int n = 1; n < 6; n++) //220829_ilyoung_타워그룹추가
                     {
                         equipid = "TWR" + n.ToString();
 
@@ -1476,7 +1482,7 @@ namespace Amkor_Material_Manager
             {
                 nCheckGroup = 0;
 
-                for (int n = 1; n < 4; n++)//210923_Sangik.choi_자재 조회 시 7번그룹 표기 안되는 문제 조치
+                for (int n = 1; n < 6; n++)//210923_Sangik.choi_자재 조회 시 7번그룹 표기 안되는 문제 조치 //220829_ilyoung_타워그룹추가
                 {
                     if (n != Int32.Parse(strGroup))
                     {
@@ -3151,9 +3157,9 @@ namespace Amkor_Material_Manager
         {
             //int[] nCount = new int[6] { 0, 0, 0, 0, 0, 0 };
 
-            //[210805_Sanigk_choi_타워그룹추가
-            int[] nCount = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
-            //]210805_Sanigk_choi_타워그룹추가
+            //[210805_Sanigk_choi_타워그룹추가 //220829_ilyoung_타워그룹추가
+            int[] nCount = new int[] { 0, 0, 0, 0, 0 };
+            //]210805_Sanigk_choi_타워그룹추가 //220829_ilyoung_타워그룹추가
 
 
 
