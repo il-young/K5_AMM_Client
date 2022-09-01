@@ -575,7 +575,7 @@ namespace Amkor_Material_Manager
                             Application.DoEvents();
                             Thread.Sleep(1);
                         }
-                        textBox_reelcount.Text = (nCheckcount - 25).ToString();
+                        textBox_reelcount.Text = "25";// (nCheckcount - 25).ToString();
                         textBox_reelcount.Focus();
                         return;
                     }
@@ -764,7 +764,7 @@ namespace Amkor_Material_Manager
                             Application.DoEvents();
                             Thread.Sleep(1);
                         }
-                        textBox_reelcount.Text = (nCheckcount - 25).ToString();
+                        textBox_reelcount.Text = "25";// ;
                         textBox_reelcount.Focus();
                         return;
                     }
@@ -3357,10 +3357,15 @@ namespace Amkor_Material_Manager
                 timer1.Stop();
         }
 
+        int RequestSelectedRowIndex = -1;
+        int PickListSelectedRowIndex = -1;
+
         private void dataGridView_requestor_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int rowIndex = e.RowIndex;
             int colIndex = e.ColumnIndex;
+
+            RequestSelectedRowIndex = e.RowIndex;
 
             if (colIndex != 0)
                 colIndex = 0;
@@ -3368,6 +3373,7 @@ namespace Amkor_Material_Manager
             if (rowIndex == -1)
                 return;
 
+            
             string strsid = dataGridView_requestor.Rows[rowIndex].Cells[0].Value.ToString();
 
             int nCount = dataGridView_requestor.RowCount;
@@ -3902,7 +3908,7 @@ namespace Amkor_Material_Manager
                         Application.DoEvents();
                         Thread.Sleep(1);
                     }
-                    textBox_reelcount.Text = (nCheckcount - 25).ToString();
+                    textBox_reelcount.Text = "25";//(nCheckcount - 25).ToString();
                     textBox_reelcount.Focus();
                     return;
                 }
@@ -4001,6 +4007,51 @@ namespace Amkor_Material_Manager
                 //Fnc_GetMtlInfo_SID_ALL(AMM_Main.strDefault_linecode, strSid, false);
             }
 
+        }
+
+        private void Form_Order_Load(object sender, EventArgs e)
+        {
+            comboBox_group.SelectedIndex = AMM_Main.nDefaultGroup - 1;
+            comboBox_method.SelectedIndex = 0;  //SID 조회
+        }
+
+        private void 삭제ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(DialogResult.Yes == MessageBox.Show("삭제하시겠습니까?","삭제", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+            {
+                if(RequestSelectedRowIndex != -1)
+                {
+                    string EmployeeNum = dataGridView_requestor.Rows[RequestSelectedRowIndex].Cells[0].Value.ToString();
+                    DataTable dt = AMM_Main.AMM.GetPickingID_Requestor(EmployeeNum);
+
+                    string strPickid = "";
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        strPickid = dt.Rows[i]["PICKID"].ToString().Trim();
+
+                        AMM_Main.AMM.Delete_Pickidinfo2(AMM_Main.strDefault_linecode, "TWR" + AMM_Main.strDefault_Group.ToString(), strPickid);
+                    }
+                    
+                    AMM_Main.AMM.DeletePickIDInfobyEmployee(AMM_Main.strDefault_linecode, "TWR" + AMM_Main.strDefault_Group.ToString(), EmployeeNum);
+                    //AMM.Delete_Pickidinfo()
+                    RequestSelectedRowIndex = -1;
+                }
+
+                if(PickListSelectedRowIndex != -1)
+                {
+                    AMM_Main.AMM.Delete_Pickidinfo2(AMM_Main.strDefault_linecode, "TWR" + AMM_Main.strDefault_Group.ToString(), dataGridView_pickinglist.Rows[PickListSelectedRowIndex].Cells[2].Value.ToString());
+                    PickListSelectedRowIndex = -1;
+                }
+            }
+        }
+
+        MouseButtons RequestButton = new MouseButtons();
+        int RequestSelectedIndex = 0;
+
+        private void dataGridView_requestor_MouseClick(object sender, MouseEventArgs e)
+        {
+            RequestButton = e.Button; 
+            
         }
     }
 
