@@ -1664,6 +1664,8 @@ namespace Amkor_Material_Manager
             List<StorageData> list = new List<StorageData>();
             List<StorageData> list2 = new List<StorageData>();
             List<StorageData> list3 = new List<StorageData>();
+            List<StorageData> list4 = new List<StorageData>();
+            List<StorageData> list5 = new List<StorageData>();
 
             string strMsg = "", strCheckSid = "";
             int nCheckGroup = 0;
@@ -1735,6 +1737,8 @@ namespace Amkor_Material_Manager
                             if (data.Tower_no.Substring(2, 1) == "1") list.Add(data);
                             else if (data.Tower_no.Substring(2, 1) == "2") list2.Add(data);
                             else if (data.Tower_no.Substring(2, 1) == "3") list3.Add(data);
+                            else if (data.Tower_no.Substring(2, 1) == "4") list4.Add(data);	//220829_ilyoung_타워그룹추가
+                            else if (data.Tower_no.Substring(2, 1) == "5") list5.Add(data);	//220829_ilyoung_타워그룹추가
                         }
                         else if (strJudge == "ERROR")
                         {
@@ -1749,7 +1753,7 @@ namespace Amkor_Material_Manager
                     }
                 }
 
-                if (list.Count == 0 && list2.Count == 0 && list3.Count == 0)
+                if (list.Count == 0 && list2.Count == 0 && list3.Count == 0 && list4.Count == 0 && list5.Count == 0)
                 {
                     if (strMsg == "")
                     {
@@ -1771,6 +1775,8 @@ namespace Amkor_Material_Manager
                 list.Sort(CompareStorageData);
                 list2.Sort(CompareStorageData);
                 list3.Sort(CompareStorageData);
+                list4.Sort(CompareStorageData);
+                list5.Sort(CompareStorageData);
             }
 
 
@@ -1958,6 +1964,120 @@ namespace Amkor_Material_Manager
                     }
                 }
             }
+
+
+            //220829_ilyoung_타워그룹추가
+            strSetLotid = "";
+            strSetSID = "";
+            strCompareSID = "";
+            strTWID = "";
+            nReelcount = 0;
+
+            if (list4.Count != 0)
+            {
+                for (int i = 0; i < list4.Count; i++)
+                {
+
+
+                    if (strSetLotid != list4[i].LOTID)
+                    {
+                        if (strSetLotid != "" && strTWID == list4[i].Tower_no.ToString().Substring(2, 1))
+                        {
+
+                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + list4[i].Tower_no.Substring(2, 1) });
+
+                            strSetLotid = list4[i].LOTID;
+                            strSetSID = list4[i].SID;
+                            strTWID = list4[i].Tower_no.Substring(2, 1);
+                            nReelcount = 1;
+
+                        }
+                        else if (i == 0)
+                        {
+                            strSetLotid = list4[i].LOTID;
+                            strSetSID = list4[i].SID;
+                            strTWID = list4[i].Tower_no.Substring(2, 1);
+                            nReelcount = 1;
+
+                        }
+                    }
+                    else
+                    {
+
+                        if (strTWID != list4[i].Tower_no.Substring(2, 1))
+                        {
+                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + strTWID });
+                            strSetLotid = list4[i].LOTID;
+                            strSetSID = list4[i].SID;
+                            strTWID = list4[i].Tower_no.Substring(2, 1);
+                            nReelcount = 1;
+                        }
+                        else nReelcount++;
+                    }
+
+                    if (i == list4.Count - 1)
+                    {
+                        dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + list4[i].Tower_no.Substring(2, 1) });
+                    }
+                }
+            }
+
+            strSetLotid = "";
+            strSetSID = "";
+            strCompareSID = "";
+            strTWID = "";
+            nReelcount = 0;
+
+            if (list5.Count != 0)
+            {
+                for (int i = 0; i < list5.Count; i++)
+                {
+
+
+                    if (strSetLotid != list5[i].LOTID)
+                    {
+                        if (strSetLotid != "" && strTWID == list5[i].Tower_no.ToString().Substring(2, 1))
+                        {
+
+                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + list5[i].Tower_no.Substring(2, 1) });
+
+                            strSetLotid = list5[i].LOTID;
+                            strSetSID = list5[i].SID;
+                            strTWID = list5[i].Tower_no.Substring(2, 1);
+                            nReelcount = 1;
+
+                        }
+                        else if (i == 0)
+                        {
+                            strSetLotid = list5[i].LOTID;
+                            strSetSID = list5[i].SID;
+                            strTWID = list5[i].Tower_no.Substring(2, 1);
+                            nReelcount = 1;
+
+                        }
+                    }
+                    else
+                    {
+
+                        if (strTWID != list5[i].Tower_no.Substring(2, 1))
+                        {
+                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + strTWID });
+                            strSetLotid = list5[i].LOTID;
+                            strSetSID = list5[i].SID;
+                            strTWID = list5[i].Tower_no.Substring(2, 1);
+                            nReelcount = 1;
+                        }
+                        else nReelcount++;
+                    }
+
+                    if (i == list5.Count - 1)
+                    {
+                        dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + list5[i].Tower_no.Substring(2, 1) });
+                    }
+                }
+            }
+
+            //220829_ilyoung_타워그룹추가
 
             if (nSidcount > 1 && !lastmtl)
             {
@@ -3359,12 +3479,13 @@ namespace Amkor_Material_Manager
 
         int RequestSelectedRowIndex = -1;
         int PickListSelectedRowIndex = -1;
+        int lastCLick = -1;
 
         private void dataGridView_requestor_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int rowIndex = e.RowIndex;
             int colIndex = e.ColumnIndex;
-
+            lastCLick = 1;
             RequestSelectedRowIndex = e.RowIndex;
 
             if (colIndex != 0)
@@ -3405,7 +3526,7 @@ namespace Amkor_Material_Manager
         {
             int rowIndex = e.RowIndex;
             int colIndex = e.ColumnIndex;
-
+            lastCLick = 2;
             if (colIndex != 0)
                 colIndex = 0;
 
@@ -4019,7 +4140,7 @@ namespace Amkor_Material_Manager
         {
             if(DialogResult.Yes == MessageBox.Show("삭제하시겠습니까?","삭제", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
             {
-                if(RequestSelectedRowIndex != -1)
+                if(RequestSelectedRowIndex != -1 && lastCLick == 1)
                 {
                     string EmployeeNum = dataGridView_requestor.Rows[RequestSelectedRowIndex].Cells[0].Value.ToString();
                     DataTable dt = AMM_Main.AMM.GetPickingID_Requestor(EmployeeNum);
@@ -4034,13 +4155,14 @@ namespace Amkor_Material_Manager
                     
                     AMM_Main.AMM.DeletePickIDInfobyEmployee(AMM_Main.strDefault_linecode, "TWR" + AMM_Main.strDefault_Group.ToString(), EmployeeNum);
                     //AMM.Delete_Pickidinfo()
-                    RequestSelectedRowIndex = -1;
+                    RequestSelectedRowIndex = -1; lastCLick = -1;
                 }
 
-                if(PickListSelectedRowIndex != -1)
+                if(PickListSelectedRowIndex != -1 && lastCLick == 2)
                 {
                     AMM_Main.AMM.Delete_Pickidinfo2(AMM_Main.strDefault_linecode, "TWR" + AMM_Main.strDefault_Group.ToString(), dataGridView_pickinglist.Rows[PickListSelectedRowIndex].Cells[2].Value.ToString());
                     PickListSelectedRowIndex = -1;
+                    lastCLick = -1;
                 }
             }
         }

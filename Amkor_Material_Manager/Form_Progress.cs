@@ -60,6 +60,11 @@ namespace Amkor_Material_Manager
                     bState = true;
                     Show();
                 }
+                else if(nType == 1006)
+                {
+                    bState = true;
+                    ShowDialog();
+                }
                 else
                 {
                     bState = true;

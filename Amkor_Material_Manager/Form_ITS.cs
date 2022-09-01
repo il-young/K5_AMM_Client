@@ -572,11 +572,11 @@ namespace Amkor_Material_Manager
             }
 
             dataGridView_sum.Rows.Add(new object[6] {"SUM", strSum[0].ToString(), strSum[1].ToString(), strSum[2].ToString(), strSum[3].ToString(), strSum[4].ToString() });//210831_Sangik.choi_타워그룹추가 //220829_ilyoung_타워그룹추가
-            dataGridView_sum.Rows[2].DefaultCellStyle.ForeColor = Color.White;
-            dataGridView_sum.Rows[2].DefaultCellStyle.BackColor = Color.OrangeRed;
-            dataGridView_sum.Rows[2].DefaultCellStyle.Font = new Font("Calibri", 16.00F, FontStyle.Bold);
+            dataGridView_sum.Rows[dataGridView_sum.RowCount-1].DefaultCellStyle.ForeColor = Color.White;
+            dataGridView_sum.Rows[dataGridView_sum.RowCount - 1].DefaultCellStyle.BackColor = Color.OrangeRed;
+            dataGridView_sum.Rows[dataGridView_sum.RowCount - 1].DefaultCellStyle.Font = new Font("Calibri", 16.00F, FontStyle.Bold);
             dataGridView_sum.Rows[0].Selected = false;
-            dataGridView_sum.Rows[2].Selected = false;
+            dataGridView_sum.Rows[dataGridView_sum.RowCount - 1].Selected = false;
 
             string strnQty = string.Format("{0:0,0}", nTotal);
             label_total.Text = strnQty + " REEL";
@@ -594,7 +594,7 @@ namespace Amkor_Material_Manager
 
             Fnc_Init_datagrid(nType);
 
-            if (nGroup != 8)//210831_Sangik.choi_타워그룹추가 //220829_ilyoung_타워그룹추가
+            if (nGroup != nCount.Length +1 )//210831_Sangik.choi_타워그룹추가 //220829_ilyoung_타워그룹추가
                 Fnc_Process_GetMaterialinfo(nType, strEquipid);
             else
             {
@@ -1098,6 +1098,8 @@ namespace Amkor_Material_Manager
                                 if (divde_7_13[1].strLocation.Contains("1")) str1 += " TWR1 ";
                                 if (divde_7_13[1].strLocation.Contains("2")) str1 += " TWR2 ";
                                 if (divde_7_13[1].strLocation.Contains("3")) str1 += " TWR3 ";
+                                if (divde_7_13[1].strLocation.Contains("4")) str1 += " TWR4 ";	//220829_ilyoung_타워그룹추가
+                                if (divde_7_13[1].strLocation.Contains("5")) str1 += " TWR5 ";	//220829_ilyoung_타워그룹추가
                                 divde_7_13[1].strLocation = str1;
                                 dataGridView_info.Rows.Add(new object[6] { nIdx, strSetSID, divde_7_13[1].nReelCount, strnQty, "13", divde_7_13[1].strLocation });
                                 divde_7_13[1].bFlag = false;
@@ -1113,7 +1115,9 @@ namespace Amkor_Material_Manager
                                 if (divde_7_13[0].strLocation.Contains("1")) str1 += " TWR1";
                                 if (divde_7_13[0].strLocation.Contains("2")) str1 += " TWR2";
                                 if (divde_7_13[0].strLocation.Contains("3")) str1 += " TWR3";
-                                divde_7_13[0].strLocation = str1;
+                                if (divde_7_13[0].strLocation.Contains("4")) str1 += " TWR4 ";	//220829_ilyoung_타워그룹추가
+                                if (divde_7_13[0].strLocation.Contains("5")) str1 += " TWR5 ";	//220829_ilyoung_타워그룹추가
+                                divde_7_13[0].strLocation = str1;//220829_ilyoung_타워그룹추가
                                 dataGridView_info.Rows.Add(new object[6] { nIdx, strSetSID, divde_7_13[0].nReelCount, strnQty, "7", divde_7_13[0].strLocation });
                                 divde_7_13[0].bFlag = false;
                                  nIdx++;
@@ -3273,7 +3277,7 @@ namespace Amkor_Material_Manager
             Fnc_Init_datagrid(nType);
 
             //if (nGroup != 7)
-            if (nGroup != comboBox_group.Items.Count -1) //210824_Sangik.choi_타워그룹추가	//220829_ilyoung_타워그룹추가
+            if (nGroup != comboBox_group.Items.Count) //210824_Sangik.choi_타워그룹추가	//220829_ilyoung_타워그룹추가
                 Fnc_Process_GetMaterialinfo(nType, strEquipid);
             else
             {

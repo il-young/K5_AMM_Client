@@ -22,7 +22,7 @@ namespace Amkor_Material_Manager
         public static string strAMM_Connect = "NG";
 
         //기본 정보        
-        public static string strDefault_linecode = "", strDefault_Group = "", strDefault_Start = "", strSMSearchEnable = "", strMatchTab = "", strNumberPad = "";
+        public static string strDefault_linecode = "", strDefault_Group = "", strDefault_Start = "", strSMSearchEnable = "", strMatchTab = "", strNumberPad = "", strAppVersion = "";
         public static string strRequestor_id = "", strRequestor_name = "", strLogfilePath = "";
         public static string strAdminID = "", strAdminPW = "";
         public static bool bAdminLogin = false, bProcessing = false, IsExit = false;
@@ -105,7 +105,9 @@ namespace Amkor_Material_Manager
             strSMSearchEnable = ConfigurationManager.AppSettings["SM_Enable"];
             strMatchTab = ConfigurationManager.AppSettings["Match_Tab"];
             strNumberPad = ConfigurationManager.AppSettings["Number_Pad"];
+            strAppVersion = ConfigurationManager.AppSettings["Application_Ver"];
 
+            
 
             if (strDefault_linecode == "")
                 strDefault_linecode = "AS41100 ";
@@ -134,8 +136,24 @@ namespace Amkor_Material_Manager
             
             ThreadStart();
             timer1.Start();
+            CheckAppVersion();
 
             Fnc_SaveLog("프로그램 시작.", 0);
+        }
+
+        private void CheckAppVersion()
+        {
+            string AppVer = AMM.ReadAppVersion("AMM_CLIENT");
+            strAppVersion = "";
+            if (strAppVersion != AppVer)
+            {
+                using (Form_Progress Frm_Process = new Form_Progress())
+                {
+                    Frm_Process.Form_Show("최종 버전이 아닙니다 Update 프로그램을 실행 합니다.", 1006);
+                }
+
+                Close();
+            }
         }
 
         public void ThreadStart()
