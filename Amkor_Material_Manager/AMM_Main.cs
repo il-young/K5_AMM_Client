@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
 using AMM;
+using System.IO;
 
 namespace Amkor_Material_Manager
 {
@@ -105,7 +106,7 @@ namespace Amkor_Material_Manager
             strSMSearchEnable = ConfigurationManager.AppSettings["SM_Enable"];
             strMatchTab = ConfigurationManager.AppSettings["Match_Tab"];
             strNumberPad = ConfigurationManager.AppSettings["Number_Pad"];
-            strAppVersion = ConfigurationManager.AppSettings["Application_Ver"];
+            strAppVersion = Fnc_Load_UpdateInfo();
 
             
 
@@ -141,15 +142,39 @@ namespace Amkor_Material_Manager
             Fnc_SaveLog("프로그램 시작.", 0);
         }
 
+        private string Fnc_Load_UpdateInfo()
+        {
+            string strPath = Application.StartupPath + "\\Updateinfo.ini";
+
+            if (!File.Exists(strPath))
+            {
+                //System.IO.File.WriteAllText(strPath, "0");
+            }
+            else
+            {
+                string[] lines = System.IO.File.ReadAllLines(strPath);
+                int nLength = lines.Length;
+
+                if (nLength > 0)
+                    return lines[0];
+            }
+
+            return "0";
+        }
+
         private void CheckAppVersion()
         {
             string AppVer = AMM.ReadAppVersion("AMM_CLIENT");
-            strAppVersion = "";
             if (strAppVersion != AppVer)
             {
                 using (Form_Progress Frm_Process = new Form_Progress())
                 {
                     Frm_Process.Form_Show("최종 버전이 아닙니다 Update 프로그램을 실행 합니다.", 1006);
+
+                    Process firstProc = new Process();
+                    firstProc.StartInfo.FileName = Application.StartupPath + "\\Auto_Updater.exe";
+                    firstProc.EnableRaisingEvents = true;
+                    firstProc.Start();
                 }
 
                 Close();
@@ -224,6 +249,8 @@ namespace Amkor_Material_Manager
             {
                 label_state.BackColor = System.Drawing.Color.Red;
             }
+
+            CheckAppVersion();
         }
 
         private void AMM_Main_FormClosing(object sender, FormClosingEventArgs e)
