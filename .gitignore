@@ -1,2 +1,8 @@
 Amkor_Material_Manager/bin/x64/Debug/Log/
 *.zip
+Amkor_Material_Manager/bin/
+*.txt
+*.cache
+*.exe
+*.resources
+*.pdb

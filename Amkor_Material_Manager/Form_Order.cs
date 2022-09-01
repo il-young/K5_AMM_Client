@@ -262,7 +262,6 @@ namespace Amkor_Material_Manager
                 string strLog = string.Format("PICK LIST 생성 시작 - 사번:{0}, PICKID:{1}", label_Requestor.Text, strPickingID);
                 Fnc_SaveLog(strLog, 1);
 
-                comboBox_group.SelectedIndex = 3;
             }
         }
         private void Fnc_Get_PickID(string strGroupinfo)
@@ -366,7 +365,7 @@ namespace Amkor_Material_Manager
 
 
 
-                    if(comboBox_group.SelectedIndex < 3)
+                    if(comboBox_group.SelectedIndex < comboBox_group.Items.Count -1)	//220829_ilyoung_타워그룹추가
                     {
                         ///SID 정보 가져 오기
                         int nGroup = comboBox_group.SelectedIndex;
@@ -508,7 +507,7 @@ namespace Amkor_Material_Manager
             if (e.KeyChar == (char)13)
             {
 
-                if(comboBox_group.SelectedIndex != 3)
+                if(comboBox_group.SelectedIndex != comboBox_group.Items.Count -1)	//220829_ilyoung_타워그룹추가
                 {
                     if (textBox_reelcount.Text == "")
                         return;
@@ -871,7 +870,7 @@ namespace Amkor_Material_Manager
             int nGroup = nSelected_groupid;
             string strGroup = (nGroup + 1).ToString();
 
-            if(comboBox_group.SelectedIndex != 3) Fnc_SetMtlInfo_FromSID(AMM_Main.strDefault_linecode, strGroup, textBox_sid.Text, false);
+            if(comboBox_group.SelectedIndex != comboBox_group.Items.Count -1 ) Fnc_SetMtlInfo_FromSID(AMM_Main.strDefault_linecode, strGroup, textBox_sid.Text, false);	//220829_ilyoung_타워그룹추가
         }
 
         public void Fnc_Check_TwrUse(int nGroup)
@@ -913,6 +912,40 @@ namespace Amkor_Material_Manager
                         checkBox_tower2.Checked = false;
                     }
                 }
+                //220829_ilyoung_타워그룹추가
+                else if (n == 3)
+                {
+                    if (strUse == "USE")
+                    {
+                        checkBox_tower3.ForeColor = Color.Black;
+                        checkBox_tower3.Text = strTwrName + " 사용";
+                        checkBox_tower3.Checked = true;
+                    }
+                    else
+                    {
+                        checkBox_tower3.ForeColor = Color.Red;
+                        checkBox_tower3.Text = strTwrName + " 사용 안함";
+                        checkBox_tower3.Checked = false;
+                    }
+                }
+                else if (n == 4)
+                {
+                    if (strUse == "USE")
+                    {
+                        checkBox_tower4.ForeColor = Color.Black;
+                        checkBox_tower4.Text = strTwrName + " 사용";
+                        checkBox_tower4.Checked = true;
+                    }
+                    else
+                    {
+                        checkBox_tower4.ForeColor = Color.Red;
+                        checkBox_tower4.Text = strTwrName + " 사용 안함";
+                        checkBox_tower4.Checked = false;
+                    }
+                }
+
+                strUse = "";
+                //220829_ilyoung_타워그룹추가
 
             }
         }
@@ -928,7 +961,7 @@ namespace Amkor_Material_Manager
 
 
 
-            if(nSel != 3)
+            if(nSel != comboBox_group.Items.Count-1)
             {
                 int nCheckCount = dataGridView_ready.Rows.Count;
 
@@ -2565,7 +2598,7 @@ namespace Amkor_Material_Manager
 
             if (strPickingID != "")
             {
-                if(comboBox_group.SelectedIndex != 3)
+                if(comboBox_group.SelectedIndex != comboBox_group.Items.Count -1)	//220829_ilyoung_타워그룹추가
                 {
                     Fnc_Picklist_Comfirm();
                     Fnc_Save_TowerUseInfo();
@@ -3177,6 +3210,15 @@ namespace Amkor_Material_Manager
             nCount[2] = dt.Rows.Count;
             dt = null;
 
+            //220829_ilyoung_타워그룹추가
+            dt = AMM_Main.AMM.GetPickingID(strlinecode, "TWR4");
+            nCount[3] = dt.Rows.Count;
+            dt = null;
+
+            dt = AMM_Main.AMM.GetPickingID(strlinecode, "TWR5");
+            nCount[4] = dt.Rows.Count;
+            dt = null;
+            //220829_ilyoung_타워그룹추가
 
 
             string str = string.Format("{0} 건", nCount[0]);
@@ -3201,15 +3243,31 @@ namespace Amkor_Material_Manager
                 label_G3.BackColor = Color.Green;
             label_G3.Text = str;
 
+            //220829_ilyoung_타워그룹추가
+            str = string.Format("{0} 건", nCount[3]);
+            if (nCount[3] == 0)
+                label_G4.BackColor = Color.Blue;
+            else
+                label_G4.BackColor = Color.Green;
+            label_G4.Text = str;
+
+            str = string.Format("{0} 건", nCount[4]);
+            if (nCount[4] == 0)
+                label_G5.BackColor = Color.Blue;
+            else
+                label_G5.BackColor = Color.Green;
+            label_G5.Text = str;
+            //220829_ilyoung_타워그룹추가
 
 
-            Fnc_DrawDoughnutChart_Ready(nCount[0], nCount[1], nCount[2]);
+
+            Fnc_DrawDoughnutChart_Ready(nCount[0], nCount[1], nCount[2], nCount[3], nCount[4]);//220829_ilyoung_타워그룹추가
 
 
 
 
         }
-        public void Fnc_DrawDoughnutChart_Ready(int nGroup1, int nGroup2, int nGroup3) //210823_Sangik.choi_타워그룹추가 
+        public void Fnc_DrawDoughnutChart_Ready(int nGroup1, int nGroup2, int nGroup3, int nGroup4, int nGroup5) //210823_Sangik.choi_타워그룹추가 //220829_ilyoung_타워그룹추가
         {
             chart1.Series.Clear();
             chart1.Legends.Clear();
@@ -3233,6 +3291,8 @@ namespace Amkor_Material_Manager
             string strValue1 = string.Format("Group 1 \n{0} EA", nGroup1);
             string strValue2 = string.Format("Group 2 \n{0} EA", nGroup2);
             string strValue3 = string.Format("Group 3 \n{0} EA", nGroup3);
+            string strValue4 = string.Format("Group 4 \n{0} EA", nGroup4);//220829_ilyoung_타워그룹추가
+            string strValue5 = string.Format("Group 5 \n{0} EA", nGroup5);//220829_ilyoung_타워그룹추가
 
 
 
@@ -3245,13 +3305,19 @@ namespace Amkor_Material_Manager
             if (nGroup3 > 0)
                 chart1.Series[seriesname].Points.AddXY(strValue3, nGroup3);
 
-   
+            //220829_ilyoung_타워그룹추가
+            if (nGroup4 > 0)
+                chart1.Series[seriesname].Points.AddXY(strValue4, nGroup4);
+
+            if (nGroup5 > 0)
+                chart1.Series[seriesname].Points.AddXY(strValue5, nGroup5);
+            //220829_ilyoung_타워그룹추가
 
 
             chart1.Series[seriesname].LabelBackColor = Color.Green;
             chart1.Series[seriesname].LabelForeColor = Color.White;
 
-            if (nGroup1 == 0 && nGroup2 == 0 && nGroup3 == 0 )
+            if (nGroup1 == 0 && nGroup2 == 0 && nGroup3 == 0 && nGroup4 == 0 && nGroup5 == 0)//220829_ilyoung_타워그룹추가
             {
                 strValue1 = string.Format("대기 자재 없음");
                 chart1.Series[seriesname].Points.AddXY(strValue1, 100);
@@ -3506,6 +3572,22 @@ namespace Amkor_Material_Manager
                         Fnc_DeleteReady(n);
                     }
                 }
+                //220829_ilyoung_타워그룹추가
+                else if (strPrefix == "PO")
+                {
+                    if (strPosition != "4")
+                    {
+                        Fnc_DeleteReady(n);
+                    }
+                }
+                else if (strPrefix == "PP")
+                {
+                    if (strPosition != "5")
+                    {
+                        Fnc_DeleteReady(n);
+                    }
+                }
+                //220829_ilyoung_타워그룹추가
 
 
             }

@@ -60,6 +60,10 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabControl_Order = new System.Windows.Forms.TabControl();
             this.tabPage_input_sid = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label_G5 = new System.Windows.Forms.Label();
+            this.label_G4 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.label20 = new System.Windows.Forms.Label();
@@ -74,6 +78,8 @@
             this.button_All_Del = new System.Windows.Forms.Button();
             this.dataGridView_LotList = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.checkBox_tower4 = new System.Windows.Forms.CheckBox();
+            this.checkBox_tower3 = new System.Windows.Forms.CheckBox();
             this.checkBox_tower2 = new System.Windows.Forms.CheckBox();
             this.checkBox_tower1 = new System.Windows.Forms.CheckBox();
             this.button_delete = new System.Windows.Forms.Button();
@@ -106,17 +112,13 @@
             this.label9 = new System.Windows.Forms.Label();
             this.dataGridView_Outmonitoring = new System.Windows.Forms.DataGridView();
             this.dataGridView_pickinglist = new System.Windows.Forms.DataGridView();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.삭제ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView_requestor = new System.Windows.Forms.DataGridView();
             this.label_OutID = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.label3 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label_G5 = new System.Windows.Forms.Label();
-            this.label_G4 = new System.Windows.Forms.Label();
-            this.checkBox_tower3 = new System.Windows.Forms.CheckBox();
-            this.checkBox_tower4 = new System.Windows.Forms.CheckBox();
             this.tabControl_Order.SuspendLayout();
             this.tabPage_input_sid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
@@ -128,6 +130,7 @@
             this.tabPage_status.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Outmonitoring)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_pickinglist)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_requestor)).BeginInit();
             this.SuspendLayout();
             // 
@@ -170,6 +173,52 @@
             this.tabPage_input_sid.Size = new System.Drawing.Size(1272, 764);
             this.tabPage_input_sid.TabIndex = 0;
             this.tabPage_input_sid.Text = "사번 입력";
+            // 
+            // label3
+            // 
+            this.label3.BackColor = System.Drawing.Color.SlateGray;
+            this.label3.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(19, 210);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(79, 36);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "G5";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label8
+            // 
+            this.label8.BackColor = System.Drawing.Color.SlateGray;
+            this.label8.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(19, 166);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(79, 36);
+            this.label8.TabIndex = 5;
+            this.label8.Text = "G4";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_G5
+            // 
+            this.label_G5.BackColor = System.Drawing.Color.DarkBlue;
+            this.label_G5.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_G5.ForeColor = System.Drawing.Color.White;
+            this.label_G5.Location = new System.Drawing.Point(100, 210);
+            this.label_G5.Name = "label_G5";
+            this.label_G5.Size = new System.Drawing.Size(187, 36);
+            this.label_G5.TabIndex = 6;
+            this.label_G5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_G4
+            // 
+            this.label_G4.BackColor = System.Drawing.Color.DarkBlue;
+            this.label_G4.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_G4.ForeColor = System.Drawing.Color.White;
+            this.label_G4.Location = new System.Drawing.Point(100, 166);
+            this.label_G4.Name = "label_G4";
+            this.label_G4.Size = new System.Drawing.Size(187, 36);
+            this.label_G4.TabIndex = 7;
+            this.label_G4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label10
             // 
@@ -363,6 +412,30 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(155, 127);
             this.panel1.TabIndex = 6;
+            // 
+            // checkBox_tower4
+            // 
+            this.checkBox_tower4.AutoSize = true;
+            this.checkBox_tower4.ForeColor = System.Drawing.SystemColors.Info;
+            this.checkBox_tower4.Location = new System.Drawing.Point(9, 96);
+            this.checkBox_tower4.Name = "checkBox_tower4";
+            this.checkBox_tower4.Size = new System.Drawing.Size(100, 27);
+            this.checkBox_tower4.TabIndex = 2;
+            this.checkBox_tower4.Text = "TOWER 2";
+            this.checkBox_tower4.UseVisualStyleBackColor = true;
+            this.checkBox_tower4.CheckedChanged += new System.EventHandler(this.checkBox_tower1_CheckedChanged);
+            // 
+            // checkBox_tower3
+            // 
+            this.checkBox_tower3.AutoSize = true;
+            this.checkBox_tower3.ForeColor = System.Drawing.SystemColors.Info;
+            this.checkBox_tower3.Location = new System.Drawing.Point(9, 66);
+            this.checkBox_tower3.Name = "checkBox_tower3";
+            this.checkBox_tower3.Size = new System.Drawing.Size(100, 27);
+            this.checkBox_tower3.TabIndex = 1;
+            this.checkBox_tower3.Text = "TOWER 2";
+            this.checkBox_tower3.UseVisualStyleBackColor = true;
+            this.checkBox_tower3.CheckedChanged += new System.EventHandler(this.checkBox_tower1_CheckedChanged);
             // 
             // checkBox_tower2
             // 
@@ -900,6 +973,7 @@
             dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridView_pickinglist.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
             this.dataGridView_pickinglist.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView_pickinglist.ContextMenuStrip = this.contextMenuStrip1;
             dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle18.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -929,6 +1003,20 @@
             this.dataGridView_pickinglist.TabIndex = 1;
             this.dataGridView_pickinglist.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_pickinglist_CellClick);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.삭제ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(99, 26);
+            // 
+            // 삭제ToolStripMenuItem
+            // 
+            this.삭제ToolStripMenuItem.Name = "삭제ToolStripMenuItem";
+            this.삭제ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.삭제ToolStripMenuItem.Text = "삭제";
+            this.삭제ToolStripMenuItem.Click += new System.EventHandler(this.삭제ToolStripMenuItem_Click);
+            // 
             // dataGridView_requestor
             // 
             this.dataGridView_requestor.AllowUserToAddRows = false;
@@ -950,6 +1038,7 @@
             dataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridView_requestor.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle22;
             this.dataGridView_requestor.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView_requestor.ContextMenuStrip = this.contextMenuStrip1;
             dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle23.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle23.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -978,6 +1067,7 @@
             this.dataGridView_requestor.Size = new System.Drawing.Size(194, 563);
             this.dataGridView_requestor.TabIndex = 1;
             this.dataGridView_requestor.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_requestor_CellClick);
+            this.dataGridView_requestor.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridView_requestor_MouseClick);
             // 
             // label_OutID
             // 
@@ -1020,74 +1110,6 @@
             this.timer1.Interval = 3000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // label3
-            // 
-            this.label3.BackColor = System.Drawing.Color.SlateGray;
-            this.label3.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(19, 210);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(79, 36);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "G5";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label8
-            // 
-            this.label8.BackColor = System.Drawing.Color.SlateGray;
-            this.label8.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(19, 166);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(79, 36);
-            this.label8.TabIndex = 5;
-            this.label8.Text = "G4";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label_G5
-            // 
-            this.label_G5.BackColor = System.Drawing.Color.DarkBlue;
-            this.label_G5.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_G5.ForeColor = System.Drawing.Color.White;
-            this.label_G5.Location = new System.Drawing.Point(100, 210);
-            this.label_G5.Name = "label_G5";
-            this.label_G5.Size = new System.Drawing.Size(187, 36);
-            this.label_G5.TabIndex = 6;
-            this.label_G5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label_G4
-            // 
-            this.label_G4.BackColor = System.Drawing.Color.DarkBlue;
-            this.label_G4.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_G4.ForeColor = System.Drawing.Color.White;
-            this.label_G4.Location = new System.Drawing.Point(100, 166);
-            this.label_G4.Name = "label_G4";
-            this.label_G4.Size = new System.Drawing.Size(187, 36);
-            this.label_G4.TabIndex = 7;
-            this.label_G4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // checkBox_tower3
-            // 
-            this.checkBox_tower3.AutoSize = true;
-            this.checkBox_tower3.ForeColor = System.Drawing.SystemColors.Info;
-            this.checkBox_tower3.Location = new System.Drawing.Point(9, 66);
-            this.checkBox_tower3.Name = "checkBox_tower3";
-            this.checkBox_tower3.Size = new System.Drawing.Size(100, 27);
-            this.checkBox_tower3.TabIndex = 1;
-            this.checkBox_tower3.Text = "TOWER 2";
-            this.checkBox_tower3.UseVisualStyleBackColor = true;
-            // 
-            // checkBox_tower4
-            // 
-            this.checkBox_tower4.AutoSize = true;
-            this.checkBox_tower4.ForeColor = System.Drawing.SystemColors.Info;
-            this.checkBox_tower4.Location = new System.Drawing.Point(9, 96);
-            this.checkBox_tower4.Name = "checkBox_tower4";
-            this.checkBox_tower4.Size = new System.Drawing.Size(100, 27);
-            this.checkBox_tower4.TabIndex = 2;
-            this.checkBox_tower4.Text = "TOWER 2";
-            this.checkBox_tower4.UseVisualStyleBackColor = true;
-            // 
             // Form_Order
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1104,6 +1126,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Form_Menu";
+            this.Load += new System.EventHandler(this.Form_Order_Load);
             this.tabControl_Order.ResumeLayout(false);
             this.tabPage_input_sid.ResumeLayout(false);
             this.tabPage_input_sid.PerformLayout();
@@ -1118,6 +1141,7 @@
             this.tabPage_status.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Outmonitoring)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_pickinglist)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_requestor)).EndInit();
             this.ResumeLayout(false);
 
@@ -1184,5 +1208,7 @@
         private System.Windows.Forms.Label label_G4;
         private System.Windows.Forms.CheckBox checkBox_tower4;
         private System.Windows.Forms.CheckBox checkBox_tower3;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 삭제ToolStripMenuItem;
     }
 }

@@ -531,7 +531,7 @@ namespace Amkor_Material_Manager
             DataTable MtlList = null;            
 
             string strTowerNo = "", strEquip = "";
-            for (int n = 1; n < 4; n++) //220829_ilyoung_타워그룹추가
+            for (int n = 1; n < 5; n++) //220829_ilyoung_타워그룹추가
             {
                 strEquip = "TWR1"; strTowerNo = string.Format("T010{0}", n.ToString());
                 //GetMTLInfo()-query = string.Format(@"SELECT * FROM TB_MTL_INFO WHERE LINE_CODE='{0}' and EQUIP_ID='{1}' and TOWER_NO='{2}');
@@ -545,13 +545,13 @@ namespace Amkor_Material_Manager
 
                 //220829_ilyoung_타워그룹추가
                 strEquip = "TWR4"; strTowerNo = string.Format("T040{0}", n.ToString());
-                MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquip, strTowerNo); nCount[2] = MtlList.Rows.Count; MtlList = null;
+                MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquip, strTowerNo); nCount[3] = MtlList.Rows.Count; MtlList = null;
 
                 strEquip = "TWR5"; strTowerNo = string.Format("T050{0}", n.ToString());
-                MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquip, strTowerNo); nCount[2] = MtlList.Rows.Count; MtlList = null;
+                MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquip, strTowerNo); nCount[4] = MtlList.Rows.Count; MtlList = null;
                 //220829_ilyoung_타워그룹추가
 
-                dataGridView_sum.Rows.Add(new object[4] { n.ToString(), nCount[0].ToString(), nCount[1].ToString(), nCount[2].ToString() });
+                dataGridView_sum.Rows.Add(new object[] { n.ToString(), nCount[0].ToString(), nCount[1].ToString(), nCount[2].ToString(), nCount[3].ToString(), nCount[4].ToString() });//220829_ilyoung_타워그룹추가
                 //]210831_Sangik.choi_타워그룹추가
             }
 
@@ -563,7 +563,7 @@ namespace Amkor_Material_Manager
             {
                 for (int i = 0; i < dataGridView_sum.Rows.Count; i++)     	//220829_ilyoung_타워그룹추가
                 {                    
-                    int nCal = Int32.Parse(dataGridView_sum.Rows[i].Cells[j+1].Value.ToString());
+                    int nCal = dataGridView_sum.Rows[i].Cells[j + 1].Value == null ? 0 : Int32.Parse(dataGridView_sum.Rows[i].Cells[j+1].Value.ToString());//220829_ilyoung_타워그룹추가
                     nSum[j] = nSum[j] + nCal;
                 }
 
@@ -3273,7 +3273,7 @@ namespace Amkor_Material_Manager
             Fnc_Init_datagrid(nType);
 
             //if (nGroup != 7)
-            if (nGroup != comboBox_group.Items.Count) //210824_Sangik.choi_타워그룹추가	//220829_ilyoung_타워그룹추가
+            if (nGroup != comboBox_group.Items.Count -1) //210824_Sangik.choi_타워그룹추가	//220829_ilyoung_타워그룹추가
                 Fnc_Process_GetMaterialinfo(nType, strEquipid);
             else
             {

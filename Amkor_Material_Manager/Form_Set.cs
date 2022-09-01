@@ -23,9 +23,9 @@ namespace Amkor_Material_Manager
         {
             comboBox_twrNo.Refresh();
             
-            for(int n = 1; n < 4; n++)
+            for(int n = 1; n < 6; n++)//220829_ilyoung_타워그룹추가
             {
-                for(int m = 1; m < 3; m++)
+                for(int m = 1; m < 5; m++)//220829_ilyoung_타워그룹추가
                 {
                     string strName = string.Format("T0{0}0{1}", n, m);
                     comboBox_twrNo.Items.Add(strName);
