@@ -68,7 +68,7 @@ namespace Amkor_Material_Manager
                 else
                 {
                     bState = true;
-                    Show();
+                    ShowDialog();
                     sw_ShowCheck.Start();
                     timer1.Start();
                     timer1.Enabled = true;

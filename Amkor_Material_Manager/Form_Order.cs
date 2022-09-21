@@ -18,9 +18,11 @@ namespace Amkor_Material_Manager
 {
     public partial class Form_Order : Form
     {
-        Form_Progress Frm_Process = new Form_Progress();
+        //Form_Progress Frm_Process = new Form_Progress();
 
         Thread Thread_Progress = null;
+
+        string[] PickIDs = new string[5];
 
         string strSelSid = "";
         string strSelLotid = "";
@@ -205,16 +207,18 @@ namespace Amkor_Material_Manager
 
                 if (strName == "NO_INFO")
                 {
-                    string str = string.Format("등록 되지 않은 사용자 입니다.\n등록 후 사용 하세요.", 1000);
-
-                    Frm_Process.Form_Show(str, 1000);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress _Progress = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
-                    }
+                        string str = string.Format("등록 되지 않은 사용자 입니다.\n등록 후 사용 하세요.", 1000);
 
+                        _Progress.Form_Show(str, 1000);
+
+                        while (_Progress.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
+                    }
                     textBox_input_sid.Text = "";
                     return;
                 }
@@ -235,6 +239,12 @@ namespace Amkor_Material_Manager
                 dataGridView_ready.Columns.Add("위치", "위치");
                 dataGridView_ready.Columns.Add("인치", "인치");
                 dataGridView_ready.Columns.Add("투입", "투입");
+
+                dataGridView_ready.Columns.Add("MANUFACTURER", "MANUFACTURER");
+                dataGridView_ready.Columns.Add("PRODUCTION_DATE", "PRODUCTION_DATE");
+
+                dataGridView_ready.Columns["MANUFACTURER"].Visible = false;
+                dataGridView_ready.Columns["PRODUCTION_DATE"].Visible = false;
 
                 comboBox_group.SelectedIndex = AMM_Main.nDefaultGroup - 1;
                 comboBox_method.SelectedIndex = 0;  //SID 조회
@@ -305,6 +315,53 @@ namespace Amkor_Material_Manager
 
             Fnc_Update_PickID(AMM_Main.strDefault_linecode, equipid, strPickingID);
         }
+
+        private string GetPickID(string strGroupinfo)
+        {
+            // GetPickIDNo - query = string.Format(@"SELECT * FROM TB_IDNUNMER_INFO WHERE LINE_CODE='{0}' and EQUIP_ID='{1}'", strLinecode, strEquipid);
+            string strprefix = "";
+            string strNo = "";
+            ///Pick id load
+            string equipid = "TWR" + strGroupinfo;
+            var tableList = AMM_Main.AMM.GetPickIDNo(AMM_Main.strDefault_linecode, equipid);
+
+            if (tableList.Rows.Count == 0)
+            {
+                if (strGroupinfo == "1")
+                    label_pickid.Text = "PL0000001";
+                else if (strGroupinfo == "2")
+                    label_pickid.Text = "PM0000001";
+                else if (strGroupinfo == "3")
+                    label_pickid.Text = "PN0000001";
+
+                //220829_ilyoung_타워그룹추가
+                else if (strGroupinfo == "4")
+                    label_pickid.Text = "PO0000001";
+                else if (strGroupinfo == "5")
+                    label_pickid.Text = "PP0000001";
+                //220829_ilyoung_타워그룹추가
+
+            }
+            else
+            {
+                strprefix = tableList.Rows[0]["PICK_PREFIX"].ToString();
+                strprefix = strprefix.Trim();
+                strNo = tableList.Rows[0]["PICK_NUM"].ToString();
+                strNo = strNo.Trim();
+                //label_pickid.Text = strprefix + strNo;
+            }
+
+            //strPickingID = label_pickid.Text;
+
+            //if (AMM_Main.strDefault_Group == strGroupinfo)
+            //    strDefaultPickingID = strPickingID;
+
+            Fnc_Update_PickID(AMM_Main.strDefault_linecode, equipid, strprefix + strNo);
+
+            return strprefix + strNo;
+            
+        }
+
         private void Fnc_Update_PickID(string strlinecode, string streqid, string strCurPickID)
         {
             string strGetNo = strCurPickID.Substring(strCurPickID.Length - 7);
@@ -358,6 +415,12 @@ namespace Amkor_Material_Manager
                     strSid = textBox_sid.Text;
                     nLength = strSid.Length;
 
+
+                    for(int i = 0; i < PickIDs.Length; i++)
+                    {
+                        PickIDs[i] = GetPickID((i + 1).ToString());
+                    }
+                    
                     if (nLength < 3 || nLength > 9)
                     {
                         return;
@@ -373,13 +436,16 @@ namespace Amkor_Material_Manager
                         ///HY20201124                    
                         if (AMM_Main.bTAlarm[nGroup])
                         {
-                            string str = string.Format("타워 그룹 {0} 이 알람 상태 입니다.\n알람 해제를 요청 하세요\n\n리스트 생성은 가능 합니다.", nGroup + 1);
-                            Frm_Process.Form_Show(str, 1000);
-
-                            while (Frm_Process.bState)
+                            using (Form_Progress _Progress = new Form_Progress())
                             {
-                                Application.DoEvents();
-                                Thread.Sleep(1);
+                                string str = string.Format("타워 그룹 {0} 이 알람 상태 입니다.\n알람 해제를 요청 하세요\n\n리스트 생성은 가능 합니다.", nGroup + 1);
+                                _Progress.Form_Show(str, 1000);
+
+                                while (_Progress.bState)
+                                {
+                                    Application.DoEvents();
+                                    Thread.Sleep(1);
+                                }
                             }
                         }
                         ///////
@@ -400,17 +466,21 @@ namespace Amkor_Material_Manager
                             return;
 
 
-                        for (int i =0; i<3; i++)
+                        for (int i =0; i< AMM_Main.bTAlarm.Length; i++)
                         {
                             if (AMM_Main.bTAlarm[i])
                             {
-                                string str = string.Format("타워 그룹 {0} 이 알람 상태 입니다.\n알람 해제를 요청 하세요\n\n리스트 생성은 가능 합니다.", i + 1);
-                                Frm_Process.Form_Show(str, 1000);
-
-                                while (Frm_Process.bState)
+                                using (Form_Progress _Progress = new Form_Progress())
                                 {
-                                    Application.DoEvents();
-                                    Thread.Sleep(1);
+
+                                    string str = string.Format("타워 그룹 {0} 이 알람 상태 입니다.\n알람 해제를 요청 하세요\n\n리스트 생성은 가능 합니다.", i + 1);
+                                    _Progress.Form_Show(str, 1000);
+
+                                    while (_Progress.bState)
+                                    {
+                                        Application.DoEvents();
+                                        Thread.Sleep(1);
+                                    }
                                 }
                             }
 
@@ -424,7 +494,7 @@ namespace Amkor_Material_Manager
                         Fnc_SaveLog(strLog, 1);
                     }
 
-                   
+                    textBox_reelcount.Focus();
                 }
             }
             else if (comboBox_method.SelectedIndex == 1)
@@ -459,13 +529,16 @@ namespace Amkor_Material_Manager
                     ///HY20201124
                     if (AMM_Main.bTAlarm[nGroup])
                     {
-                        string str = string.Format("타워 그룹 {0} 이 알람 상태 입니다.\n알람 해제를 요청 하세요\n\n리스트 생성은 가능 합니다.", nGroup + 1);
-                        Frm_Process.Form_Show(str, 1000);
-
-                        while (Frm_Process.bState)
+                        using (Form_Progress _Progress = new Form_Progress())
                         {
-                            Application.DoEvents();
-                            Thread.Sleep(1);
+                            string str = string.Format("타워 그룹 {0} 이 알람 상태 입니다.\n알람 해제를 요청 하세요\n\n리스트 생성은 가능 합니다.", nGroup + 1);
+                            _Progress.Form_Show(str, 1000);
+
+                            while (_Progress.bState)
+                            {
+                                Application.DoEvents();
+                                Thread.Sleep(1);
+                            }
                         }
                     }
                     ///////
@@ -547,16 +620,18 @@ namespace Amkor_Material_Manager
                     //if(strNo == "" || nRequestcount == 0)
                     if (nRequestcount == 0)
                     {
-                        string str = string.Format("수량을 입력 하여 주십시오", 1);
-                        
-                        Frm_Process.Form_Show(str, 1);
-
-                        while (Frm_Process.bState)
+                        using (Form_Progress Frm_Process = new Form_Progress())
                         {
-                            Application.DoEvents();
-                            Thread.Sleep(1);
-                        }
+                            string str = string.Format("수량을 입력 하여 주십시오", 1);
 
+                            Frm_Process.Form_Show(str, 1);
+
+                            while (Frm_Process.bState)
+                            {
+                                Application.DoEvents();
+                                Thread.Sleep(1);
+                            }
+                        }
                         textBox_reelcount.Text = "";
                         textBox_reelcount.Focus();
                         return;
@@ -566,14 +641,17 @@ namespace Amkor_Material_Manager
                     int nCheckcount = nReadyMTLcount + nRequestcount;
                     if (nCheckcount > 25)
                     {
-                        string str = string.Format("배출 수량이 너무 많습니다.25개 초과!\n한 개 리스트에 자재 25개 까지 담을 수 있습니다.", 1);
-                        
-                        Frm_Process.Form_Show(str, 1);
-
-                        while (Frm_Process.bState)
+                        using (Form_Progress Frm_Process = new Form_Progress())
                         {
-                            Application.DoEvents();
-                            Thread.Sleep(1);
+                            string str = string.Format("배출 수량이 너무 많습니다.25개 초과!\n한 개 리스트에 자재 25개 까지 담을 수 있습니다.", 1);
+
+                            Frm_Process.Form_Show(str, 1);
+
+                            while (Frm_Process.bState)
+                            {
+                                Application.DoEvents();
+                                Thread.Sleep(1);
+                            }
                         }
                         textBox_reelcount.Text = "25";// (nCheckcount - 25).ToString();
                         textBox_reelcount.Focus();
@@ -593,15 +671,17 @@ namespace Amkor_Material_Manager
 
                         if (nRequestcount > nAllCount) //BYK 220112 Reel 주문 초과수량 처리
                         {
-                            string str = string.Format("보유 수량 보다 요청 수량이 많습니다.\n다시 입력 하여 주십시오", 1);
-                            Frm_Process.Form_Show(str, 1);
-
-                            while (Frm_Process.bState)
+                            using (Form_Progress Frm_Process = new Form_Progress())
                             {
-                                Application.DoEvents();
-                                Thread.Sleep(1);
-                            }
+                                string str = string.Format("보유 수량 보다 요청 수량이 많습니다.\n다시 입력 하여 주십시오", 1);
+                                Frm_Process.Form_Show(str, 1);
 
+                                while (Frm_Process.bState)
+                                {
+                                    Application.DoEvents();
+                                    Thread.Sleep(1);
+                                }
+                            }
                             textBox_reelcount.Text = (nRequestcount - nKeepCount).ToString();
                             textBox_reelcount.Focus();
                             return;
@@ -738,11 +818,8 @@ namespace Amkor_Material_Manager
                     strSelSid = dataGridView_view.Rows[nIndex].Cells[0].Value.ToString();
                     strSelLotid = dataGridView_view.Rows[nIndex].Cells[1].Value.ToString();
 
-
-
                     int nRequestcount = Int32.Parse(textBox_reelcount.Text);
                     int nKeepCount = 0;
-
 
                     int nMethod = comboBox_method.SelectedIndex;
                     for(int i = 0; i < nRowcount; i++)
@@ -755,14 +832,17 @@ namespace Amkor_Material_Manager
                     int nCheckcount = nReadyMTLcount + nRequestcount;
                     if (nCheckcount > 25)
                     {
-                        string str = string.Format("배출 수량이 너무 많습니다.25개 초과!\n한 개 리스트에 자재 25개 까지 담을 수 있습니다.", 1);
-                        
-                        Frm_Process.Form_Show(str, 1);
-
-                        while (Frm_Process.bState)
+                        using (Form_Progress Frm_Process = new Form_Progress())
                         {
-                            Application.DoEvents();
-                            Thread.Sleep(1);
+                            string str = string.Format("배출 수량이 너무 많습니다.25개 초과!\n한 개 리스트에 자재 25개 까지 담을 수 있습니다.", 1);
+
+                            Frm_Process.Form_Show(str, 1);
+
+                            while (Frm_Process.bState)
+                            {
+                                Application.DoEvents();
+                                Thread.Sleep(1);
+                            }
                         }
                         textBox_reelcount.Text = "25";// ;
                         textBox_reelcount.Focus();
@@ -772,21 +852,25 @@ namespace Amkor_Material_Manager
 
                     if (nRequestcount > nKeepCount)
                     {
-                        string str = string.Format("보유 수량 보다 요청 수량이 많습니다.\n다시 입력 하여 주십시오", 1);
-                        Frm_Process.Form_Show(str, 1);
-
-                        while (Frm_Process.bState)
+                        using (Form_Progress Frm_Process = new Form_Progress())
                         {
-                            Application.DoEvents();
-                            Thread.Sleep(1);
-                        }
+                            string str = string.Format("보유 수량 보다 요청 수량이 많습니다.\n다시 입력 하여 주십시오", 1);
+                            Frm_Process.Form_Show(str, 1);
 
+                            while (Frm_Process.bState)
+                            {
+                                Application.DoEvents();
+                                Thread.Sleep(1);
+                            }
+                        }
                         textBox_reelcount.Text = (nRequestcount - nKeepCount).ToString();
                         textBox_reelcount.Focus();
                         return;
                     }
 
-                    Fnc_RequestMaterial_ALL(AMM_Main.strDefault_linecode, strSelSid, strSelLotid, nRequestcount, strPickingID);
+                    
+
+                    Fnc_RequestMaterial_ALL(AMM_Main.strDefault_linecode, strSelSid, strSelLotid, nRequestcount, strPickingID, dataGridView_view.Rows[nIndex].Cells["위치"].Value.ToString());
 
                 }
                 
@@ -827,6 +911,12 @@ namespace Amkor_Material_Manager
             dataGridView_ready.Columns.Add("위치", "위치");
             dataGridView_ready.Columns.Add("인치", "인치");
             dataGridView_ready.Columns.Add("투입", "투입");
+            
+            dataGridView_ready.Columns.Add("MANUFACTURER", "MANUFACTURER");
+            dataGridView_ready.Columns.Add("PRODUCTION_DATE", "PRODUCTION_DATE");
+
+            dataGridView_ready.Columns["MANUFACTURER"].Visible = false;
+            dataGridView_ready.Columns["PRODUCTION_DATE"].Visible = false;
 
             var MtlList = AMM_Main.AMM.GetPickingReadyinfo_ID(pickid);
 
@@ -855,7 +945,7 @@ namespace Amkor_Material_Manager
             for (int n = 0; n < list.Count; n++)
             {
                 nReadyMTLcount++;
-                dataGridView_ready.Rows.Add(new object[8] { nReadyMTLcount, list[n].SID, list[n].LOTID, list[n].UID, list[n].Quantity, list[n].Tower_no, list[n].Inch, list[n].Input_type });                
+                dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, list[n].SID, list[n].LOTID, list[n].UID, list[n].Quantity, list[n].Tower_no, list[n].Inch, list[n].Input_type, list[n].Manufacturer, list[n].Production_date });                
                 
             }
 
@@ -871,6 +961,25 @@ namespace Amkor_Material_Manager
             string strGroup = (nGroup + 1).ToString();
 
             if(comboBox_group.SelectedIndex != comboBox_group.Items.Count -1 ) Fnc_SetMtlInfo_FromSID(AMM_Main.strDefault_linecode, strGroup, textBox_sid.Text, false);	//220829_ilyoung_타워그룹추가
+        }
+
+        private void SetAllTowerUse()
+        {
+            checkBox_tower1.ForeColor = Color.Black;
+            checkBox_tower1.Text = "TA01 사용";
+            checkBox_tower1.Checked = true;
+
+            checkBox_tower2.ForeColor = Color.Black;
+            checkBox_tower2.Text ="TA02 사용";
+            checkBox_tower2.Checked = true;
+
+            checkBox_tower3.ForeColor = Color.Black;
+            checkBox_tower3.Text = "TA03 사용";
+            checkBox_tower3.Checked = true;
+
+            checkBox_tower4.ForeColor = Color.Black;
+            checkBox_tower4.Text = "TA04 사용";
+            checkBox_tower4.Checked = true;
         }
 
         public void Fnc_Check_TwrUse(int nGroup)
@@ -967,16 +1076,21 @@ namespace Amkor_Material_Manager
 
                 if (nCheckCount > 0)
                 {
-                    str = string.Format("배출 대기 리스트가 존재 합니다.\n리스트 삭제 또는 완료 후 선택 가능 합니다.");
-                    Frm_Process.Form_Show(str, 1);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
+                        str = string.Format("배출 대기 리스트가 존재 합니다.\n리스트 삭제 또는 완료 후 선택 가능 합니다.");
+                        Frm_Process.Form_Show(str, 1);
+
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
                     }
 
-                    Fnc_Check_TwrUse(nSel + 1);
+                    
+
+
                     comboBox_group.SelectedIndex = nSelected_groupid;
 
                     return;
@@ -988,13 +1102,16 @@ namespace Amkor_Material_Manager
 
                 if (strReelState == "PICK_FAIL")
                 {
-                    str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-1번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
-                    Frm_Process.Form_Show(str, 1000);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
+                        str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-1번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
+                        Frm_Process.Form_Show(str, 1000);
+
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
                     }
                 }
 
@@ -1003,13 +1120,16 @@ namespace Amkor_Material_Manager
 
                 if (strReelState == "PICK_FAIL")
                 {
-                    str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-2번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
-                    Frm_Process.Form_Show(str, 1000);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
+                        str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-2번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
+                        Frm_Process.Form_Show(str, 1000);
+
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
                     }
                 }
 
@@ -1018,13 +1138,16 @@ namespace Amkor_Material_Manager
 
                 if (strReelState == "PICK_FAIL")
                 {
-                    str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-3번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
-                    Frm_Process.Form_Show(str, 1000);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
+                        str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-3번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
+                        Frm_Process.Form_Show(str, 1000);
+
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
                     }
                 }
 
@@ -1033,13 +1156,16 @@ namespace Amkor_Material_Manager
 
                 if (strReelState == "PICK_FAIL")
                 {
-                    str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-4번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
-                    Frm_Process.Form_Show(str, 1000);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
+                        str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-4번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
+                        Frm_Process.Form_Show(str, 1000);
+
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
                     }
                 }
                 ///////
@@ -1114,29 +1240,39 @@ namespace Amkor_Material_Manager
                     textBox_reelid.Focus();
                 }
             }
-            else if(nSel == 3)
+            else if(nSel == comboBox_group.Items.Count - 1)
             {
                 int nCheckCount = dataGridView_ready.Rows.Count;
 
                 if (nCheckCount > 0)
                 {
-                    str = string.Format("배출 대기 리스트가 존재 합니다.\n리스트 삭제 또는 완료 후 선택 가능 합니다.");
-                    Frm_Process.Form_Show(str, 1);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
-                    }
+                        str = string.Format("배출 대기 리스트가 존재 합니다.\n리스트 삭제 또는 완료 후 선택 가능 합니다.");
+                        Frm_Process.Form_Show(str, 1);
 
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
+                    }
                     Fnc_Check_TwrUse(1);
                     Fnc_Check_TwrUse(2);
                     Fnc_Check_TwrUse(3);
                     Fnc_Check_TwrUse(4);
+
+
+                    
                     comboBox_group.SelectedIndex = nSelected_groupid;
 
                     return;
                 }
+
+
+                SetAllTowerUse();
+
+                label_pickid.Text = "-";
 
 
                 ///HY20210126 
@@ -1145,13 +1281,16 @@ namespace Amkor_Material_Manager
 
                 if (strReelState == "PICK_FAIL")
                 {
-                    str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-1번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
-                    Frm_Process.Form_Show(str, 1000);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
+                        str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-1번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
+                        Frm_Process.Form_Show(str, 1000);
+
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
                     }
                 }
 
@@ -1160,13 +1299,16 @@ namespace Amkor_Material_Manager
 
                 if (strReelState == "PICK_FAIL")
                 {
-                    str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-2번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
-                    Frm_Process.Form_Show(str, 1000);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
+                        str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-2번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
+                        Frm_Process.Form_Show(str, 1000);
+
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
                     }
                 }
 
@@ -1175,13 +1317,16 @@ namespace Amkor_Material_Manager
 
                 if (strReelState == "PICK_FAIL")
                 {
-                    str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-3번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
-                    Frm_Process.Form_Show(str, 1000);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
+                        str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-3번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
+                        Frm_Process.Form_Show(str, 1000);
+
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
                     }
                 }
 
@@ -1190,26 +1335,41 @@ namespace Amkor_Material_Manager
 
                 if (strReelState == "PICK_FAIL")
                 {
-                    str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-4번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
-                    Frm_Process.Form_Show(str, 1000);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
+                        str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-4번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
+                        Frm_Process.Form_Show(str, 1000);
+
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
                     }
                 }
 
 
+                //220829_ilyoung_타워그룹추가
+                strTwr = string.Format("T0{0}04", 5);
+                strReelState = AMM_Main.AMM.Get_Twr_State(AMM_Main.strDefault_linecode, strTwr);
 
+                if (strReelState == "PICK_FAIL")
+                {
+                    using (Form_Progress Frm_Process = new Form_Progress())
+                    {
+                        str = string.Format("그룹 {0} 타워 내부에 배출 릴이 있습니다.\n리스트를 생성 해도 배출 할 수 없습니다.\n{0}-4번 타워에 있는 릴 제거 후 리스트를 생성 하세요.", nSel + 1);
+                        Frm_Process.Form_Show(str, 1000);
 
-
-
-
-
-
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
+                    }
+                }
+                //220829_ilyoung_타워그룹추가
             }
-            
+
         }
 
         private void comboBox_method_SelectedIndexChanged(object sender, EventArgs e)
@@ -1343,12 +1503,15 @@ namespace Amkor_Material_Manager
                 {
                     if (!lastmtl)
                     {
-                        Frm_Process.Form_Show("자재 없음! 핸들러 또는 MC에게 문의 하세요!", 1000);
-
-                        while (Frm_Process.bState)
+                        using (Form_Progress Frm_Process = new Form_Progress())
                         {
-                            Application.DoEvents();
-                            Thread.Sleep(1);
+                            Frm_Process.Form_Show("자재 없음! 핸들러 또는 MC에게 문의 하세요!", 1000);
+
+                            while (Frm_Process.bState)
+                            {
+                                Application.DoEvents();
+                                Thread.Sleep(1);
+                            }
                         }
                     }
 
@@ -1358,14 +1521,17 @@ namespace Amkor_Material_Manager
                 {
                     if (!lastmtl)
                     {
-                        strMsg = strMsg + "\n보관 중 입니다. 그룹을 확인 하세요";
-
-                        Frm_Process.Form_Show(strMsg, 1);
-
-                        while (Frm_Process.bState)
+                        using (Form_Progress Frm_Process = new Form_Progress())
                         {
-                            Application.DoEvents();
-                            Thread.Sleep(1);
+                            strMsg = strMsg + "\n보관 중 입니다. 그룹을 확인 하세요";
+
+                            Frm_Process.Form_Show(strMsg, 1);
+
+                            while (Frm_Process.bState)
+                            {
+                                Application.DoEvents();
+                                Thread.Sleep(1);
+                            }
                         }
                     }
 
@@ -1403,9 +1569,9 @@ namespace Amkor_Material_Manager
 
                         //// Tower 제외
                         string strTowerNo = data.Tower_no.Substring(4, 1);
-                        string strJudge3 = "OK";
+                        string strJudge3 = "OK";                        
 
-                        if(!checkBox_tower1.Checked)
+                        if (!checkBox_tower1.Checked)
                         {
                             if(strTowerNo == "1")
                                 strJudge3 = "NG";
@@ -1414,6 +1580,18 @@ namespace Amkor_Material_Manager
                         if (!checkBox_tower2.Checked)
                         {
                             if (strTowerNo == "2")
+                                strJudge3 = "NG";
+                        }
+
+                        if (!checkBox_tower3.Checked)
+                        {
+                            if (strTowerNo == "3")
+                                strJudge3 = "NG";
+                        }
+
+                        if (!checkBox_tower4.Checked)
+                        {
+                            if (strTowerNo == "4")
                                 strJudge3 = "NG";
                         }
 
@@ -1478,11 +1656,14 @@ namespace Amkor_Material_Manager
                     {
                         if (!lastmtl)
                         {
-                            Frm_Process.Form_Show("자재 없음! 핸들러 또는 MC에게 문의 하세요!", 1000);
-                            while (Frm_Process.bState)
+                            using (Form_Progress Frm_Process = new Form_Progress())
                             {
-                                Application.DoEvents();
-                                Thread.Sleep(1);
+                                Frm_Process.Form_Show("자재 없음! 핸들러 또는 MC에게 문의 하세요!", 1000);
+                                while (Frm_Process.bState)
+                                {
+                                    Application.DoEvents();
+                                    Thread.Sleep(1);
+                                }
                             }
                         }
 
@@ -1492,14 +1673,17 @@ namespace Amkor_Material_Manager
                     {
                         if (!lastmtl)
                         {
-                            strMsg = strMsg + "\n보관 중 입니다. 그룹을 확인 하세요";
-
-                            Frm_Process.Form_Show(strMsg, 1);
-
-                            while (Frm_Process.bState)
+                            using (Form_Progress Frm_Process = new Form_Progress())
                             {
-                                Application.DoEvents();
-                                Thread.Sleep(1);
+                                strMsg = strMsg + "\n보관 중 입니다. 그룹을 확인 하세요";
+
+                                Frm_Process.Form_Show(strMsg, 1);
+
+                                while (Frm_Process.bState)
+                                {
+                                    Application.DoEvents();
+                                    Thread.Sleep(1);
+                                }
                             }
                         }
 
@@ -1558,13 +1742,16 @@ namespace Amkor_Material_Manager
                 {
                     strMsg = "4자리가 같은 자재가 다른 그룹에도 있습니다.\n전체 SID 를 확인 후 계속 진행 하세요.\n\n" + strMsg;
 
-                    Frm_Process.Form_Show(strMsg, 1);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress _Progress = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
-                    }
+                        _Progress.Form_Show(strMsg, 1);
+
+                        while (_Progress.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
+                    }                        
                 }
             }
             
@@ -1633,14 +1820,17 @@ namespace Amkor_Material_Manager
 
             if(nSidcount > 1 && !lastmtl)
             {
-                strMsg = strMsg + "\n여러개 SID가 존재 합니다.\n전체 자리를 확인 후 계속 진행 하세요.";
-
-                Frm_Process.Form_Show(strMsg, 1);
-
-                while (Frm_Process.bState)
+                using (Form_Progress Frm_Process = new Form_Progress())
                 {
-                    Application.DoEvents();
-                    Thread.Sleep(1);
+                    strMsg = strMsg + "\n여러개 SID가 존재 합니다.\n전체 자리를 확인 후 계속 진행 하세요.";
+
+                    Frm_Process.Form_Show(strMsg, 1);
+
+                    while (Frm_Process.bState)
+                    {
+                        Application.DoEvents();
+                        Thread.Sleep(1);
+                    }
                 }
             }
             return 0;
@@ -1675,12 +1865,15 @@ namespace Amkor_Material_Manager
             {
                 if (!lastmtl)
                 {
-                    Frm_Process.Form_Show("자재 없음! 핸들러 또는 MC에게 문의 하세요!", 1000);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
+                        Frm_Process.Form_Show("자재 없음! 핸들러 또는 MC에게 문의 하세요!", 1000);
+
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
                     }
                 }
 
@@ -1716,23 +1909,25 @@ namespace Amkor_Material_Manager
                         string strJudge2 = AMM_Main.AMM.GetPickingListinfo(data.UID);
 
                         //// Tower 제외
-                        string strTowerNo = data.Tower_no.Substring(4, 1);
-                        string strJudge3 = "OK";
+                        //string strTowerNo = data.Tower_no.Substring(4, 1);
+                        //string strJudge3 = "OK";
 
-                        if (!checkBox_tower1.Checked)
-                        {
-                            if (strTowerNo == "1")
-                                strJudge3 = "NG";
-                        }
+                        //if (!checkBox_tower1.Checked)
+                        //{
+                        //    if (strTowerNo == "1")
+                        //        strJudge3 = "NG";
+                        //}
 
-                        if (!checkBox_tower2.Checked)
-                        {
-                            if (strTowerNo == "2")
-                                strJudge3 = "NG";
-                        }
-                        
+                        //if (!checkBox_tower2.Checked)
+                        //{
+                        //    if (strTowerNo == "2")
+                        //        strJudge3 = "NG";
+                        //}
+                        string TowerUse = AMM_Main.AMM.Get_Twr_Use(data.Tower_no);
 
-                        if (strJudge == "OK" && strJudge2 == "OK" && strJudge3 == "OK")
+
+
+                        if (TowerUse == "USE")
                         {
                             if (data.Tower_no.Substring(2, 1) == "1") list.Add(data);
                             else if (data.Tower_no.Substring(2, 1) == "2") list2.Add(data);
@@ -1759,11 +1954,14 @@ namespace Amkor_Material_Manager
                     {
                         if (!lastmtl)
                         {
-                            Frm_Process.Form_Show("자재 없음! 핸들러 또는 MC에게 문의 하세요!", 1000);
-                            while (Frm_Process.bState)
+                            using (Form_Progress Frm_Process = new Form_Progress())
                             {
-                                Application.DoEvents();
-                                Thread.Sleep(1);
+                                Frm_Process.Form_Show("자재 없음! 핸들러 또는 MC에게 문의 하세요!", 1000);
+                                while (Frm_Process.bState)
+                                {
+                                    Application.DoEvents();
+                                    Thread.Sleep(1);
+                                }
                             }
                         }
 
@@ -1785,6 +1983,8 @@ namespace Amkor_Material_Manager
             dataGridView_view.Columns.Add("벤더#", "벤더#");
             dataGridView_view.Columns.Add("보유수량", "보유수량");
             dataGridView_view.Columns.Add("위치", "위치");
+
+            
 
             string strSetLotid = "", strSetSID = "", strCompareSID = "", strTWID = "";
             int nReelcount = 0;
@@ -1817,7 +2017,7 @@ namespace Amkor_Material_Manager
                         if (strSetLotid != "" && strTWID == list[i].Tower_no.ToString().Substring(2, 1))
                         {
 
-                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + list[i].Tower_no.Substring(2, 1) });
+                            dataGridView_view.Rows.Add(new object[] { strSetSID, strSetLotid, nReelcount, "TWR" + list[i].Tower_no.Substring(2, 1) });
 
                             strSetLotid = list[i].LOTID;
                             strSetSID = list[i].SID;
@@ -1839,7 +2039,7 @@ namespace Amkor_Material_Manager
 
                         if (strTWID != list[i].Tower_no.Substring(2, 1))
                         {
-                            dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + strTWID });
+                            dataGridView_view.Rows.Add(new object[] { strSetSID, strSetLotid, nReelcount, "TWR" + strTWID });
                             strSetLotid = list[i].LOTID;
                             strSetSID = list[i].SID;
                             strTWID = list[i].Tower_no.Substring(2, 1);
@@ -1850,7 +2050,7 @@ namespace Amkor_Material_Manager
 
                     if (i == list.Count - 1)
                     {
-                        dataGridView_view.Rows.Add(new object[4] { strSetSID, strSetLotid, nReelcount, "TWR" + list[i].Tower_no.Substring(2, 1) });
+                        dataGridView_view.Rows.Add(new object[] { strSetSID, strSetLotid, nReelcount, "TWR" + list[i].Tower_no.Substring(2, 1) });
                     }
                 }
             }
@@ -2081,14 +2281,17 @@ namespace Amkor_Material_Manager
 
             if (nSidcount > 1 && !lastmtl)
             {
-                strMsg = strMsg + "\n여러개 SID가 존재 합니다.\n전체 자리를 확인 후 계속 진행 하세요.";
-
-                Frm_Process.Form_Show(strMsg, 1);
-
-                while (Frm_Process.bState)
+                using (Form_Progress Frm_Process = new Form_Progress())
                 {
-                    Application.DoEvents();
-                    Thread.Sleep(1);
+                    strMsg = strMsg + "\n여러개 SID가 존재 합니다.\n전체 자리를 확인 후 계속 진행 하세요.";
+
+                    Frm_Process.Form_Show(strMsg, 1);
+
+                    while (Frm_Process.bState)
+                    {
+                        Application.DoEvents();
+                        Thread.Sleep(1);
+                    }
                 }
             }
 
@@ -2123,15 +2326,17 @@ namespace Amkor_Material_Manager
 
                         if (datacheck.UID ==  uid)
                         {
-                            string str = string.Format("해당 자재는 Group # {0} 에서 배출 가능 합니다.", n);
-                            Frm_Process.Form_Show(str, n);
-
-                            while (Frm_Process.bState)
+                            using (Form_Progress Frm_Process = new Form_Progress())
                             {
-                                Application.DoEvents();
-                                Thread.Sleep(1);
-                            }
+                                string str = string.Format("해당 자재는 Group # {0} 에서 배출 가능 합니다.", n);
+                                Frm_Process.Form_Show(str, n);
 
+                                while (Frm_Process.bState)
+                                {
+                                    Application.DoEvents();
+                                    Thread.Sleep(1);
+                                }
+                            }
                             return 1;
                         }
                     }
@@ -2139,11 +2344,14 @@ namespace Amkor_Material_Manager
 
                 if (!lastmtl)
                 {
-                    Frm_Process.Form_Show("자재 없음! 핸들러 또는 MC에게 문의 하세요!", 1000);
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
+                        Frm_Process.Form_Show("자재 없음! 핸들러 또는 MC에게 문의 하세요!", 1000);
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
                     }
                 }
 
@@ -2191,13 +2399,16 @@ namespace Amkor_Material_Manager
 
                             if (datacheck.UID == uid)
                             {
-                                string str = string.Format("해당 자재는 Group # {0} 에서 배출 가능 합니다.", n);
-                                Frm_Process.Form_Show(str, n);
-
-                                while (Frm_Process.bState)
+                                using (Form_Progress Frm_Process = new Form_Progress())
                                 {
-                                    Application.DoEvents();
-                                    Thread.Sleep(1);
+                                    string str = string.Format("해당 자재는 Group # {0} 에서 배출 가능 합니다.", n);
+                                    Frm_Process.Form_Show(str, n);
+
+                                    while (Frm_Process.bState)
+                                    {
+                                        Application.DoEvents();
+                                        Thread.Sleep(1);
+                                    }
                                 }
                                 return 1;
                             }
@@ -2206,11 +2417,14 @@ namespace Amkor_Material_Manager
 
                     if (!lastmtl)
                     {
-                        Frm_Process.Form_Show("자재 없음! 핸들러 또는 MC에게 문의 하세요!", 1000);
-                        while (Frm_Process.bState)
+                        using (Form_Progress Frm_Process = new Form_Progress())
                         {
-                            Application.DoEvents();
-                            Thread.Sleep(1);
+                            Frm_Process.Form_Show("자재 없음! 핸들러 또는 MC에게 문의 하세요!", 1000);
+                            while (Frm_Process.bState)
+                            {
+                                Application.DoEvents();
+                                Thread.Sleep(1);
+                            }
                         }
                     }
 
@@ -2336,16 +2550,18 @@ namespace Amkor_Material_Manager
 
             if (list.Count < nCount)
             {
-                string str = string.Format("요청 수량 보다 배출 가능 수량이 적습니다.\n다시 자재 조회 하여 주십시오.", 1);
-
-                Frm_Process.Form_Show(str, 1);
-
-                while (Frm_Process.bState)
+                using (Form_Progress Frm_Process = new Form_Progress())
                 {
-                    Application.DoEvents();
-                    Thread.Sleep(1);
-                }
+                    string str = string.Format("요청 수량 보다 배출 가능 수량이 적습니다.\n다시 자재 조회 하여 주십시오.", 1);
 
+                    Frm_Process.Form_Show(str, 1);
+
+                    while (Frm_Process.bState)
+                    {
+                        Application.DoEvents();
+                        Thread.Sleep(1);
+                    }
+                }
                 return -1;
             }
 
@@ -2367,7 +2583,7 @@ namespace Amkor_Material_Manager
 
             return 0;
         }
-        public int Fnc_RequestMaterial_ALL(string strlinecode, string strSid, string strLotid, int nCount, string strPickingid) //BYK ALL Data 조회에서 자재 반출대기 List로 이동. 
+        public int Fnc_RequestMaterial_ALL(string strlinecode, string strSid, string strLotid, int nCount, string strPickingid, string strEq) //BYK ALL Data 조회에서 자재 반출대기 List로 이동. 
         {
             var MtlList = AMM_Main.AMM.GetMTLInfo_SID_ALL(strlinecode, strSid);
 
@@ -2394,27 +2610,21 @@ namespace Amkor_Material_Manager
                 data.Production_date = MtlList.Rows[i]["PRODUCTION_DATE"].ToString(); data.Production_date = data.Production_date.Trim();
                 data.Inch = MtlList.Rows[i]["INCH_INFO"].ToString(); data.Inch = data.Inch.Trim();
                 data.Input_type = MtlList.Rows[i]["INPUT_TYPE"].ToString(); data.Input_type = data.Input_type.Trim();
+                data.Equipid = MtlList.Rows[i]["EQUIP_ID"].ToString(); data.Equipid = data.Equipid.Trim();
 
                 string strJudge = AMM_Main.AMM.GetPickingReadyinfo(data.UID);
                 string strJudge2 = AMM_Main.AMM.GetPickingListinfo(data.UID);
+
+
+                string TowerUse = AMM_Main.AMM.Get_Twr_Use(data.Tower_no);
 
                 //// Tower 제외
                 string strTowerNo = data.Tower_no.Substring(4, 1);
                 string strJudge3 = "OK";
 
-                if (!checkBox_tower1.Checked)
-                {
-                    if (strTowerNo == "1")
-                        strJudge3 = "NG";
-                }
+                
 
-                if (!checkBox_tower2.Checked)
-                {
-                    if (strTowerNo == "2")
-                        strJudge3 = "NG";
-                }
-
-                if (strJudge == "OK" && strJudge2 == "OK" && strJudge3 == "OK")
+                if (TowerUse == "USE")
                     list_first.Add(data);
                 else if (strJudge == "ERROR")
                     AMM_Main.strAMM_Connect = "NG";
@@ -2459,26 +2669,24 @@ namespace Amkor_Material_Manager
 
             }
 
-
             List_Sort2 = List_Sort2.OrderBy(x => x.Input_date).ToList();
             if (List_Sort2.Count != 0)
             {
                 if ((Int64.Parse(List_Sort2[0].Input_date)) > (Int64.Parse(List_Sort2[List_Sort2.Count - 1].Input_date)))
                 {
                     List_Sort2 = List_Sort2.OrderByDescending(x => x.Input_date).ToList();
-
                 }
             }
+
             for (int n = 0; n < nCount; n++)
             {
-
                 if( (List_Sort1.Count - n) > 0)
                 {
                     nReadyMTLcount++;
-                    dataGridView_ready.Rows.Add(new object[8] { nReadyMTLcount, List_Sort1[n].SID, List_Sort1[n].LOTID, List_Sort1[n].UID, List_Sort1[n].Quantity, List_Sort1[n].Tower_no, List_Sort1[n].Inch, List_Sort1[n].Input_type });
+                    dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, List_Sort1[n].SID, List_Sort1[n].LOTID, List_Sort1[n].UID, List_Sort1[n].Quantity, List_Sort1[n].Tower_no, List_Sort1[n].Inch, List_Sort1[n].Input_type, List_Sort1[n].Manufacturer, List_Sort1[n].Production_date });
 
                     equipid = "TWR" + List_Sort1[n].Tower_no.Substring(2, 1);
-                    string strJudge = AMM_Main.AMM.SetPicking_Readyinfo(strlinecode, equipid, strPickingid, List_Sort1[n].UID, AMM_Main.strRequestor_id, List_Sort1[n].Tower_no, List_Sort1[n].SID, List_Sort1[n].LOTID, List_Sort1[n].Quantity,
+                    string strJudge = AMM_Main.AMM.SetPicking_Readyinfo(strlinecode, equipid, PickIDs[int.Parse(List_Sort1[n].Tower_no.Substring(2, 1)) - 1], List_Sort1[n].UID, AMM_Main.strRequestor_id, List_Sort1[n].Tower_no, List_Sort1[n].SID, List_Sort1[n].LOTID, List_Sort1[n].Quantity,
                         List_Sort1[n].Manufacturer, List_Sort1[n].Production_date, List_Sort1[n].Inch, List_Sort1[n].Input_type, "AMM_SID");
 
                     if (strJudge == "NG")
@@ -2488,16 +2696,23 @@ namespace Amkor_Material_Manager
                 }
                 else
                 {
-                    nReadyMTLcount++;
-                    dataGridView_ready.Rows.Add(new object[8] { nReadyMTLcount, List_Sort2[n-List_Sort1.Count].SID, List_Sort2[n-List_Sort1.Count].LOTID, List_Sort2[n-List_Sort1.Count].UID, List_Sort2[n-List_Sort1.Count].Quantity, List_Sort2[n-List_Sort1.Count].Tower_no, List_Sort2[n-List_Sort1.Count].Inch, List_Sort2[n-List_Sort1.Count].Input_type });
-
-                    equipid = "TWR" + List_Sort2[n-List_Sort1.Count].Tower_no.Substring(2, 1);
-                    string strJudge = AMM_Main.AMM.SetPicking_Readyinfo(strlinecode, equipid, strPickingid, List_Sort2[n-List_Sort1.Count].UID, AMM_Main.strRequestor_id, List_Sort2[n-List_Sort1.Count].Tower_no, List_Sort2[n-List_Sort1.Count].SID, List_Sort2[n-List_Sort1.Count].LOTID, List_Sort2[n-List_Sort1.Count].Quantity,
-                        List_Sort2[n-List_Sort1.Count].Manufacturer, List_Sort2[n-List_Sort1.Count].Production_date, List_Sort2[n-List_Sort1.Count].Inch, List_Sort2[n-List_Sort1.Count].Input_type, "AMM_SID");
-
-                    if (strJudge == "NG")
+                    for (int i = 0; i < List_Sort2.Count; i++)
                     {
-                        MessageBox.Show("DB 저장 실패!");
+                        if (List_Sort2[i].LOTID == strLotid && List_Sort2[i].SID == strSid && List_Sort2[i].Equipid == strEq)
+                        {
+                            nReadyMTLcount++;
+                            dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, List_Sort2[i].SID, List_Sort2[i].LOTID, List_Sort2[i].UID, List_Sort2[i].Quantity, List_Sort2[i].Tower_no, List_Sort2[i].Inch, List_Sort2[i].Input_type, List_Sort2[i].Manufacturer, List_Sort2[i].Production_date });
+
+                            equipid = "TWR" + List_Sort2[n - List_Sort1.Count].Tower_no.Substring(2, 1);
+                            string strJudge = AMM_Main.AMM.SetPicking_Readyinfo(strlinecode, equipid, PickIDs[int.Parse(List_Sort2[n].Tower_no.Substring(2, 1)) - 1], List_Sort2[n - List_Sort1.Count].UID, AMM_Main.strRequestor_id, List_Sort2[n - List_Sort1.Count].Tower_no, List_Sort2[n - List_Sort1.Count].SID, List_Sort2[n - List_Sort1.Count].LOTID, List_Sort2[n - List_Sort1.Count].Quantity,
+                                List_Sort2[n - List_Sort1.Count].Manufacturer, List_Sort2[n - List_Sort1.Count].Production_date, List_Sort2[n - List_Sort1.Count].Inch, List_Sort2[n - List_Sort1.Count].Input_type, "AMM_SID");
+
+                            if (strJudge == "NG")
+                            {
+                                MessageBox.Show("DB 저장 실패!");
+                            }
+                            break;
+                        }
                     }
                 }
                
@@ -2511,7 +2726,7 @@ namespace Amkor_Material_Manager
 
 
 
-            public int Fnc_RequestMaterial_uid(string strlinecode, string strGroup, string strUid, int nCount, string strPickingid)
+        public int Fnc_RequestMaterial_uid(string strlinecode, string strGroup, string strUid, int nCount, string strPickingid)
         {
             //////다시 코딩////
 
@@ -2572,15 +2787,17 @@ namespace Amkor_Material_Manager
 
             if (list.Count < nCount)
             {
-                string str = string.Format("요청 수량 보다 배출 가능 수량이 적습니다.\n다시 자재 조회 하여 주십시오.", 1);
-                Frm_Process.Form_Show(str, 1);
-
-                while (Frm_Process.bState)
+                using (Form_Progress Frm_Process = new Form_Progress())
                 {
-                    Application.DoEvents();
-                    Thread.Sleep(1);
-                }
+                    string str = string.Format("요청 수량 보다 배출 가능 수량이 적습니다.\n다시 자재 조회 하여 주십시오.", 1);
+                    Frm_Process.Form_Show(str, 1);
 
+                    while (Frm_Process.bState)
+                    {
+                        Application.DoEvents();
+                        Thread.Sleep(1);
+                    }
+                }
                 return -1;
             }
 
@@ -2716,6 +2933,25 @@ namespace Amkor_Material_Manager
             int nGroup = nSelected_groupid;
             string strGroup = (nGroup + 1).ToString();
 
+            
+
+            if (int.Parse(label_Totalcount.Text) > 25)
+            {
+                using (Form_Progress Frm_Process = new Form_Progress())
+                {
+                    string str = string.Format("배출 수량이 너무 많습니다.25개 초과!\n한 개 리스트에 자재 25개 까지 담을 수 있습니다.", 1);
+
+                    Frm_Process.Form_Show(str, 1);
+
+                    while (Frm_Process.bState)
+                    {
+                        Application.DoEvents();
+                        Thread.Sleep(1);
+                    }
+                }               
+                return;
+            }
+
             if (strPickingID != "")
             {
                 if(comboBox_group.SelectedIndex != comboBox_group.Items.Count -1)	//220829_ilyoung_타워그룹추가
@@ -2835,6 +3071,9 @@ namespace Amkor_Material_Manager
 
         private void Fnc_Picklist_Send_All(string strlincode, string strPickID) // BYK 220112 전체 Data 배출기능.
         {
+            string sTowerGroup = "";
+            string sPickIDTemp = "";
+            /*
             if (strPickID == "")
             {
                 string str = string.Format("배출 ID 정보가 없습니다.");
@@ -2843,10 +3082,14 @@ namespace Amkor_Material_Manager
             }
             ///Picklist 생성
             DataTable dt = AMM_Main.AMM.GetPickingReadyinfo_ID(strPickID);
+            */
 
-            int nCount = dt.Rows.Count;
+            dataGridView_ready.Columns["위치"].SortMode = DataGridViewColumnSortMode.Automatic;
 
-            if (nCount == 0)
+            //dt.DefaultView.Sort = ""
+                       
+
+            if (dataGridView_ready.Rows.Count == 0)
             {
                 string str = string.Format("리스트 생성 목록이 없습니다.");
                 Fnc_AlartMessage(str, 1);
@@ -2858,26 +3101,34 @@ namespace Amkor_Material_Manager
             string strJudge = "";
 
 
-            bool[] bFlag_Group = new bool[3];
-            int[] nCount_Group = new int[3];
+            bool[] bFlag_Group = new bool[5];
+            int[] nCount_Group = new int[5];
 
 
-            for (int i = 0; i < nCount; i++)
+            for (int i = 0; i < dataGridView_ready.Rows.Count; i++)
             {
-                data.Linecode = dt.Rows[i]["LINE_CODE"].ToString(); data.Linecode = data.Linecode.Trim();
-                data.Equipid = dt.Rows[i]["EQUIP_ID"].ToString(); data.Equipid = data.Equipid.Trim();
-                data.UID = dt.Rows[i]["UID"].ToString(); data.UID = data.UID.Trim();
-                data.Requestor = dt.Rows[i]["REQUESTOR"].ToString(); data.Requestor = data.Requestor.Trim();
-                data.Tower_no = dt.Rows[i]["TOWER_NO"].ToString(); data.Tower_no = data.Tower_no.Trim();
-                data.SID = dt.Rows[i]["SID"].ToString(); data.SID = data.SID.Trim();
-                data.LOTID = dt.Rows[i]["LOTID"].ToString(); data.LOTID = data.LOTID.Trim();
-                data.Quantity = dt.Rows[i]["QTY"].ToString(); data.Quantity = data.Quantity.Trim();
-                data.Manufacturer = dt.Rows[i]["MANUFACTURER"].ToString(); data.Manufacturer = data.Manufacturer.Trim();
-                data.Production_date = dt.Rows[i]["PRODUCTION_DATE"].ToString(); data.Production_date = data.Production_date.Trim();
-                data.Inch = dt.Rows[i]["INCH_INFO"].ToString(); data.Inch = data.Inch.Trim();
-                data.Input_type = dt.Rows[i]["INPUT_TYPE"].ToString(); data.Input_type = data.Input_type.Trim();
+                data.Linecode = AMM_Main.strDefault_linecode; data.Linecode = data.Linecode.Trim();
+                data.Equipid = int.Parse(dataGridView_ready.Rows[i].Cells["위치"].Value.ToString().Substring(1,2)).ToString(); data.Equipid = data.Equipid.Trim();
+                data.UID = dataGridView_ready.Rows[i].Cells["UID"].Value.ToString(); data.UID = data.UID.Trim();
+                data.Requestor = AMM_Main.strRequestor_id; data.Requestor = data.Requestor.Trim();
+                data.Tower_no = dataGridView_ready.Rows[i].Cells["위치"].Value.ToString(); data.Tower_no = data.Tower_no.Trim();
+                data.SID = dataGridView_ready.Rows[i].Cells["SID"].Value.ToString(); data.SID = data.SID.Trim();
+                data.LOTID = dataGridView_ready.Rows[i].Cells["벤더#"].Value.ToString(); data.LOTID = data.LOTID.Trim();
+                data.Quantity = dataGridView_ready.Rows[i].Cells["수량"].Value.ToString(); data.Quantity = data.Quantity.Trim();
+                data.Manufacturer = dataGridView_ready.Rows[i].Cells["MANUFACTURER"].Value.ToString(); data.Manufacturer = data.Manufacturer.Trim();
+                data.Production_date = dataGridView_ready.Rows[i].Cells["PRODUCTION_DATE"].Value.ToString(); data.Production_date = data.Production_date.Trim();
+                data.Inch = dataGridView_ready.Rows[i].Cells["인치"].Value.ToString(); data.Inch = data.Inch.Trim();
+                data.Input_type = dataGridView_ready.Rows[i].Cells["투입"].Value.ToString(); data.Input_type = data.Input_type.Trim();
 
-                strJudge = AMM_Main.AMM.SetPicking_Listinfo(strlincode, "TWR"+data.Tower_no.Substring(2,1), strPickID, data.UID, AMM_Main.strRequestor_id, data.Tower_no, data.SID, data.LOTID, data.Quantity, data.Manufacturer, data.Production_date, data.Inch, data.Input_type, "AMM");
+                if(sTowerGroup != data.Equipid)
+                {
+                    sTowerGroup = data.Equipid;                    
+                    //Fnc_Get_PickID(data.Equipid);
+                }
+
+                strJudge = AMM_Main.AMM.SetPicking_Listinfo(strlincode, "TWR"+data.Tower_no.Substring(2,1), PickIDs[int.Parse(data.Tower_no.Substring(2, 1)) - 1], 
+                    data.UID, AMM_Main.strRequestor_id, data.Tower_no, data.SID, data.LOTID, data.Quantity, data.Manufacturer, 
+                    data.Production_date, data.Inch, data.Input_type, "AMM");
 
                 try
                 {
@@ -2903,7 +3154,11 @@ namespace Amkor_Material_Manager
                     Fnc_AlartMessage(str, 1);
                 }
             }
-            strJudge = AMM_Main.AMM.Delete_PickReadyinfo(strlincode, strPickID);
+
+            for (int i = 0; i < PickIDs.Length; i++)
+            {
+                strJudge = AMM_Main.AMM.Delete_PickReadyinfo(strlincode, PickIDs[i]);
+            }
 
             if (strJudge == "NG")
             {
@@ -2916,9 +3171,11 @@ namespace Amkor_Material_Manager
             ///Pick ID Info
             ///
             //strJudge = AMM_Main.AMM.SetPickingID(strlincode, strequip, strPickID, nReadyMTLcount.ToString(), AMM_Main.strRequestor_id);
-            if (bFlag_Group[0] == true) strJudge = AMM_Main.AMM.SetPickingID(strlincode, "TWR1", strPickID, nCount_Group[0].ToString(), AMM_Main.strRequestor_id);
-            if (bFlag_Group[1] == true) strJudge = AMM_Main.AMM.SetPickingID(strlincode, "TWR2", strPickID, nCount_Group[1].ToString(), AMM_Main.strRequestor_id);
-            if (bFlag_Group[2] == true) strJudge = AMM_Main.AMM.SetPickingID(strlincode, "TWR3", strPickID, nCount_Group[2].ToString(), AMM_Main.strRequestor_id);
+            if (bFlag_Group[0] == true) strJudge = AMM_Main.AMM.SetPickingID(strlincode, "TWR1", PickIDs[0], nCount_Group[0].ToString(), AMM_Main.strRequestor_id);
+            if (bFlag_Group[1] == true) strJudge = AMM_Main.AMM.SetPickingID(strlincode, "TWR2", PickIDs[1], nCount_Group[1].ToString(), AMM_Main.strRequestor_id);
+            if (bFlag_Group[2] == true) strJudge = AMM_Main.AMM.SetPickingID(strlincode, "TWR3", PickIDs[2], nCount_Group[2].ToString(), AMM_Main.strRequestor_id);
+            if (bFlag_Group[3] == true) strJudge = AMM_Main.AMM.SetPickingID(strlincode, "TWR4", PickIDs[3], nCount_Group[3].ToString(), AMM_Main.strRequestor_id);
+            if (bFlag_Group[4] == true) strJudge = AMM_Main.AMM.SetPickingID(strlincode, "TWR5", PickIDs[4], nCount_Group[4].ToString(), AMM_Main.strRequestor_id);
 
             if (strJudge == "NG")
             {
@@ -2943,17 +3200,20 @@ namespace Amkor_Material_Manager
             AMM_Main.strRequestor_id = "";
             AMM_Main.strRequestor_name = "";
 
-            string strLog = string.Format("PICK LIST 생성 완료 - 사번:{0}, PICKID:{1}, 수량:{2}", label_Requestor.Text, strPickingID, nCount.ToString());
-            Fnc_SaveLog(strLog, 1);
+            //string strLog = string.Format("PICK LIST 생성 완료 - 사번:{0}, PICKID:{1}, 수량:{2}", label_Requestor.Text, strPickingID, nCount.ToString());
+            //Fnc_SaveLog(strLog, 1);
         }
-            public void Fnc_AlartMessage(string strMsg, int nindex)
+        public void Fnc_AlartMessage(string strMsg, int nindex)
         {
             string str = "";
             bool bstate = false;
             try
             {
-                str = string.Format(strMsg, nindex);
-                Frm_Process.Form_Show(str, nindex);
+                using (Form_Progress Frm_Process = new Form_Progress())
+                {
+                    str = string.Format(strMsg, nindex);
+                    Frm_Process.Form_Show(str, nindex);
+                }
             }
             catch (Exception ex)
             {
@@ -2961,11 +3221,11 @@ namespace Amkor_Material_Manager
                 bstate = true;
             }
 
-            while (Frm_Process.bState && !bstate)
-            {
-                Application.DoEvents();
-                Thread.Sleep(1);
-            }
+            //while (Frm_Process.bState && !bstate)
+            //{
+            //    Application.DoEvents();
+            //    Thread.Sleep(1);
+            //}
         }
 
         public void Fnc_Monitor_GetRequest(string strlincode)
@@ -3526,6 +3786,8 @@ namespace Amkor_Material_Manager
         {
             int rowIndex = e.RowIndex;
             int colIndex = e.ColumnIndex;
+            PickListSelectedRowIndex = rowIndex;
+
             lastCLick = 2;
             if (colIndex != 0)
                 colIndex = 0;
@@ -3564,12 +3826,14 @@ namespace Amkor_Material_Manager
         {
             string strPath = strSavefilePath + "\\TowerUse_config.ini";
 
-            string text = checkBox_tower1.Checked + ";" + checkBox_tower2.Checked + ";" ;
+            string text = checkBox_tower1.Checked + ";" + checkBox_tower2.Checked + ";" + checkBox_tower3.Checked + ";" + checkBox_tower4.Checked + ";";
             System.IO.File.WriteAllText(strPath, text);
 
             Form_ITS.bTowerUse[0] = checkBox_tower1.Checked;
             Form_ITS.bTowerUse[1] = checkBox_tower2.Checked;
-  
+            Form_ITS.bTowerUse[2] = checkBox_tower3.Checked;
+            Form_ITS.bTowerUse[3] = checkBox_tower4.Checked;
+
         }
 
         private void Fnc_Load_TowerUseInfo()
@@ -3752,7 +4016,8 @@ namespace Amkor_Material_Manager
         private void checkBox_tower1_CheckedChanged(object sender, EventArgs e)
         {
             int n = comboBox_group.SelectedIndex;
-            Fnc_Check_TwrUse(n + 1);
+            if(n != comboBox_group.Items.Count -1)
+                Fnc_Check_TwrUse(n + 1);
         }
 
         private void textBox_input_sid_Click(object sender, EventArgs e)
@@ -3774,16 +4039,18 @@ namespace Amkor_Material_Manager
 
                 if (strName == "NO_INFO")
                 {
-                    string str = string.Format("등록 되지 않은 사용자 입니다.\n등록 후 사용 하세요.", 1000);
-
-                    Frm_Process.Form_Show(str, 1000);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
-                    }
+                        string str = string.Format("등록 되지 않은 사용자 입니다.\n등록 후 사용 하세요.", 1000);
 
+                        Frm_Process.Form_Show(str, 1000);
+
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
+                    }
                     textBox_input_sid.Text = "";
                     return;
                 }
@@ -3804,6 +4071,12 @@ namespace Amkor_Material_Manager
                 dataGridView_ready.Columns.Add("위치", "위치");
                 dataGridView_ready.Columns.Add("인치", "인치");
                 dataGridView_ready.Columns.Add("투입", "투입");
+
+                dataGridView_ready.Columns.Add("MANUFACTURER", "MANUFACTURER");
+                dataGridView_ready.Columns.Add("PRODUCTION_DATE", "PRODUCTION_DATE");
+
+                dataGridView_ready.Columns["MANUFACTURER"].Visible = false;
+                dataGridView_ready.Columns["PRODUCTION_DATE"].Visible = false;
 
                 comboBox_group.SelectedIndex = AMM_Main.nDefaultGroup - 1;
                 comboBox_method.SelectedIndex = 0;  //SID 조회
@@ -3862,13 +4135,16 @@ namespace Amkor_Material_Manager
                     ///HY20201124                    
                     if (AMM_Main.bTAlarm[nGroup])
                     {
-                        string str = string.Format("타워 그룹 {0} 이 알람 상태 입니다.\n알람 해제를 요청 하세요\n\n리스트 생성은 가능 합니다.", nGroup + 1);
-                        Frm_Process.Form_Show(str, 1000);
-
-                        while (Frm_Process.bState)
+                        using (Form_Progress _Progress = new Form_Progress())
                         {
-                            Application.DoEvents();
-                            Thread.Sleep(1);
+                            string str = string.Format("타워 그룹 {0} 이 알람 상태 입니다.\n알람 해제를 요청 하세요\n\n리스트 생성은 가능 합니다.", nGroup + 1);
+                            _Progress.Form_Show(str, 1000);
+
+                            while (_Progress.bState)
+                            {
+                                Application.DoEvents();
+                                Thread.Sleep(1);
+                            }
                         }
                     }
                     ///////
@@ -3908,13 +4184,16 @@ namespace Amkor_Material_Manager
                     ///HY20201124
                     if (AMM_Main.bTAlarm[nGroup])
                     {
-                        string str = string.Format("타워 그룹 {0} 이 알람 상태 입니다.\n알람 해제를 요청 하세요\n\n리스트 생성은 가능 합니다.", nGroup + 1);
-                        Frm_Process.Form_Show(str, 1000);
-
-                        while (Frm_Process.bState)
+                        using (Form_Progress _Progress = new Form_Progress())
                         {
-                            Application.DoEvents();
-                            Thread.Sleep(1);
+                            string str = string.Format("타워 그룹 {0} 이 알람 상태 입니다.\n알람 해제를 요청 하세요\n\n리스트 생성은 가능 합니다.", nGroup + 1);
+                            _Progress.Form_Show(str, 1000);
+
+                            while (_Progress.bState)
+                            {
+                                Application.DoEvents();
+                                Thread.Sleep(1);
+                            }
                         }
                     }
                     ///////
@@ -3988,15 +4267,17 @@ namespace Amkor_Material_Manager
                 //if(strNo == "" || nRequestcount == 0)
                 if (nRequestcount == 0)
                 {
-                    string str = string.Format("수량을 입력 하여 주십시오", 1);
-                    Frm_Process.Form_Show(str, 1);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
-                    }
+                        string str = string.Format("수량을 입력 하여 주십시오", 1);
+                        Frm_Process.Form_Show(str, 1);
 
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
+                    }
                     textBox_reelcount.Text = "";
                     textBox_reelcount.Focus();
                     return;
@@ -4004,15 +4285,17 @@ namespace Amkor_Material_Manager
 
                 if (nRequestcount > nKeepCount)
                 {
-                    string str = string.Format("보유 수량 보다 요청 수량이 많습니다.\n다시 입력 하여 주십시오", 1);
-                    Frm_Process.Form_Show(str, 1);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
-                    }
+                        string str = string.Format("보유 수량 보다 요청 수량이 많습니다.\n다시 입력 하여 주십시오", 1);
+                        Frm_Process.Form_Show(str, 1);
 
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
+                    }
                     textBox_reelcount.Text = (nRequestcount - nKeepCount).ToString();
                     textBox_reelcount.Focus();
                     return;
@@ -4021,13 +4304,16 @@ namespace Amkor_Material_Manager
                 int nCheckcount = nReadyMTLcount + nRequestcount;
                 if (nCheckcount > 25)
                 {
-                    string str = string.Format("배출 수량이 너무 많습니다.25개 초과!\n한 개 리스트에 자재 25개 까지 담을 수 있습니다.", 1);
-                    Frm_Process.Form_Show(str, 1);
-
-                    while (Frm_Process.bState)
+                    using (Form_Progress Frm_Process = new Form_Progress())
                     {
-                        Application.DoEvents();
-                        Thread.Sleep(1);
+                        string str = string.Format("배출 수량이 너무 많습니다.25개 초과!\n한 개 리스트에 자재 25개 까지 담을 수 있습니다.", 1);
+                        Frm_Process.Form_Show(str, 1);
+
+                        while (Frm_Process.bState)
+                        {
+                            Application.DoEvents();
+                            Thread.Sleep(1);
+                        }
                     }
                     textBox_reelcount.Text = "25";//(nCheckcount - 25).ToString();
                     textBox_reelcount.Focus();
@@ -4160,9 +4446,36 @@ namespace Amkor_Material_Manager
 
                 if(PickListSelectedRowIndex != -1 && lastCLick == 2)
                 {
-                    AMM_Main.AMM.Delete_Pickidinfo2(AMM_Main.strDefault_linecode, "TWR" + AMM_Main.strDefault_Group.ToString(), dataGridView_pickinglist.Rows[PickListSelectedRowIndex].Cells[2].Value.ToString());
-                    PickListSelectedRowIndex = -1;
-                    lastCLick = -1;
+                    DataTable dt = AMM_Main.AMM.GetPickingListinfo(AMM_Main.strDefault_linecode, dataGridView_pickinglist.Rows[PickListSelectedRowIndex].Cells[4].Value.ToString(), dataGridView_pickinglist.Rows[PickListSelectedRowIndex].Cells[2].Value.ToString());
+
+                    if(dt.Rows.Count != 0)
+                    {
+                        if(dt.Rows[0][15].ToString() == "TRUE")
+                        {
+                            using (Form_Progress Frm_Process = new Form_Progress())
+                            {
+                                string str = string.Format("배출이 진행 중입니다. 배출 완료후 투입해 주세요", 1);
+
+                                Frm_Process.Form_Show(str, 1);
+
+                                while (Frm_Process.bState)
+                                {
+                                    Application.DoEvents();
+                                    Thread.Sleep(1);
+                                }
+                            }
+                            return;
+                        }
+                        else
+                        {
+                            AMM_Main.AMM.Delete_Pickidinfo2(AMM_Main.strDefault_linecode, dataGridView_pickinglist.Rows[PickListSelectedRowIndex].Cells[4].Value.ToString(), dataGridView_pickinglist.Rows[PickListSelectedRowIndex].Cells[2].Value.ToString());
+                        }
+                        PickListSelectedRowIndex = -1;
+                        lastCLick = -1;
+                    }
+
+                    
+                    
                 }
             }
         }

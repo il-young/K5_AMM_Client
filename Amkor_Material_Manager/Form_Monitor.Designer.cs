@@ -235,7 +235,7 @@
             // 
             this.label7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label7.Image = ((System.Drawing.Image)(resources.GetObject("label7.Image")));
-            this.label7.Location = new System.Drawing.Point(727, 50);
+            this.label7.Location = new System.Drawing.Point(735, 50);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(151, 103);
             this.label7.TabIndex = 21;
@@ -245,7 +245,7 @@
             // 
             this.label8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label8.Image = ((System.Drawing.Image)(resources.GetObject("label8.Image")));
-            this.label8.Location = new System.Drawing.Point(544, 50);
+            this.label8.Location = new System.Drawing.Point(552, 50);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(152, 103);
             this.label8.TabIndex = 20;
@@ -257,7 +257,7 @@
             this.label_Status_G5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label_Status_G5.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Status_G5.ForeColor = System.Drawing.Color.White;
-            this.label_Status_G5.Location = new System.Drawing.Point(721, 158);
+            this.label_Status_G5.Location = new System.Drawing.Point(729, 158);
             this.label_Status_G5.Name = "label_Status_G5";
             this.label_Status_G5.Size = new System.Drawing.Size(164, 38);
             this.label_Status_G5.TabIndex = 14;
@@ -270,7 +270,7 @@
             this.label_Status_G4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label_Status_G4.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Status_G4.ForeColor = System.Drawing.Color.White;
-            this.label_Status_G4.Location = new System.Drawing.Point(538, 158);
+            this.label_Status_G4.Location = new System.Drawing.Point(546, 158);
             this.label_Status_G4.Name = "label_Status_G4";
             this.label_Status_G4.Size = new System.Drawing.Size(165, 38);
             this.label_Status_G4.TabIndex = 15;
@@ -283,7 +283,7 @@
             this.label_Info_G5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label_Info_G5.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Info_G5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.label_Info_G5.Location = new System.Drawing.Point(721, 196);
+            this.label_Info_G5.Location = new System.Drawing.Point(729, 196);
             this.label_Info_G5.Name = "label_Info_G5";
             this.label_Info_G5.Size = new System.Drawing.Size(164, 83);
             this.label_Info_G5.TabIndex = 16;
@@ -296,7 +296,7 @@
             this.label_Info_G4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label_Info_G4.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_Info_G4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.label_Info_G4.Location = new System.Drawing.Point(538, 196);
+            this.label_Info_G4.Location = new System.Drawing.Point(546, 196);
             this.label_Info_G4.Name = "label_Info_G4";
             this.label_Info_G4.Size = new System.Drawing.Size(165, 83);
             this.label_Info_G4.TabIndex = 17;
@@ -308,7 +308,7 @@
             this.label13.BackColor = System.Drawing.Color.SlateGray;
             this.label13.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(721, 4);
+            this.label13.Location = new System.Drawing.Point(729, 4);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(164, 40);
             this.label13.TabIndex = 12;
@@ -320,7 +320,7 @@
             this.label14.BackColor = System.Drawing.Color.SlateGray;
             this.label14.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(538, 4);
+            this.label14.Location = new System.Drawing.Point(546, 4);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(165, 40);
             this.label14.TabIndex = 13;
@@ -330,7 +330,7 @@
             // label_alive5
             // 
             this.label_alive5.BackColor = System.Drawing.Color.Silver;
-            this.label_alive5.Location = new System.Drawing.Point(721, 45);
+            this.label_alive5.Location = new System.Drawing.Point(729, 45);
             this.label_alive5.Name = "label_alive5";
             this.label_alive5.Size = new System.Drawing.Size(164, 113);
             this.label_alive5.TabIndex = 18;
@@ -338,7 +338,7 @@
             // label_alive4
             // 
             this.label_alive4.BackColor = System.Drawing.Color.Silver;
-            this.label_alive4.Location = new System.Drawing.Point(538, 45);
+            this.label_alive4.Location = new System.Drawing.Point(546, 45);
             this.label_alive4.Name = "label_alive4";
             this.label_alive4.Size = new System.Drawing.Size(165, 113);
             this.label_alive4.TabIndex = 19;

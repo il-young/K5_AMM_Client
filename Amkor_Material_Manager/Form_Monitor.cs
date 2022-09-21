@@ -612,62 +612,63 @@ namespace Amkor_Material_Manager
                         }
                     }
                 }
+            }
 
-                else if (strGroup == "TWR5")
+            else if (strGroup == "TWR5")
+            {
+                if (!bAliveAlarm[4])
                 {
-                    if (!bAliveAlarm[4])
+                    if (nValue == 0)
+                        label_alive5.BackColor = Color.FromArgb(0, 190, 0);
+                    else
+                        label_alive5.BackColor = Color.FromArgb(0, 190, 0);
+                }
+                else
+                    Fnc_Status_Alarm(strGroup);
+
+                strAlive[4] = nValue.ToString();
+
+                if (strAlive[4] == "0")
+                {
+                    if (nAlive[4] == 1)
                     {
-                        if (nValue == 0)
-                            label_alive5.BackColor = Color.FromArgb(0, 190, 0);
-                        else
-                            label_alive5.BackColor = Color.FromArgb(0, 190, 0);
+                        bStopwatch_Alve[4] = false;
+                        sw_AliveTime_5.Stop();
+                        sw_AliveTime_5.Reset();
+
+                        bAliveAlarm[4] = false;
                     }
                     else
-                        Fnc_Status_Alarm(strGroup);
-
-                    strAlive[4] = nValue.ToString();
-
-                    if (strAlive[4] == "0")
                     {
-                        if (nAlive[4] == 1)
+                        if (!bStopwatch_Alve[4])
                         {
-                            bStopwatch_Alve[4] = false;
-                            sw_AliveTime_5.Stop();
-                            sw_AliveTime_5.Reset();
-
-                            bAliveAlarm[4] = false;
-                        }
-                        else
-                        {
-                            if (!bStopwatch_Alve[4])
-                            {
-                                sw_AliveTime_5.Start();
-                                bStopwatch_Alve[4] = true;
-                                nAlive[4] = 0;
-                            }
+                            sw_AliveTime_5.Start();
+                            bStopwatch_Alve[4] = true;
+                            nAlive[4] = 0;
                         }
                     }
-                    else if (strAlive[4] == "1")
+                }
+                else if (strAlive[4] == "1")
+                {
+                    if (nAlive[4] == 0)
                     {
-                        if (nAlive[4] == 0)
+                        bStopwatch_Alve[4] = false;
+                        sw_AliveTime_5.Stop();
+                        sw_AliveTime_5.Reset();
+                        bAliveAlarm[4] = false;
+                    }
+                    else
+                    {
+                        if (!bStopwatch_Alve[4])
                         {
-                            bStopwatch_Alve[4] = false;
-                            sw_AliveTime_5.Stop();
-                            sw_AliveTime_5.Reset();
-                            bAliveAlarm[4] = false;
-                        }
-                        else
-                        {
-                            if (!bStopwatch_Alve[4])
-                            {
-                                sw_AliveTime_5.Start();
-                                bStopwatch_Alve[4] = true;
-                                nAlive[4] = 1;
-                            }
+                            sw_AliveTime_5.Start();
+                            bStopwatch_Alve[4] = true;
+                            nAlive[4] = 1;
                         }
                     }
                 }
             }
+            
             //220829_ilyoung_타워그룹추가
 
 
