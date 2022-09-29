@@ -168,7 +168,7 @@ namespace Amkor_Material_Manager
 
                 Fnc_Update_timeset();
 
-
+                comboBox_group2_SelectedIndexChanged(sender, e);
 
                 bUpdate_Timer = false;
             }
@@ -2007,7 +2007,16 @@ namespace Amkor_Material_Manager
 
             label_updatedate2.Text = "최근 업데이트: " + strToday + " " + strHead;
 
-            var MtlList = AMM_Main.AMM.GetInouthistroy_Sid2(AMM_Main.strDefault_linecode, strEquip, strSearch_sid, strTime_st, strTime_ed);
+            var MtlList = new DataTable();
+
+            if(int.Parse(strEquip.Replace("TWR","")) == comboBox_group2.Items.Count )
+            {
+                MtlList = AMM_Main.AMM.GetInouthistroy_Sid3(AMM_Main.strDefault_linecode, strSearch_sid, strTime_st, strTime_ed);
+            }
+            else
+            {
+                MtlList = AMM_Main.AMM.GetInouthistroy_Sid2(AMM_Main.strDefault_linecode, strEquip, strSearch_sid, strTime_st, strTime_ed);
+            }
 
             int nMtlCount = MtlList.Rows.Count;
 
@@ -3431,6 +3440,8 @@ namespace Amkor_Material_Manager
             {
                 if (nGroup != comboBox_group2.Items.Count)//210909_Sangik.choi_입출고정보 7번그룹 추가
                     Fnc_Process_GetINOUT_mtlinfo(nType, strEquipid, Double.Parse(strDate_st), Double.Parse(strDate_ed));
+                else
+                    Fnc_Process_GetINOUT_mtlinfo_Sid2(nType, strEquipid, textBox_sid.Text, Double.Parse(strDate_st), Double.Parse(strDate_ed));
             }            
 
             IsDateGathering = false;

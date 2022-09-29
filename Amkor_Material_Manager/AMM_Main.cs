@@ -144,40 +144,48 @@ namespace Amkor_Material_Manager
 
         private string Fnc_Load_UpdateInfo()
         {
-            string strPath = Application.StartupPath + "\\Updateinfo.ini";
+            string strPath = Application.StartupPath + "\\Auto_Updater.exe.config";
+            return  File.GetLastWriteTime(Application.StartupPath + "\\Auto_Updater.exe.config").ToString();
+            //if (!File.Exists(strPath))
+            //{
+            //    //System.IO.File.WriteAllText(strPath, "0");
+            //}
+            //else
+            //{
+            //    string[] lines = System.IO.File.ReadAllLines(strPath);
+            //    int nLength = lines.Length;
 
-            if (!File.Exists(strPath))
-            {
-                //System.IO.File.WriteAllText(strPath, "0");
-            }
-            else
-            {
-                string[] lines = System.IO.File.ReadAllLines(strPath);
-                int nLength = lines.Length;
+            //    if (nLength > 0)
+            //        return lines[0];
+            //}
 
-                if (nLength > 0)
-                    return lines[0];
-            }
-
-            return "0";
+            //return "0";
         }
 
         private void CheckAppVersion()
         {
-            string AppVer = AMM.ReadAppVersion("AMM_CLIENT");
-            if (strAppVersion != AppVer)
+            string AppVer = (AMM.ReadAppDate("AMM_CLIENT"));
+
+            DateTime dateApp = DateTime.Parse(AppVer);
+
+            if (Form_Order.nTabIndex != 1)
             {
-                using (Form_Progress Frm_Process = new Form_Progress())
+                if (DateTime.Parse(strAppVersion) < dateApp)
                 {
-                    Frm_Process.Form_Show("최종 버전이 아닙니다 Update 프로그램을 실행 합니다.", 1006);
+                    using (Form_Progress Frm_Process = new Form_Progress())
+                    {
+                        Frm_Process.Form_Show("최종 버전이 아닙니다 Update 프로그램을 실행 합니다.", 1006);
 
-                    Process firstProc = new Process();
-                    firstProc.StartInfo.FileName = Application.StartupPath + "\\Auto_Updater.exe";
-                    firstProc.EnableRaisingEvents = true;
-                    firstProc.Start();
+                        Process firstProc = new Process();
+                        firstProc.StartInfo.FileName = Application.StartupPath + "\\Auto_Updater.exe";
+                        firstProc.EnableRaisingEvents = true;
+                        firstProc.Start();
+                    }
+
+                    File.SetLastWriteTime(Application.StartupPath + "\\Auto_Updater.exe.config", DateTime.Now);
+
+                    Close();
                 }
-
-                Close();
             }
         }
 
@@ -224,6 +232,8 @@ namespace Amkor_Material_Manager
             }
         }
 
+        int AppVerCnt = 0;
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             string strToday = string.Format("{0}/{1:00}/{2:00}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
@@ -249,8 +259,13 @@ namespace Amkor_Material_Manager
             {
                 label_state.BackColor = System.Drawing.Color.Red;
             }
-
-            CheckAppVersion();
+            
+            if (AppVerCnt++ >= 300)
+            {
+                CheckAppVersion();
+                AppVerCnt = 0;
+            }
+            
         }
 
         private void AMM_Main_FormClosing(object sender, FormClosingEventArgs e)

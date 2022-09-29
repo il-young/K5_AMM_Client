@@ -30,7 +30,7 @@ namespace Amkor_Material_Manager
         string strKeepingcount = "";
         string strPickingID = "";
         string strDefaultPickingID = "";
-        int nTabIndex = 0;
+        static public int nTabIndex = 0;
         int nReadyMTLcount = 0;
         int nSelected_groupid = -1;
         int nMonitorIndex = 0;
@@ -2696,21 +2696,28 @@ namespace Amkor_Material_Manager
                 }
                 else
                 {
-                    for (int i = 0; i < List_Sort2.Count; i++)
+                    //for (int i = 0; i < List_Sort2.Count; i++)
+                    foreach(var row in List_Sort2)
                     {
-                        if (List_Sort2[i].LOTID == strLotid && List_Sort2[i].SID == strSid && List_Sort2[i].Equipid == strEq)
+                        StorageData RowTemp = (StorageData)row;
+                        if (RowTemp.LOTID == strLotid && RowTemp.SID == strSid && RowTemp.Equipid == strEq)
                         {
                             nReadyMTLcount++;
-                            dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, List_Sort2[i].SID, List_Sort2[i].LOTID, List_Sort2[i].UID, List_Sort2[i].Quantity, List_Sort2[i].Tower_no, List_Sort2[i].Inch, List_Sort2[i].Input_type, List_Sort2[i].Manufacturer, List_Sort2[i].Production_date });
+                            dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, RowTemp.SID, RowTemp.LOTID, RowTemp.UID,
+                                RowTemp.Quantity, RowTemp.Tower_no, RowTemp.Inch, RowTemp.Input_type, RowTemp.Manufacturer,
+                                RowTemp.Production_date });
 
-                            equipid = "TWR" + List_Sort2[n - List_Sort1.Count].Tower_no.Substring(2, 1);
-                            string strJudge = AMM_Main.AMM.SetPicking_Readyinfo(strlinecode, equipid, PickIDs[int.Parse(List_Sort2[n].Tower_no.Substring(2, 1)) - 1], List_Sort2[n - List_Sort1.Count].UID, AMM_Main.strRequestor_id, List_Sort2[n - List_Sort1.Count].Tower_no, List_Sort2[n - List_Sort1.Count].SID, List_Sort2[n - List_Sort1.Count].LOTID, List_Sort2[n - List_Sort1.Count].Quantity,
-                                List_Sort2[n - List_Sort1.Count].Manufacturer, List_Sort2[n - List_Sort1.Count].Production_date, List_Sort2[n - List_Sort1.Count].Inch, List_Sort2[n - List_Sort1.Count].Input_type, "AMM_SID");
+                            equipid = "TWR" + RowTemp.Tower_no.Substring(2, 1);
+                            string strJudge = AMM_Main.AMM.SetPicking_Readyinfo(strlinecode, equipid, PickIDs[int.Parse(RowTemp.Tower_no.Substring(2, 1)) - 1],
+                                RowTemp.UID, AMM_Main.strRequestor_id, RowTemp.Tower_no, RowTemp.SID, RowTemp.LOTID, RowTemp.Quantity,
+                                RowTemp.Manufacturer, RowTemp.Production_date, RowTemp.Inch, RowTemp.Input_type, "AMM_SID");
 
                             if (strJudge == "NG")
                             {
                                 MessageBox.Show("DB 저장 실패!");
                             }
+
+                            List_Sort2.Remove(row);
                             break;
                         }
                     }
@@ -3479,7 +3486,7 @@ namespace Amkor_Material_Manager
                     strSid = strSid.Trim();
                     string str = string.Format("Employee ID : {0}({1}) 완료 되었습니다.", strEName, strSid);
 
-                    Fnc_AlartMessage(str, 1005);
+                    Fnc_AlartMessage(str, 1006);
 
                     nMonitorIndex = 0;
                     label_OutID.Text = "-";

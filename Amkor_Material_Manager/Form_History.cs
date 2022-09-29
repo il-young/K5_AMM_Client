@@ -218,7 +218,37 @@ namespace Amkor_Material_Manager
 
             label_updatedate2.Text = "최근 조회: " + strToday + " " + strHead;
 
-            DataTable dtEvent = AMM_Main.AMM.GetEqEvent(strLincode, strEqid);
+            DataTable dtEvent = new DataTable();
+
+            if (comboBox_group2.SelectedIndex + 1 == comboBox_group2.Items.Count)
+            {
+                DataTable dtTemp = new DataTable();
+                for (int i = 0; i < comboBox_group2.Items.Count; i++)
+                {
+                    dtTemp = AMM_Main.AMM.GetEqEvent(strLincode, "TWR" + i.ToString());
+
+                    if (dtEvent.Rows.Count == 0)
+                    {
+                        dtEvent = dtTemp;
+                    }
+                    else
+                    {
+                        for (int j = 0; j < dtTemp.Rows.Count; j++)
+                        {
+                            dtEvent.Rows.Add(dtTemp.Rows[j][0].ToString(), dtTemp.Rows[j][1].ToString(), dtTemp.Rows[j][2].ToString(), dtTemp.Rows[j][3].ToString(),
+                                dtTemp.Rows[j][4].ToString(), dtTemp.Rows[j][5].ToString(), dtTemp.Rows[j][6].ToString(), dtTemp.Rows[j][7].ToString());
+                        }
+                    }
+                }
+
+                
+            }
+            else
+            {
+                 dtEvent = AMM_Main.AMM.GetEqEvent(strLincode, strEqid);
+            }
+
+            
 
             int nCount = dtEvent.Rows.Count;
 
