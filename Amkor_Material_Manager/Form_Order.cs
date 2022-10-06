@@ -3486,7 +3486,7 @@ namespace Amkor_Material_Manager
                     strSid = strSid.Trim();
                     string str = string.Format("Employee ID : {0}({1}) 완료 되었습니다.", strEName, strSid);
 
-                    Fnc_AlartMessage(str, 1006);
+                    Fnc_AlartMessage(str, 1003);
 
                     nMonitorIndex = 0;
                     label_OutID.Text = "-";

@@ -51,6 +51,11 @@ namespace Amkor_Material_Manager
                     timer1.Start();
                     timer1.Enabled = true;
                 }
+                else if(nType == 1003)
+                {
+                    bState = true;
+                    ShowDialog();
+                }
                 else if (nType == 1004)
                 {
                     bState = true;
@@ -99,7 +104,7 @@ namespace Amkor_Material_Manager
                 label1.BackColor = System.Drawing.Color.RoyalBlue;
                 nChangeIndex = 0;
             }
-            else if(n == 1005)
+            else if(n == 1005 || n == 1003)
             {
                 label1.BackColor = System.Drawing.Color.DarkGreen;
                 nChangeIndex = 0;
