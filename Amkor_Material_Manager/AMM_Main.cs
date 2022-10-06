@@ -77,9 +77,6 @@ namespace Amkor_Material_Manager
         }
         public void Fnc_init()
         {
-            Version = Application.ProductVersion;
-            Text = "S/W Version:" + Version;
-
             Frm_Order.MdiParent = this;
             Frm_Order.Location = new Point(0, 0);
             Frm_Order.Size = new Size(1013, 390);
@@ -139,26 +136,30 @@ namespace Amkor_Material_Manager
             timer1.Start();
             CheckAppVersion();
 
+            Text = "S/W Version: " + Version;
+
             Fnc_SaveLog("프로그램 시작.", 0);
         }
 
         private string Fnc_Load_UpdateInfo()
         {
             string strPath = Application.StartupPath + "\\Auto_Updater.exe.config";
-            return  File.GetLastWriteTime(Application.StartupPath + "\\Auto_Updater.exe.config").ToString();
-            //if (!File.Exists(strPath))
-            //{
-            //    //System.IO.File.WriteAllText(strPath, "0");
-            //}
-            //else
-            //{
-            //    string[] lines = System.IO.File.ReadAllLines(strPath);
-            //    int nLength = lines.Length;
+            string strVerPath = Application.StartupPath + "\\Versioninfo.ini";
 
-            //    if (nLength > 0)
-            //        return lines[0];
-            //}
+            if (!File.Exists(strPath))
+            {
+                //system.io.file.writealltext(strpath, "0");
+            }
+            else
+            {
+                string[] lines = System.IO.File.ReadAllLines(strVerPath);
+                int nlength = lines.Length;
 
+                if (nlength > 0)
+                    Version = lines[0];
+            }
+
+            return File.GetLastWriteTime(Application.StartupPath + "\\Auto_Updater.exe.config").ToString();
             //return "0";
         }
 
@@ -366,6 +367,11 @@ namespace Amkor_Material_Manager
             Form_History.IsDateGathering = false;
 
             Fnc_SaveLog("설비 모니터링 창 이동.", 0);
+        }
+
+        private void AMM_Main_Load(object sender, EventArgs e)
+        {
+
         }
 
         public void Fnc_Show_InventoryViewer()
