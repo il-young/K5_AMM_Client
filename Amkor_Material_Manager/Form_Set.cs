@@ -168,8 +168,8 @@ namespace Amkor_Material_Manager
             {
                 string strdate = dt_List.Rows[n]["DATETIME"].ToString();
 
-                strdate = strdate.Substring(0, 4) + "-" + strdate.Substring(4, 2) + "-" + strdate.Substring(6, 2) + " "
-                    + strdate.Substring(8, 2) + ":" + strdate.Substring(10, 2) + ":" + strdate.Substring(12, 2);
+                //strdate = strdate.Substring(0, 4) + "-" + strdate.Substring(4, 2) + "-" + strdate.Substring(6, 2) + " "
+                    //+ strdate.Substring(8, 2) + ":" + strdate.Substring(10, 2) + ":" + strdate.Substring(12, 2);
 
                 string strSid = dt_List.Rows[n]["USER_SID"].ToString(); strSid = strSid.Trim();
                 string strName = dt_List.Rows[n]["USER_NAME"].ToString(); strName = strName.Trim();
@@ -200,11 +200,12 @@ namespace Amkor_Material_Manager
 
                 if (Value == "True")
                 {
+                    string strDate = dataGridView_List.Rows[n].Cells[0].Value.ToString();
                     string strSid = dataGridView_List.Rows[n].Cells[1].Value.ToString();
-                    string strName = dataGridView_List.Rows[n].Cells[2].Value.ToString();
+                    string strName = dataGridView_List.Rows[n].Cells[2].Value.ToString();                    
 
                     string strJudge = AMM_Main.AMM.User_Register(strSid, strName);
-                    if (strJudge == "NG")
+                    if (strJudge.Contains("Fail") == true)
                     {
                         str = string.Format("등록 실패! {0} {1}", strSid, strName);
                         MessageBox.Show(str);
@@ -212,10 +213,10 @@ namespace Amkor_Material_Manager
                     }
                     else
                     {
-                        strJudge = AMM_Main.AMM.Delete_UserRequest(strSid);
+                        strJudge = AMM_Main.AMM.Delete_UserRequest(strSid, strDate);
                         if (strJudge != "OK")
                         {
-                            str = string.Format("등록 실패! {0} {1}", strSid, strName);
+                            str = string.Format("삭제 실패! {0} {1}", strSid, strName);
                             MessageBox.Show(str);
                         }
                     }
