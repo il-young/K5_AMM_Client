@@ -68,6 +68,7 @@
             this.textBox_pw.PasswordChar = '*';
             this.textBox_pw.Size = new System.Drawing.Size(297, 37);
             this.textBox_pw.TabIndex = 7;
+            this.textBox_pw.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_pw_KeyDown);
             // 
             // textBox_id
             // 
@@ -76,6 +77,7 @@
             this.textBox_id.Name = "textBox_id";
             this.textBox_id.Size = new System.Drawing.Size(297, 37);
             this.textBox_id.TabIndex = 6;
+            this.textBox_id.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_id_KeyDown);
             // 
             // label3
             // 

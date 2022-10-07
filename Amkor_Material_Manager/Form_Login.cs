@@ -45,5 +45,17 @@ namespace Amkor_Material_Manager
             textBox_pw.Text = "";
             textBox_pw.Focus();
         }
+
+        private void textBox_pw_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyValue == 13)
+                button_login_Click(sender, e);
+        }
+
+        private void textBox_id_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyValue == 13)
+                textBox_pw.Focus();
+        }
     }
 }
