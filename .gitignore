@@ -7,3 +7,4 @@ Amkor_Material_Manager/bin/
 *.resources
 *.pdb
 .vs/
+Amkor_Material_Manager/AMM.dll

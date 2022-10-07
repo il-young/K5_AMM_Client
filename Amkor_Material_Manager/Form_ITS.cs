@@ -1763,9 +1763,9 @@ namespace Amkor_Material_Manager
                 return nMtlCount;
             }
 
-            label_incount.Text = string.Format("{0:0,0}", list_input.Count.ToString());
-            label_returncount.Text = string.Format("{0:0,0}", list_return.Count.ToString());
-            label_outcount.Text = string.Format("{0:0,0}", list_out.Count.ToString());
+            label_incount.Text = string.Format("{0:0,0}", (int.Parse(label_incount.Text) + list_input.Count).ToString());
+            label_returncount.Text = string.Format("{0:0,0}", (int.Parse(label_returncount.Text) + list_return.Count).ToString());
+            label_outcount.Text = string.Format("{0:0,0}", (int.Parse(label_outcount.Text) + list_out.Count).ToString());
 
             return nMtlCount;
         }
@@ -2632,6 +2632,13 @@ namespace Amkor_Material_Manager
             }
         }
 
+        public void InitLabel()
+        {
+            label_incount.Text = "0";
+            label_returncount.Text = "0";
+            label_outcount.Text = "0";
+        }
+
         public void Fnc_ExcelCreate_INOUTInfo_SID(string strPath, string strStart, string strEnd)
         {
             Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
@@ -2694,6 +2701,9 @@ namespace Amkor_Material_Manager
                 if (bGroupUse[n])
                 {
                     Fnc_Init_datagrid2(0);
+
+                    InitLabel();
+
                     Fnc_Process_GetINOUT_mtlinfo(0, strEqinfo, Double.Parse(strStart), Double.Parse(strEnd));
 
                     nGcount_input = dataGridView_input.RowCount;
@@ -2833,7 +2843,9 @@ namespace Amkor_Material_Manager
 
                 if (bGroupUse[n])
                 {
+
                     Fnc_Init_datagrid2(1);
+                    InitLabel();
                     Fnc_Process_GetINOUT_mtlinfo(1, strEqinfo, Double.Parse(strStart), Double.Parse(strEnd));
 
                     nGcount_input = dataGridView_input.RowCount;
@@ -3397,8 +3409,17 @@ namespace Amkor_Material_Manager
                         return;
                     }
 
-                    if (nGroup != 4) //210909_Sangik.choi_입출고정보 7번그룹 추가
+                    InitLabel();
+
+                    if (nGroup != comboBox_group2.Items.Count) //210909_Sangik.choi_입출고정보 7번그룹 추가 //220829_ilyoung_타워그룹추가
                         Fnc_Process_GetINOUT_mtlinfo(nType, strEquipid, Double.Parse(strDate_st), Double.Parse(strDate_ed));
+                    else
+                    {
+                        for(int i = 0; i < comboBox_group2.Items.Count; i++)
+                        {
+                            Fnc_Process_GetINOUT_mtlinfo(nType, "TWR"+i.ToString(), Double.Parse(strDate_st), Double.Parse(strDate_ed));
+                        }
+                    }
 
                 }                
 
@@ -3432,13 +3453,15 @@ namespace Amkor_Material_Manager
                 return;
             }
 
+            InitLabel();
+
             if (bSearch_sid)
             {
                 Fnc_Process_GetINOUT_mtlinfo_Sid2(nType, strEquipid, textBox_sid.Text, Double.Parse(strDate_st), Double.Parse(strDate_ed));
             }
             else
             {
-                if (nGroup != comboBox_group2.Items.Count)//210909_Sangik.choi_입출고정보 7번그룹 추가
+                if (nGroup != comboBox_group2.Items.Count)//210909_Sangik.choi_입출고정보 7번그룹 추가 //220829_ilyoung_타워그룹추가
                     Fnc_Process_GetINOUT_mtlinfo(nType, strEquipid, Double.Parse(strDate_st), Double.Parse(strDate_ed));
                 else
                     Fnc_Process_GetINOUT_mtlinfo_Sid2(nType, strEquipid, textBox_sid.Text, Double.Parse(strDate_st), Double.Parse(strDate_ed));
@@ -3987,8 +4010,17 @@ namespace Amkor_Material_Manager
 
                 Fnc_Init_datagrid2(nType);
 
-                if (nGroup != 4)
+                InitLabel();
+
+                if (nGroup != comboBox_group2.Items.Count)//220829_ilyoung_타워그룹추가
                     Fnc_Process_GetINOUT_mtlinfo(nType, strEquipid, Double.Parse(strDate_st), Double.Parse(strDate_ed));
+                else
+                {
+                    for(int i = 0; i  < comboBox_group2.Items.Count -1; i++)
+                    {
+                        Fnc_Process_GetINOUT_mtlinfo(nType, "TWR"+ i.ToString(), Double.Parse(strDate_st), Double.Parse(strDate_ed));
+                    }
+                }
             }            
 
             IsDateGathering = false;
@@ -4029,8 +4061,18 @@ namespace Amkor_Material_Manager
 
             Fnc_Init_datagrid2(nType);
 
-            if (nGroup != 4)
+            InitLabel();
+
+            if (nGroup != comboBox_group2.Items.Count)//220829_ilyoung_타워그룹추가
                 Fnc_Process_GetINOUT_mtlinfo(nType, strEquipid, Double.Parse(strDate_st), Double.Parse(strDate_ed));
+            else
+            {
+                for (int i = 0; i < comboBox_group2.Items.Count; i++)
+                {
+                    Fnc_Process_GetINOUT_mtlinfo(nType, "TWR" + i.ToString(), Double.Parse(strDate_st), Double.Parse(strDate_ed));
+                }
+            }
+
 
             IsDateGathering = false;
         }
