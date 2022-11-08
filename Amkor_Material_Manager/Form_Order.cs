@@ -2702,7 +2702,8 @@ namespace Amkor_Material_Manager
                     foreach(var row in List_Sort2)
                     {
                         StorageData RowTemp = (StorageData)row;
-                        if (RowTemp.LOTID == strLotid && RowTemp.SID == strSid && RowTemp.Equipid == strEq)
+
+                        if ( RowTemp.SID == strSid && RowTemp.Equipid == strEq)//RowTemp.LOTID == strLotid &&
                         {
                             nReadyMTLcount++;
                             dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, RowTemp.SID, RowTemp.LOTID, RowTemp.UID,
