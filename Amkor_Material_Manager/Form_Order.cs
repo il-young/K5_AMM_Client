@@ -2686,6 +2686,8 @@ namespace Amkor_Material_Manager
                     dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, List_Sort1[n].SID, List_Sort1[n].LOTID, List_Sort1[n].UID, List_Sort1[n].Quantity, List_Sort1[n].Tower_no, List_Sort1[n].Inch, List_Sort1[n].Input_type, List_Sort1[n].Manufacturer, List_Sort1[n].Production_date });
 
                     equipid = "TWR" + List_Sort1[n].Tower_no.Substring(2, 1);
+
+                    strEq = List_Sort1[n].Equipid;
                     string strJudge = AMM_Main.AMM.SetPicking_Readyinfo(strlinecode, equipid, PickIDs[int.Parse(List_Sort1[n].Tower_no.Substring(2, 1)) - 1], List_Sort1[n].UID, AMM_Main.strRequestor_id, List_Sort1[n].Tower_no, List_Sort1[n].SID, List_Sort1[n].LOTID, List_Sort1[n].Quantity,
                         List_Sort1[n].Manufacturer, List_Sort1[n].Production_date, List_Sort1[n].Inch, List_Sort1[n].Input_type, "AMM_SID");
 
@@ -3158,6 +3160,11 @@ namespace Amkor_Material_Manager
                 else if (strJudge == "DUPLICATE")
                 {
                     string str = string.Format("자재 리스트가 중복 되었습니다.\n SID = '{0}', UID = '{1}'", data.SID, data.UID);
+                    Fnc_AlartMessage(str, 1);
+                }
+                else if(strJudge.Contains("fail") == true)
+                {
+                    string str = string.Format("Pickup List 생성에 실패 했습니다.\n재시도 하세요 \n SID = '{0}', UID = '{1}'", data.SID, data.UID);
                     Fnc_AlartMessage(str, 1);
                 }
             }

@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
+using System.Reflection;
+using System.Security.Principal;
+
 using AMM;
 using System.IO;
 
@@ -24,6 +27,7 @@ namespace Amkor_Material_Manager
 
         //기본 정보        
         public static string strDefault_linecode = "", strDefault_Group = "", strDefault_Start = "", strSMSearchEnable = "", strMatchTab = "", strNumberPad = "", strAppVersion = "";
+        public static bool strAutoUpdate = false;
         public static string strRequestor_id = "", strRequestor_name = "", strLogfilePath = "";
         public static string strAdminID = "", strAdminPW = "";
         public static bool bAdminLogin = false, bProcessing = false, IsExit = false;
@@ -103,6 +107,8 @@ namespace Amkor_Material_Manager
             strSMSearchEnable = ConfigurationManager.AppSettings["SM_Enable"];
             strMatchTab = ConfigurationManager.AppSettings["Match_Tab"];
             strNumberPad = ConfigurationManager.AppSettings["Number_Pad"];
+            strAutoUpdate = bool.Parse( ConfigurationManager.AppSettings["AutoUpdate"]);
+            
             strAppVersion = Fnc_Load_UpdateInfo();
 
             
@@ -134,7 +140,8 @@ namespace Amkor_Material_Manager
             
             ThreadStart();
             timer1.Start();
-            CheckAppVersion();
+            if(strAutoUpdate == true)
+                CheckAppVersion();
 
             Text = "S/W Version: " + Version;
 
@@ -152,14 +159,21 @@ namespace Amkor_Material_Manager
             }
             else
             {
-                string[] lines = System.IO.File.ReadAllLines(strVerPath);
-                int nlength = lines.Length;
+                if(File.Exists(strVerPath) == true)
+                {
+                    string[] lines = System.IO.File.ReadAllLines(strVerPath);
+                    int nlength = lines.Length;
 
-                if (nlength > 0)
-                    Version = lines[0];
+                    if (nlength > 0)
+                        Version = lines[0];
+                }
+                else
+                {
+                    Version = "0";
+                }
             }
 
-            return File.GetLastWriteTime(Application.StartupPath + "\\Auto_Updater.exe.config").ToString();
+            return Version;
             //return "0";
         }
 
@@ -167,26 +181,38 @@ namespace Amkor_Material_Manager
         {
             string AppVer = (AMM.ReadAppDate("AMM_CLIENT"));
 
-            DateTime dateApp = DateTime.Parse(AppVer);
+            //DateTime dateApp = DateTime.Parse(AppVer);
 
             if (Form_Order.nTabIndex != 1)
             {
-                if (DateTime.Parse(strAppVersion) < dateApp)
+                if (strAppVersion != AppVer)
                 {
                     using (Form_Progress Frm_Process = new Form_Progress())
                     {
                         Frm_Process.Form_Show("최종 버전이 아닙니다 Update 프로그램을 실행 합니다.", 1006);
 
+                        /*
+                        UpdatePopUp = false;
+                        ProcessStartInfo psinfo = new ProcessStartInfo();
+                        psinfo.UseShellExecute = true;
+                        psinfo.FileName = Application.StartupPath + "\\Auto_Updater.exe";
+                        psinfo.WorkingDirectory = Application.StartupPath;
+                        psinfo.Verb = "runas";
+                        Process.Start(psinfo);
+                        */
+                        
                         Process firstProc = new Process();
-                        firstProc.StartInfo.FileName = Application.StartupPath + "\\Auto_Updater.exe";
-                        firstProc.EnableRaisingEvents = true;
+                        firstProc.StartInfo.FileName = Application.StartupPath + "\\RunUpdate.bat";
+                        firstProc.EnableRaisingEvents = true;                        
                         firstProc.Start();
+                        
                     }
 
                     File.SetLastWriteTime(Application.StartupPath + "\\Auto_Updater.exe.config", DateTime.Now);
 
                     Close();
                 }
+                UpdatePopUp = false;
             }
         }
 
@@ -234,6 +260,7 @@ namespace Amkor_Material_Manager
         }
 
         int AppVerCnt = 0;
+        bool UpdatePopUp = false;
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -260,11 +287,13 @@ namespace Amkor_Material_Manager
             {
                 label_state.BackColor = System.Drawing.Color.Red;
             }
-            
-            if (AppVerCnt++ >= 300)
+
+            if (AppVerCnt++ >= 300 && strAutoUpdate == true && UpdatePopUp == false)
             {
+                UpdatePopUp = true;
                 CheckAppVersion();
                 AppVerCnt = 0;
+                
             }
             
         }

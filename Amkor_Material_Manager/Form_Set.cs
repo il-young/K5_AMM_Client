@@ -454,5 +454,6 @@ namespace Amkor_Material_Manager
             else
                 comboBox_twrUse.SelectedIndex = 1;
         }
+
     }
 }
