@@ -478,7 +478,10 @@
             this.comboBox_L_group.Items.AddRange(new object[] {
             "Group #1",
             "Group #2",
-            "Group #3"});
+            "Group #3",
+            "Group #4",
+            "Group #5",
+            "ALL"});
             this.comboBox_L_group.Location = new System.Drawing.Point(507, 12);
             this.comboBox_L_group.Name = "comboBox_L_group";
             this.comboBox_L_group.Size = new System.Drawing.Size(104, 31);

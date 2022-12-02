@@ -268,11 +268,14 @@ namespace Amkor_Material_Manager
 
                 data.Equipid = MtlList.Rows[i]["EQUIP_ID"].ToString(); data.Equipid = data.Equipid.Trim();
                 data.Inch_7_cnt = MtlList.Rows[i]["INCH_7_CNT"].ToString(); data.Inch_7_cnt = data.Inch_7_cnt.Trim();
+
+                
                 data.Inch_13_cnt = MtlList.Rows[i]["INCH_13_CNT"].ToString(); data.Inch_13_cnt = data.Inch_13_cnt.Trim();
                 data.Inch_7_capa = MtlList.Rows[i]["INCH_7_CAPA"].ToString(); data.Inch_7_capa = data.Inch_7_capa.Trim();
                 data.Inch_13_capa = MtlList.Rows[i]["INCH_13_CAPA"].ToString(); data.Inch_13_capa = data.Inch_13_capa.Trim();
                 data.Inch_7_rate = MtlList.Rows[i]["INCH_7_LOAD_RATE"].ToString(); data.Inch_7_rate = data.Inch_7_rate.Trim();
                 data.Inch_13_rate = MtlList.Rows[i]["INCH_13_LOAD_RATE"].ToString(); data.Inch_13_rate = data.Inch_13_rate.Trim();
+                
 
                 Tot7InchCnt += int.Parse(data.Inch_7_cnt == "" ? "0" : data.Inch_7_cnt);    //220829_ilyoung_타워그룹추가
                 Tot13InchCnt += int.Parse(data.Inch_13_cnt == "" ? "0" : data.Inch_13_cnt); //220829_ilyoung_타워그룹추가
@@ -281,6 +284,13 @@ namespace Amkor_Material_Manager
 
                 string inch_7_cal = (Int32.Parse(data.Inch_7_capa == "" ? "0" : data.Inch_7_capa) - Int32.Parse(data.Inch_7_cnt == "" ? "0" : data.Inch_7_cnt)).ToString(); //220829_ilyoung_타워그룹추가
                 string inch_13_cal = (Int32.Parse(data.Inch_13_capa == "" ? "0" : data.Inch_13_capa) - Int32.Parse(data.Inch_13_cnt == "" ? "0" : data.Inch_13_cnt)).ToString();    //220829_ilyoung_타워그룹추가
+
+                if(int.Parse(inch_7_cal) < 0)
+                {
+                    inch_13_cal = (int.Parse(inch_13_cal) + int.Parse(inch_7_cal)).ToString();
+                    data.Inch_13_rate = (double.Parse(inch_13_cal) / double.Parse(data.Inch_13_capa) * 100).ToString("F2");
+                }
+
 
                 list[i].Rows.Add(new object[4] {  data.Inch_7_capa, data.Inch_7_cnt, inch_7_cal, data.Inch_7_rate });
                 list[i].Rows.Add(new object[4] {  data.Inch_13_capa, data.Inch_13_cnt, inch_13_cal, data.Inch_13_rate });
@@ -602,6 +612,78 @@ namespace Amkor_Material_Manager
             }
 
             IsDateGathering = false;
+        }
+
+        private int Fnc_Process_GetMaterialinfo_longterm(int nType)
+        {
+
+            var MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode);
+
+            var today = DateTime.Now;
+
+            int month = nType;
+
+            string format = "yyyyMMddHHmmss";
+
+            //strEquipid = strEquipid.Replace("TWR", "G"); //20200529
+
+            int nMtlCount = MtlList.Rows.Count;
+
+            if (MtlList.Rows.Count == 0)
+            {
+                return nMtlCount;
+            }
+
+            List<StorageData> list = new List<StorageData>();
+
+            for (int i = 0; i < MtlList.Rows.Count; i++)
+            {
+                StorageData data = new StorageData();
+
+                data.UID = MtlList.Rows[i]["UID"].ToString(); data.UID = data.UID.Trim();
+                data.SID = MtlList.Rows[i]["SID"].ToString(); data.SID = data.SID.Trim();
+                data.Input_date = MtlList.Rows[i]["DATETIME"].ToString(); data.Input_date = data.Input_date.Trim();
+                data.Tower_no = MtlList.Rows[i]["TOWER_NO"].ToString(); data.Tower_no = data.Tower_no.Trim();
+                data.LOTID = MtlList.Rows[i]["LOTID"].ToString(); data.LOTID = data.LOTID.Trim();
+                data.Quantity = MtlList.Rows[i]["QTY"].ToString(); data.Quantity = data.Quantity.Trim();
+                data.Manufacturer = MtlList.Rows[i]["MANUFACTURER"].ToString(); data.Manufacturer = data.Manufacturer.Trim();
+                data.Production_date = MtlList.Rows[i]["PRODUCTION_DATE"].ToString(); data.Production_date = data.Production_date.Trim();
+                data.Inch = MtlList.Rows[i]["INCH_INFO"].ToString(); data.Inch = data.Inch.Trim();
+                data.Input_type = MtlList.Rows[i]["INPUT_TYPE"].ToString(); data.Input_type = data.Input_type.Trim();
+
+                //[2108011_Sangik.choi_장기보관관리기능추가 by이종명수석님
+
+                DateTime dt = DateTime.ParseExact(data.Input_date, format, null);
+                DateTime dt_temp = today.AddMonths(-month);
+
+                int result = DateTime.Compare(dt, dt_temp);
+
+
+                if (result < 0)
+                {
+                    list.Add(data);
+
+                }
+                //]2108011_Sangik.choi_장기보관관리기능추가 by이종명수석님
+
+
+            }
+
+            list.Sort(sortlist_date);
+
+            foreach (var item in list)
+            {
+                //string strnQty = string.Format("{0:0,0}", Int32.Parse(item.Quantity));  //210818_Sangik_choi_입출고 조회중 DB 오류로 삭제
+                string strdate = item.Input_date;
+                strdate = strdate.Substring(0, 4) + "-" + strdate.Substring(4, 2) + "-" + strdate.Substring(6, 2) + " "
+                    + strdate.Substring(8, 2) + ":" + strdate.Substring(10, 2) + ":" + strdate.Substring(12, 2);
+
+                dataGridView_longterm.Rows.Add(new object[10] { item.SID, item.LOTID, item.UID, item.Quantity, item.Input_type, item.Tower_no, item.Production_date, strdate, item.Manufacturer, item.Inch });
+            }
+
+            return nMtlCount;
+
+
         }
 
 
@@ -4875,8 +4957,17 @@ namespace Amkor_Material_Manager
             string strEquipid = "TWR" + nGroup.ToString();
 
             if (idx <= 12 && idx >= 1)
-
-                Fnc_Process_GetMaterialinfo_longterm(idx, strEquipid);
+            {
+                if(comboBox_L_group.SelectedIndex != comboBox_L_group.Items.Count -1)
+                {
+                    Fnc_Process_GetMaterialinfo_longterm(idx, strEquipid);
+                }
+                else
+                {
+                    Fnc_Process_GetMaterialinfo_longterm(idx);
+                }
+                
+            }
             else
             {
                 Fnc_Process_GetMaterialinfo_All(1);
