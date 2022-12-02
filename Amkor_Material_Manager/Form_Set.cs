@@ -98,29 +98,24 @@ namespace Amkor_Material_Manager
 
         public void Fnc_Send_Email(string strSid, string strName, int nType)
         {
-            System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
+            //System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
 
-
-            message.To.Add("Sangik.Choi@amkor.co.kr");
-            message.To.Add("hyoungjong.joo@amkor.co.kr");
-
-
-            if (nType == 0)
-            {
-                message.Subject = string.Format("[AMM 사용등록요청] 사번:{0} 이름:{1}", strSid, strName);
-                message.From = new System.Net.Mail.MailAddress("Amkor.AMM@amkor.co.kr");
-                message.Body = string.Format("AMM Reel 청구 사용자 등록 요청 메일 입니다. 관리자께서는 검토 후 등록 해 주시길 바랍니다.\n\n 사번:{0} \n 이름:{1}", strSid, strName);
-            }
-            else if(nType == 1)
-            {
-                message.Subject = string.Format("[AMM 등록완료] 이름:{0}", strName);
-                message.From = new System.Net.Mail.MailAddress("Amkor.AMM@amkor.co.kr");
-                message.Body = string.Format("AMM Reel 청구 사용자 등록이 완료 되었습니다.\n\n 사번:{0} \n 이름:{1}", strSid, strName);
-            }
-            System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("10.101.10.6");
-            smtp.Credentials = new System.Net.NetworkCredential("", "");
-            smtp.Port = 25;
-            smtp.Send(message);
+            //if (nType == 0)
+            //{
+            //    message.Subject = string.Format("[AMM 사용등록요청] 사번:{0} 이름:{1}", strSid, strName);
+            //    message.From = new System.Net.Mail.MailAddress("Amkor.AMM@amkor.co.kr");
+            //    message.Body = string.Format("AMM Reel 청구 사용자 등록 요청 메일 입니다. 관리자께서는 검토 후 등록 해 주시길 바랍니다.\n\n 사번:{0} \n 이름:{1}", strSid, strName);
+            //}
+            //else if(nType == 1)
+            //{
+            //    message.Subject = string.Format("[AMM 등록완료] 이름:{0}", strName);
+            //    message.From = new System.Net.Mail.MailAddress("Amkor.AMM@amkor.co.kr");
+            //    message.Body = string.Format("AMM Reel 청구 사용자 등록이 완료 되었습니다.\n\n 사번:{0} \n 이름:{1}", strSid, strName);
+            //}
+            //System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("10.101.10.6");
+            //smtp.Credentials = new System.Net.NetworkCredential("", "");
+            //smtp.Port = 25;
+            //smtp.Send(message);
         }
 
         public void Fnc_SendEmail(string strRequestor)
