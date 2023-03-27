@@ -288,7 +288,7 @@ namespace Amkor_Material_Manager
                 if(int.Parse(inch_7_cal) < 0)
                 {
                     inch_13_cal = (int.Parse(inch_13_cal) + int.Parse(inch_7_cal)).ToString();
-                    data.Inch_13_rate = (double.Parse(inch_13_cal) / double.Parse(data.Inch_13_capa) * 100).ToString("F2");
+                    data.Inch_13_rate = (double.Parse((int.Parse(data.Inch_13_capa) - int.Parse(inch_13_cal)).ToString()) / double.Parse(data.Inch_13_capa) * 100).ToString("F2");
                 }
 
 
@@ -532,86 +532,95 @@ namespace Amkor_Material_Manager
         {
             IsDateGathering = true;
 
-            Fnc_Init_datagrid(2); //Init
-
-            Application.DoEvents();
-
-            int[] nCount = new int[] { 0, 0, 0, 0, 0};//210831_Sangik.choi_타워그룹추가	//220829_ilyoung_타워그룹추가
-
-            DataTable MtlList = null;            
-
-            string strTowerNo = "", strEquip = "";
-            for (int n = 1; n < 5; n++) //220829_ilyoung_타워그룹추가
+            try
             {
-                strEquip = "TWR1"; strTowerNo = string.Format("T010{0}", n.ToString());
-                //GetMTLInfo()-query = string.Format(@"SELECT * FROM TB_MTL_INFO WHERE LINE_CODE='{0}' and EQUIP_ID='{1}' and TOWER_NO='{2}');
-                MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquip, strTowerNo); nCount[0] = MtlList.Rows.Count; MtlList = null;
+                Fnc_Init_datagrid(2); //Init
 
-                strEquip = "TWR2"; strTowerNo = string.Format("T020{0}", n.ToString());
-                MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquip, strTowerNo); nCount[1] = MtlList.Rows.Count; MtlList = null;
+                Application.DoEvents();
 
-                strEquip = "TWR3"; strTowerNo = string.Format("T030{0}", n.ToString());
-                MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquip, strTowerNo); nCount[2] = MtlList.Rows.Count; MtlList = null;
+                int[] nCount = new int[] { 0, 0, 0, 0, 0};//210831_Sangik.choi_타워그룹추가	//220829_ilyoung_타워그룹추가
 
-                //220829_ilyoung_타워그룹추가
-                strEquip = "TWR4"; strTowerNo = string.Format("T040{0}", n.ToString());
-                MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquip, strTowerNo); nCount[3] = MtlList.Rows.Count; MtlList = null;
+                DataTable MtlList = null;            
 
-                strEquip = "TWR5"; strTowerNo = string.Format("T050{0}", n.ToString());
-                MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquip, strTowerNo); nCount[4] = MtlList.Rows.Count; MtlList = null;
-                //220829_ilyoung_타워그룹추가
+                string strTowerNo = "", strEquip = "";
+                for (int n = 1; n < 5; n++) //220829_ilyoung_타워그룹추가
+                {
+                    strEquip = "TWR1"; strTowerNo = string.Format("T010{0}", n.ToString());
+                    //GetMTLInfo()-query = string.Format(@"SELECT * FROM TB_MTL_INFO WHERE LINE_CODE='{0}' and EQUIP_ID='{1}' and TOWER_NO='{2}');
+                    MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquip, strTowerNo); nCount[0] = MtlList.Rows.Count; MtlList = null;
 
-                dataGridView_sum.Rows.Add(new object[] { n.ToString(), nCount[0].ToString(), nCount[1].ToString(), nCount[2].ToString(), nCount[3].ToString(), nCount[4].ToString() });//220829_ilyoung_타워그룹추가
-                //]210831_Sangik.choi_타워그룹추가
-            }
+                    strEquip = "TWR2"; strTowerNo = string.Format("T020{0}", n.ToString());
+                    MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquip, strTowerNo); nCount[1] = MtlList.Rows.Count; MtlList = null;
 
-            int[] nSum = new int[] { 0, 0, 0, 0, 0 };//210831_Sangik.choi_타워그룹추가//220829_ilyoung_타워그룹추가
-            string[] strSum = new string[] { "", "", "", "", "" };//210831_Sangik.choi_타워그룹추가//220829_ilyoung_타워그룹추가
-            int nTotal = 0;
+                    strEquip = "TWR3"; strTowerNo = string.Format("T030{0}", n.ToString());
+                    MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquip, strTowerNo); nCount[2] = MtlList.Rows.Count; MtlList = null;
 
-            for (int j = 0; j < nSum.Length; j++)//210831_Sangik.choi_타워그룹추가  	//220829_ilyoung_타워그룹추가
-            {
-                for (int i = 0; i < dataGridView_sum.Rows.Count; i++)     	//220829_ilyoung_타워그룹추가
-                {                    
-                    int nCal = dataGridView_sum.Rows[i].Cells[j + 1].Value == null ? 0 : Int32.Parse(dataGridView_sum.Rows[i].Cells[j+1].Value.ToString());//220829_ilyoung_타워그룹추가
-                    nSum[j] = nSum[j] + nCal;
+                    //220829_ilyoung_타워그룹추가
+                    strEquip = "TWR4"; strTowerNo = string.Format("T040{0}", n.ToString());
+                    MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquip, strTowerNo); nCount[3] = MtlList.Rows.Count; MtlList = null;
+
+                    strEquip = "TWR5"; strTowerNo = string.Format("T050{0}", n.ToString());
+                    MtlList = AMM_Main.AMM.GetMTLInfo(AMM_Main.strDefault_linecode, strEquip, strTowerNo); nCount[4] = MtlList.Rows.Count; MtlList = null;
+                    //220829_ilyoung_타워그룹추가
+
+                    dataGridView_sum.Rows.Add(new object[] { n.ToString(), nCount[0].ToString(), nCount[1].ToString(), nCount[2].ToString(), nCount[3].ToString(), nCount[4].ToString() });//220829_ilyoung_타워그룹추가
+                    //]210831_Sangik.choi_타워그룹추가
                 }
 
-                strSum[j] = string.Format("{0:0,0}", nSum[j]);
-                nTotal = nTotal + nSum[j];
+                int[] nSum = new int[] { 0, 0, 0, 0, 0 };//210831_Sangik.choi_타워그룹추가//220829_ilyoung_타워그룹추가
+                string[] strSum = new string[] { "", "", "", "", "" };//210831_Sangik.choi_타워그룹추가//220829_ilyoung_타워그룹추가
+                int nTotal = 0;
+
+                for (int j = 0; j < nSum.Length; j++)//210831_Sangik.choi_타워그룹추가  	//220829_ilyoung_타워그룹추가
+                {
+                    for (int i = 0; i < dataGridView_sum.Rows.Count; i++)     	//220829_ilyoung_타워그룹추가
+                    {                    
+                        int nCal = dataGridView_sum.Rows[i].Cells[j + 1].Value == null ? 0 : Int32.Parse(dataGridView_sum.Rows[i].Cells[j+1].Value.ToString());//220829_ilyoung_타워그룹추가
+                        nSum[j] = nSum[j] + nCal;
+                    }
+
+                    strSum[j] = string.Format("{0:0,0}", nSum[j]);
+                    nTotal = nTotal + nSum[j];
+                }
+
+                dataGridView_sum.Rows.Add(new object[6] {"SUM", strSum[0].ToString(), strSum[1].ToString(), strSum[2].ToString(), strSum[3].ToString(), strSum[4].ToString() });//210831_Sangik.choi_타워그룹추가 //220829_ilyoung_타워그룹추가
+                dataGridView_sum.Rows[dataGridView_sum.RowCount-1].DefaultCellStyle.ForeColor = Color.White;
+                dataGridView_sum.Rows[dataGridView_sum.RowCount - 1].DefaultCellStyle.BackColor = Color.OrangeRed;
+                dataGridView_sum.Rows[dataGridView_sum.RowCount - 1].DefaultCellStyle.Font = new Font("Calibri", 16.00F, FontStyle.Bold);
+                dataGridView_sum.Rows[0].Selected = false;
+                dataGridView_sum.Rows[dataGridView_sum.RowCount - 1].Selected = false;
+
+                string strnQty = string.Format("{0:0,0}", nTotal);
+                label_total.Text = strnQty + " REEL";
+
+                string strToday = string.Format("{0}-{1:00}-{2:00}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                string strHead = string.Format("{0:00}:{1:00}:{2:00}", DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+
+                label_updatedate.Text = "최근 업데이트: " + strToday + " " + strHead;
+
+                //////Infomation
+                int nType = comboBox_type.SelectedIndex; //0: SID, 1:Detail info
+                int nGroup = comboBox_group.SelectedIndex + 1;
+
+                string strEquipid = "TWR" + nGroup.ToString();
+
+                Fnc_Init_datagrid(nType);
+
+                if (nGroup != nCount.Length +1 )//210831_Sangik.choi_타워그룹추가 //220829_ilyoung_타워그룹추가
+                    Fnc_Process_GetMaterialinfo(nType, strEquipid);
+                else
+                {
+                    Fnc_Process_GetMaterialinfo_All(nType);
+                }
+
+                IsDateGathering = false;
+
+
             }
-
-            dataGridView_sum.Rows.Add(new object[6] {"SUM", strSum[0].ToString(), strSum[1].ToString(), strSum[2].ToString(), strSum[3].ToString(), strSum[4].ToString() });//210831_Sangik.choi_타워그룹추가 //220829_ilyoung_타워그룹추가
-            dataGridView_sum.Rows[dataGridView_sum.RowCount-1].DefaultCellStyle.ForeColor = Color.White;
-            dataGridView_sum.Rows[dataGridView_sum.RowCount - 1].DefaultCellStyle.BackColor = Color.OrangeRed;
-            dataGridView_sum.Rows[dataGridView_sum.RowCount - 1].DefaultCellStyle.Font = new Font("Calibri", 16.00F, FontStyle.Bold);
-            dataGridView_sum.Rows[0].Selected = false;
-            dataGridView_sum.Rows[dataGridView_sum.RowCount - 1].Selected = false;
-
-            string strnQty = string.Format("{0:0,0}", nTotal);
-            label_total.Text = strnQty + " REEL";
-
-            string strToday = string.Format("{0}-{1:00}-{2:00}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            string strHead = string.Format("{0:00}:{1:00}:{2:00}", DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
-
-            label_updatedate.Text = "최근 업데이트: " + strToday + " " + strHead;
-
-            //////Infomation
-            int nType = comboBox_type.SelectedIndex; //0: SID, 1:Detail info
-            int nGroup = comboBox_group.SelectedIndex + 1;
-
-            string strEquipid = "TWR" + nGroup.ToString();
-
-            Fnc_Init_datagrid(nType);
-
-            if (nGroup != nCount.Length +1 )//210831_Sangik.choi_타워그룹추가 //220829_ilyoung_타워그룹추가
-                Fnc_Process_GetMaterialinfo(nType, strEquipid);
-            else
+            catch (Exception ex)
             {
-                Fnc_Process_GetMaterialinfo_All(nType);
+                throw;
             }
-
-            IsDateGathering = false;
         }
 
         private int Fnc_Process_GetMaterialinfo_longterm(int nType)
