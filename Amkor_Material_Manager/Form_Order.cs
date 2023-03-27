@@ -242,6 +242,7 @@ namespace Amkor_Material_Manager
 
                 dataGridView_ready.Columns.Add("MANUFACTURER", "MANUFACTURER");
                 dataGridView_ready.Columns.Add("PRODUCTION_DATE", "PRODUCTION_DATE");
+                dataGridView_ready.Columns.Add("PICKID", "PICKID");
 
                 dataGridView_ready.Columns["MANUFACTURER"].Visible = false;
                 dataGridView_ready.Columns["PRODUCTION_DATE"].Visible = false;
@@ -416,11 +417,13 @@ namespace Amkor_Material_Manager
                     nLength = strSid.Length;
 
 
-                    for(int i = 0; i < PickIDs.Length; i++)
+                    for (int i = 0; i < PickIDs.Length; i++)
                     {
                         PickIDs[i] = GetPickID((i + 1).ToString());
                     }
-                    
+
+
+
                     if (nLength < 3 || nLength > 9)
                     {
                         return;
@@ -802,6 +805,9 @@ namespace Amkor_Material_Manager
                 }
                 else //BYK 220112 All Data 반출대기 리스트 보내기
                 {
+                    int nIndex = dataGridView_view.CurrentCell.RowIndex;
+                    Fnc_Get_PickID(dataGridView_view.Rows[nIndex].Cells["위치"].Value.ToString().Substring(3, 1));
+
                     if (textBox_reelcount.Text == "")
                         return;
 
@@ -812,8 +818,6 @@ namespace Amkor_Material_Manager
                         textBox_reelcount.Text = "";
                         return;
                     }
-
-                    int nIndex = dataGridView_view.CurrentCell.RowIndex;
 
                     strSelSid = dataGridView_view.Rows[nIndex].Cells[0].Value.ToString();
                     strSelLotid = dataGridView_view.Rows[nIndex].Cells[1].Value.ToString();
@@ -870,8 +874,8 @@ namespace Amkor_Material_Manager
 
                     
 
-                    Fnc_RequestMaterial_ALL(AMM_Main.strDefault_linecode, strSelSid, strSelLotid, nRequestcount, strPickingID, dataGridView_view.Rows[nIndex].Cells["위치"].Value.ToString());
-
+                    Fnc_RequestMaterial_ALL(AMM_Main.strDefault_linecode, strSelSid, strSelLotid, nRequestcount, PickIDs[int.Parse(dataGridView_view.Rows[nIndex].Cells["위치"].Value.ToString().Substring(3,1))-1], dataGridView_view.Rows[nIndex].Cells["위치"].Value.ToString());
+                    
                 }
                 
             }
@@ -914,6 +918,7 @@ namespace Amkor_Material_Manager
             
             dataGridView_ready.Columns.Add("MANUFACTURER", "MANUFACTURER");
             dataGridView_ready.Columns.Add("PRODUCTION_DATE", "PRODUCTION_DATE");
+            dataGridView_ready.Columns.Add("PICKID", "PICKID");
 
             dataGridView_ready.Columns["MANUFACTURER"].Visible = false;
             dataGridView_ready.Columns["PRODUCTION_DATE"].Visible = false;
@@ -945,7 +950,7 @@ namespace Amkor_Material_Manager
             for (int n = 0; n < list.Count; n++)
             {
                 nReadyMTLcount++;
-                dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, list[n].SID, list[n].LOTID, list[n].UID, list[n].Quantity, list[n].Tower_no, list[n].Inch, list[n].Input_type, list[n].Manufacturer, list[n].Production_date });                
+                dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, list[n].SID, list[n].LOTID, list[n].UID, list[n].Quantity, list[n].Tower_no, list[n].Inch, list[n].Input_type, list[n].Manufacturer, list[n].Production_date, PickIDs[int.Parse( list[n].Tower_no.Substring(1,2))-1]});                
                 
             }
 
@@ -960,7 +965,8 @@ namespace Amkor_Material_Manager
             int nGroup = nSelected_groupid;
             string strGroup = (nGroup + 1).ToString();
 
-            if(comboBox_group.SelectedIndex != comboBox_group.Items.Count -1 ) Fnc_SetMtlInfo_FromSID(AMM_Main.strDefault_linecode, strGroup, textBox_sid.Text, false);	//220829_ilyoung_타워그룹추가
+            if(comboBox_group.SelectedIndex != comboBox_group.Items.Count -1 )
+                Fnc_SetMtlInfo_FromSID(AMM_Main.strDefault_linecode, strGroup, textBox_sid.Text, false);	//220829_ilyoung_타워그룹추가
         }
 
         private void SetAllTowerUse()
@@ -2568,7 +2574,7 @@ namespace Amkor_Material_Manager
             for(int n = 0; n<nCount; n++)
             {
                 nReadyMTLcount++;
-                dataGridView_ready.Rows.Add(new object[8] { nReadyMTLcount, list[n].SID, list[n].LOTID, list[n].UID, list[n].Quantity, list[n].Tower_no, list[n].Inch, list[n].Input_type });
+                dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, list[n].SID, list[n].LOTID, list[n].UID, list[n].Quantity, list[n].Tower_no, list[n].Inch, list[n].Input_type, list[n].Manufacturer, list[n].Production_date, PickIDs[int.Parse(list[n].Tower_no.Substring(1, 2))-1]});
                 string strJudge = AMM_Main.AMM.SetPicking_Readyinfo(strlinecode, equipid, strPickingid, list[n].UID, AMM_Main.strRequestor_id, list[n].Tower_no, list[n].SID, list[n].LOTID, list[n].Quantity,
                     list[n].Manufacturer, list[n].Production_date, list[n].Inch, list[n].Input_type, "AMM_SID");
 
@@ -2683,12 +2689,12 @@ namespace Amkor_Material_Manager
                 if( (List_Sort1.Count - n) > 0)
                 {
                     nReadyMTLcount++;
-                    dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, List_Sort1[n].SID, List_Sort1[n].LOTID, List_Sort1[n].UID, List_Sort1[n].Quantity, List_Sort1[n].Tower_no, List_Sort1[n].Inch, List_Sort1[n].Input_type, List_Sort1[n].Manufacturer, List_Sort1[n].Production_date });
+                    dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, List_Sort1[n].SID, List_Sort1[n].LOTID, List_Sort1[n].UID, List_Sort1[n].Quantity, List_Sort1[n].Tower_no, List_Sort1[n].Inch, List_Sort1[n].Input_type, List_Sort1[n].Manufacturer, List_Sort1[n].Production_date, PickIDs[int.Parse(List_Sort1[n].Tower_no.Substring(1, 2))-1] });
 
                     equipid = "TWR" + List_Sort1[n].Tower_no.Substring(2, 1);
-
+                    
                     strEq = List_Sort1[n].Equipid;
-                    string strJudge = AMM_Main.AMM.SetPicking_Readyinfo(strlinecode, equipid, PickIDs[int.Parse(List_Sort1[n].Tower_no.Substring(2, 1)) - 1], List_Sort1[n].UID, AMM_Main.strRequestor_id, List_Sort1[n].Tower_no, List_Sort1[n].SID, List_Sort1[n].LOTID, List_Sort1[n].Quantity,
+                    string strJudge = AMM_Main.AMM.SetPicking_Readyinfo(strlinecode, equipid, PickIDs[int.Parse(List_Sort1[n].Tower_no.Substring(1,2))-1], List_Sort1[n].UID, AMM_Main.strRequestor_id, List_Sort1[n].Tower_no, List_Sort1[n].SID, List_Sort1[n].LOTID, List_Sort1[n].Quantity,
                         List_Sort1[n].Manufacturer, List_Sort1[n].Production_date, List_Sort1[n].Inch, List_Sort1[n].Input_type, "AMM_SID");
 
                     if (strJudge == "NG")
@@ -2708,10 +2714,10 @@ namespace Amkor_Material_Manager
                             nReadyMTLcount++;
                             dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, RowTemp.SID, RowTemp.LOTID, RowTemp.UID,
                                 RowTemp.Quantity, RowTemp.Tower_no, RowTemp.Inch, RowTemp.Input_type, RowTemp.Manufacturer,
-                                RowTemp.Production_date });
+                                RowTemp.Production_date, PickIDs[int.Parse(RowTemp.Tower_no.Substring(1, 2)) - 1] });
 
                             equipid = "TWR" + RowTemp.Tower_no.Substring(2, 1);
-                            string strJudge = AMM_Main.AMM.SetPicking_Readyinfo(strlinecode, equipid, PickIDs[int.Parse(RowTemp.Tower_no.Substring(2, 1)) - 1],
+                            string strJudge = AMM_Main.AMM.SetPicking_Readyinfo(strlinecode, equipid, PickIDs[int.Parse(RowTemp.Tower_no.Substring(1, 2)) - 1],
                                 RowTemp.UID, AMM_Main.strRequestor_id, RowTemp.Tower_no, RowTemp.SID, RowTemp.LOTID, RowTemp.Quantity,
                                 RowTemp.Manufacturer, RowTemp.Production_date, RowTemp.Inch, RowTemp.Input_type, "AMM_SID");
 
@@ -2814,7 +2820,7 @@ namespace Amkor_Material_Manager
             for (int n = 0; n < nCount; n++)
             {
                 nReadyMTLcount++;
-                dataGridView_ready.Rows.Add(new object[8] { nReadyMTLcount, list[n].SID, list[n].LOTID, list[n].UID, list[n].Quantity, list[n].Tower_no, list[n].Inch, list[n].Input_type });
+                dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, list[n].SID, list[n].LOTID, list[n].UID, list[n].Quantity, list[n].Tower_no, list[n].Inch, list[n].Input_type, list[n].Manufacturer, list[n].Production_date, PickIDs[int.Parse(list[n].Tower_no.Substring(1, 2))-1] });
                 string strJudge = AMM_Main.AMM.SetPicking_Readyinfo(strlinecode, equipid, strPickingid, list[n].UID, AMM_Main.strRequestor_id, list[n].Tower_no, list[n].SID, list[n].LOTID, list[n].Quantity,
                     list[n].Manufacturer, list[n].Production_date, list[n].Inch, list[n].Input_type, "AMM_UID");
 
@@ -2934,7 +2940,7 @@ namespace Amkor_Material_Manager
                 return;
             }
 
-            Fnc_UpdateReadyInfo(strPickingID);
+            Fnc_UpdateReadyInfo(PickIDs[int.Parse(dataGridView_ready.Rows[nIndex].Cells["위치"].Value.ToString().Substring(1,2))-1]);
         }
 
         private void button_out_Click(object sender, EventArgs e) //BYK 전체 배출 기능 분기.
@@ -3136,7 +3142,7 @@ namespace Amkor_Material_Manager
                     //Fnc_Get_PickID(data.Equipid);
                 }
 
-                strJudge = AMM_Main.AMM.SetPicking_Listinfo(strlincode, "TWR"+data.Tower_no.Substring(2,1), PickIDs[int.Parse(data.Tower_no.Substring(2, 1)) - 1], 
+                strJudge = AMM_Main.AMM.SetPicking_Listinfo(strlincode, "TWR"+data.Tower_no.Substring(2,1), PickIDs[int.Parse(data.Tower_no.Substring(1, 2)) - 1], 
                     data.UID, AMM_Main.strRequestor_id, data.Tower_no, data.SID, data.LOTID, data.Quantity, data.Manufacturer, 
                     data.Production_date, data.Inch, data.Input_type, "AMM");
 
@@ -4086,12 +4092,15 @@ namespace Amkor_Material_Manager
                 dataGridView_ready.Columns.Add("위치", "위치");
                 dataGridView_ready.Columns.Add("인치", "인치");
                 dataGridView_ready.Columns.Add("투입", "투입");
+                
 
                 dataGridView_ready.Columns.Add("MANUFACTURER", "MANUFACTURER");
                 dataGridView_ready.Columns.Add("PRODUCTION_DATE", "PRODUCTION_DATE");
+                dataGridView_ready.Columns.Add("PICKID", "PICKID");
 
                 dataGridView_ready.Columns["MANUFACTURER"].Visible = false;
                 dataGridView_ready.Columns["PRODUCTION_DATE"].Visible = false;
+                
 
                 comboBox_group.SelectedIndex = AMM_Main.nDefaultGroup - 1;
                 comboBox_method.SelectedIndex = 0;  //SID 조회
