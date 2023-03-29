@@ -1075,9 +1075,9 @@
             this.label17.Font = new System.Drawing.Font("Calibri", 17.25F);
             this.label17.Location = new System.Drawing.Point(9, 356);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(140, 28);
+            this.label17.Size = new System.Drawing.Size(77, 28);
             this.label17.TabIndex = 24;
-            this.label17.Text = "Reel Tower #5";
+            this.label17.Text = "RHS #5";
             // 
             // dataGridView_group5
             // 
@@ -1175,9 +1175,9 @@
             this.label22.Font = new System.Drawing.Font("Calibri", 17.25F);
             this.label22.Location = new System.Drawing.Point(517, 210);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(140, 28);
+            this.label22.Size = new System.Drawing.Size(77, 28);
             this.label22.TabIndex = 21;
-            this.label22.Text = "Reel Tower #4";
+            this.label22.Text = "RHS #4";
             // 
             // label_group3
             // 
@@ -1185,9 +1185,9 @@
             this.label_group3.Font = new System.Drawing.Font("Calibri", 17.25F);
             this.label_group3.Location = new System.Drawing.Point(9, 210);
             this.label_group3.Name = "label_group3";
-            this.label_group3.Size = new System.Drawing.Size(140, 28);
+            this.label_group3.Size = new System.Drawing.Size(77, 28);
             this.label_group3.TabIndex = 20;
-            this.label_group3.Text = "Reel Tower #3";
+            this.label_group3.Text = "RHS #3";
             // 
             // dataGridView_group3
             // 
@@ -1286,9 +1286,9 @@
             this.label_group2.Font = new System.Drawing.Font("Calibri", 17.25F);
             this.label_group2.Location = new System.Drawing.Point(517, 64);
             this.label_group2.Name = "label_group2";
-            this.label_group2.Size = new System.Drawing.Size(140, 28);
+            this.label_group2.Size = new System.Drawing.Size(77, 28);
             this.label_group2.TabIndex = 6;
-            this.label_group2.Text = "Reel Tower #2";
+            this.label_group2.Text = "RHS #2";
             // 
             // label_group1
             // 
@@ -1296,9 +1296,9 @@
             this.label_group1.Font = new System.Drawing.Font("Calibri", 17.25F);
             this.label_group1.Location = new System.Drawing.Point(7, 66);
             this.label_group1.Name = "label_group1";
-            this.label_group1.Size = new System.Drawing.Size(140, 28);
+            this.label_group1.Size = new System.Drawing.Size(77, 28);
             this.label_group1.TabIndex = 2;
-            this.label_group1.Text = "Reel Tower #1";
+            this.label_group1.Text = "RHS #1";
             // 
             // dataGridView_group1
             // 
