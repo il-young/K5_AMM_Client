@@ -923,7 +923,7 @@ namespace Amkor_Material_Manager
             dataGridView_ready.Columns["MANUFACTURER"].Visible = false;
             dataGridView_ready.Columns["PRODUCTION_DATE"].Visible = false;
 
-            var MtlList = AMM_Main.AMM.GetPickingReadyinfo_ID(pickid);
+            var MtlList = AMM_Main.AMM.GetPickReadInfo(AMM_Main.strRequestor_id);//AMM_Main.AMM.GetPickingID_Requestor(AMM_Main.strRequestor_id);// AMM_Main.AMM.GetPickingReadyinfo_ID(pickid);
 
             List<StorageData> list = new List<StorageData>();
 
@@ -2591,7 +2591,7 @@ namespace Amkor_Material_Manager
         }
         public int Fnc_RequestMaterial_ALL(string strlinecode, string strSid, string strLotid, int nCount, string strPickingid, string strEq) //BYK ALL Data 조회에서 자재 반출대기 List로 이동. 
         {
-            var MtlList = AMM_Main.AMM.GetMTLInfo_SID_ALL(strlinecode, strSid);
+            var MtlList = AMM_Main.AMM.GetMTLInfo_SID_ALL(strlinecode, strSid, strEq);
 
             List<StorageData> list_first = new List<StorageData>();
 
