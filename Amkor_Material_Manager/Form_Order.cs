@@ -872,10 +872,35 @@ namespace Amkor_Material_Manager
                         return;
                     }
 
-                    
+                    int outcnt = 0;
+                    int resultcnt = 0;
+                    int viewcnt = dataGridView_view.RowCount;
 
-                    Fnc_RequestMaterial_ALL(AMM_Main.strDefault_linecode, strSelSid, strSelLotid, nRequestcount, PickIDs[int.Parse(dataGridView_view.Rows[nIndex].Cells["위치"].Value.ToString().Substring(3,1))-1], dataGridView_view.Rows[nIndex].Cells["위치"].Value.ToString());
-                    
+                    // 한번에 배출
+                    for(int i = 0; i < viewcnt; i++)
+                    {
+                        if (nCheckcount > outcnt)
+                        {
+                            resultcnt = (nCheckcount - outcnt) > int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString()) ? int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString()) : (nCheckcount - outcnt);
+                            Fnc_RequestMaterial_ALL(AMM_Main.strDefault_linecode, strSelSid, strSelLotid, resultcnt, PickIDs[int.Parse(dataGridView_view.Rows[0].Cells["위치"].Value.ToString().Substring(3, 1)) - 1], dataGridView_view.Rows[0].Cells["위치"].Value.ToString());
+
+                            outcnt += int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString());
+
+                            if(resultcnt == int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString()))
+                            {
+                                dataGridView_view.Rows.RemoveAt(0);
+                            }
+                            else if(resultcnt < int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString()))
+                            {
+                                dataGridView_view.Rows[0].Cells["보유수량"].Value = int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString()) - resultcnt;
+                            }
+                        }
+                    }
+
+                    // 타워 별로 배출
+                    //Fnc_RequestMaterial_ALL(AMM_Main.strDefault_linecode, strSelSid, strSelLotid, nRequestcount, PickIDs[int.Parse(dataGridView_view.Rows[nIndex].Cells["위치"].Value.ToString().Substring(3, 1)) - 1], dataGridView_view.Rows[nIndex].Cells["위치"].Value.ToString());
+
+
                 }
                 
             }
@@ -2927,6 +2952,8 @@ namespace Amkor_Material_Manager
             if (nReadyMTLcount == 0)
                 return;
 
+            
+
             int nIndex = dataGridView_ready.CurrentCell.RowIndex;
 
             string strDeleteUID;
@@ -2939,6 +2966,8 @@ namespace Amkor_Material_Manager
                 AMM_Main.strAMM_Connect = "NG";
                 return;
             }
+
+            
 
             Fnc_UpdateReadyInfo(PickIDs[int.Parse(dataGridView_ready.Rows[nIndex].Cells["위치"].Value.ToString().Substring(1,2))-1]);
         }
