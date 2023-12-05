@@ -403,6 +403,11 @@ namespace Amkor_Material_Manager
 
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            AMM.SetEqStart("AS41100", "TWR2");
+        }
+
         public void Fnc_Show_InventoryViewer()
         {
             Frm_Order.Fnc_MtlListCheck();

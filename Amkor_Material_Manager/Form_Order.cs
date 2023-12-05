@@ -1510,7 +1510,10 @@ namespace Amkor_Material_Manager
                         datacheck.UID = sortedDT.Rows[i]["UID"].ToString(); datacheck.UID = datacheck.UID.Trim();
                         datacheck.SID = sortedDT.Rows[i]["SID"].ToString(); datacheck.SID = datacheck.SID.Trim();
 
-                        string strCheck = datacheck.SID.Substring(datacheck.SID.Length - nSidLength);
+                        string strCheck = "";
+
+                        if (datacheck.SID.Length - nSidLength > 0)
+                            strCheck = datacheck.SID.Substring(datacheck.SID.Length - nSidLength);
                         bool bCheck = false;
 
                         if (sid == strCheck)
@@ -1657,7 +1660,10 @@ namespace Amkor_Material_Manager
                             datacheck.UID = sortedDT.Rows[i]["UID"].ToString(); datacheck.UID = datacheck.UID.Trim();
                             datacheck.SID = sortedDT.Rows[i]["SID"].ToString(); datacheck.SID = datacheck.SID.Trim();
 
-                            string strCheck = datacheck.SID.Substring(datacheck.SID.Length - nSidLength);
+                            string strCheck = "";
+
+                            if (datacheck.SID.Length - nSidLength > 0)
+                                strCheck = datacheck.SID.Substring(datacheck.SID.Length - nSidLength);
                             bool bCheck = false;
 
                             if (sid == strCheck)
@@ -1748,7 +1754,11 @@ namespace Amkor_Material_Manager
                             datacheck.UID = sortedDT.Rows[i]["UID"].ToString(); datacheck.UID = datacheck.UID.Trim();
                             datacheck.SID = sortedDT.Rows[i]["SID"].ToString(); datacheck.SID = datacheck.SID.Trim();
 
-                            string strCheck = datacheck.SID.Substring(datacheck.SID.Length - nSidLength);
+                            string strCheck = "";
+
+                            if (datacheck.SID.Length - nSidLength > 0)
+                                strCheck = datacheck.SID.Substring(datacheck.SID.Length - nSidLength);
+
                             bool bCheck = false;
 
                             if (sid == strCheck)

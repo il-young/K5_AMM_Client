@@ -1536,26 +1536,30 @@ namespace Amkor_Material_Manager
                     {
                         if (strMtl.Length == 4)
                         {
-                            string strCheck = data.SID.Substring(data.SID.Length - 4);
-                            if (strMtl == strCheck)
+                            if (data.SID.Length != 0)
                             {
-                                list.Add(data);
+                                string strCheck = data.SID.Substring(data.SID.Length - 4);
 
-                                int nCombocount = comboBox_sid.Items.Count;
-                                bool bjudge = false;
-                                for(int k=0; k<nCombocount; k++)
-                                {                                   
-                                    string str = comboBox_sid.Items[k].ToString();
-
-                                    if(data.SID == str)
-                                    {
-                                        bjudge = true;
-                                    }
-                                }
-
-                                if (!bjudge)
+                                if (strMtl == strCheck)
                                 {
-                                    comboBox_sid.Items.Add(data.SID);
+                                    list.Add(data);
+
+                                    int nCombocount = comboBox_sid.Items.Count;
+                                    bool bjudge = false;
+                                    for (int k = 0; k < nCombocount; k++)
+                                    {
+                                        string str = comboBox_sid.Items[k].ToString();
+
+                                        if (data.SID == str)
+                                        {
+                                            bjudge = true;
+                                        }
+                                    }
+
+                                    if (!bjudge)
+                                    {
+                                        comboBox_sid.Items.Add(data.SID);
+                                    }
                                 }
                             }
                         }
