@@ -877,15 +877,15 @@ namespace Amkor_Material_Manager
                     int viewcnt = dataGridView_view.RowCount;
 
                     // 한번에 배출
-                    for(int i = 0; i < viewcnt; i++)
+                    //for(int i = 0; i < viewcnt; i++)
                     {
-                        if (nCheckcount > outcnt)
+                        if (nRequestcount > outcnt)
                         {
                             resultcnt = (nCheckcount - outcnt) > int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString()) ? int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString()) : (nCheckcount - outcnt);
-                            Fnc_RequestMaterial_ALL(AMM_Main.strDefault_linecode, strSelSid, strSelLotid, resultcnt, PickIDs[int.Parse(dataGridView_view.Rows[0].Cells["위치"].Value.ToString().Substring(3, 1)) - 1], dataGridView_view.Rows[0].Cells["위치"].Value.ToString());
+                            Fnc_RequestMaterial_ALL(AMM_Main.strDefault_linecode, strSelSid, strSelLotid, nRequestcount, PickIDs[int.Parse(dataGridView_view.Rows[0].Cells["위치"].Value.ToString().Substring(3, 1)) - 1], dataGridView_view.Rows[0].Cells["위치"].Value.ToString());
 
-                            outcnt += int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString());
-
+                            //outcnt += int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString());
+                            outcnt++;
                             if(resultcnt == int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString()))
                             {
                                 dataGridView_view.Rows.RemoveAt(0);
@@ -894,6 +894,10 @@ namespace Amkor_Material_Manager
                             {
                                 dataGridView_view.Rows[0].Cells["보유수량"].Value = int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString()) - resultcnt;
                             }
+                        }
+                        else
+                        {
+                            //break;
                         }
                     }
 
@@ -2719,10 +2723,12 @@ namespace Amkor_Material_Manager
                 }
             }
 
-            for (int n = 0; n < nCount; n++)
+            for (int n = 0 ; n < nCount; n++)
             {
                 if( (List_Sort1.Count - n) > 0)
                 {
+                    //int a = n + dataGridView_ready.RowCount;
+
                     nReadyMTLcount++;
                     dataGridView_ready.Rows.Add(new object[] { nReadyMTLcount, List_Sort1[n].SID, List_Sort1[n].LOTID, List_Sort1[n].UID, List_Sort1[n].Quantity, List_Sort1[n].Tower_no, List_Sort1[n].Inch, List_Sort1[n].Input_type, List_Sort1[n].Manufacturer, List_Sort1[n].Production_date, PickIDs[int.Parse(List_Sort1[n].Tower_no.Substring(1, 2))-1] });
 
