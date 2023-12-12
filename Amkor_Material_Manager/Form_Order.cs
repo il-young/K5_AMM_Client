@@ -263,18 +263,57 @@ namespace Amkor_Material_Manager
                 textBox_input_sid.Text = "OK";
                 tabControl_Order.SelectedIndex = 1;
 
+                //AMM_Main.AMM.DeletePickIDInfobyEmployee(AMM_Main.strDefault_linecode, "TWR1", strSid);
+                //AMM_Main.AMM.DeletePickIDInfobyEmployee(AMM_Main.strDefault_linecode, "TWR2", strSid);
+                //AMM_Main.AMM.DeletePickIDInfobyEmployee(AMM_Main.strDefault_linecode, "TWR3", strSid);
+                //AMM_Main.AMM.DeletePickIDInfobyEmployee(AMM_Main.strDefault_linecode, "TWR4", strSid);
+                //AMM_Main.AMM.DeletePickIDInfobyEmployee(AMM_Main.strDefault_linecode, "TWR5", strSid);
+
                 textBox_sid.Focus();                             
 
                 nReadyMTLcount = 0;
 
                 //Fnc_Load_TowerUseInfo();
                 Fnc_Get_PickID(AMM_Main.nDefaultGroup.ToString());
-                                
+
+                GetPickReadyList(strSid);
+
                 string strLog = string.Format("PICK LIST 생성 시작 - 사번:{0}, PICKID:{1}", label_Requestor.Text, strPickingID);
                 Fnc_SaveLog(strLog, 1);
 
             }
         }
+
+        private void GetPickReadyList(string emp)
+        {
+            /*
+            dataGridView_ready.Columns.Add("No", "N0");
+            dataGridView_ready.Columns.Add("SID", "SID");
+            dataGridView_ready.Columns.Add("벤더#", "벤더#");
+            dataGridView_ready.Columns.Add("UID", "UID");
+            dataGridView_ready.Columns.Add("수량", "수량");
+            dataGridView_ready.Columns.Add("위치", "위치");
+            dataGridView_ready.Columns.Add("인치", "인치");
+            dataGridView_ready.Columns.Add("투입", "투입");
+
+            dataGridView_ready.Columns.Add("MANUFACTURER", "MANUFACTURER");
+            dataGridView_ready.Columns.Add("PRODUCTION_DATE", "PRODUCTION_DATE");
+            dataGridView_ready.Columns.Add("PICKID", "PICKID");
+             */
+
+            dataGridView_ready.Rows.Clear();
+
+            var PickReadyInfo = AMM_Main.AMM.MSSql.GetData($"select * from [TB_PICK_READY_INFO] with(nolock) where [REQUESTOR] = '{emp}'");
+
+            for(int i = 0; i < PickReadyInfo.Rows.Count; i++)
+            {
+                dataGridView_ready.Rows.Add(new object[] { i + 1, PickReadyInfo.Rows[i]["SID"].ToString(), PickReadyInfo.Rows[i]["MANUFACTURER"].ToString(),
+                PickReadyInfo.Rows[i]["UID"].ToString(), PickReadyInfo.Rows[i]["QTY"].ToString(), PickReadyInfo.Rows[i]["TOWER_NO"].ToString(), PickReadyInfo.Rows[i]["INCH_INFO"].ToString(),
+                PickReadyInfo.Rows[i]["INPUT_TYPE"].ToString(), PickReadyInfo.Rows[i]["MANUFACTURER"].ToString(), PickReadyInfo.Rows[i]["PRODUCTION_DATE"].ToString(),
+                PickReadyInfo.Rows[i]["PICKID"].ToString()});
+            }
+        }
+
         private void Fnc_Get_PickID(string strGroupinfo)
         {
             // GetPickIDNo - query = string.Format(@"SELECT * FROM TB_IDNUNMER_INFO WHERE LINE_CODE='{0}' and EQUIP_ID='{1}'", strLinecode, strEquipid);
@@ -877,15 +916,15 @@ namespace Amkor_Material_Manager
                     int viewcnt = dataGridView_view.RowCount;
 
                     // 한번에 배출
-                    //for(int i = 0; i < viewcnt; i++)
+                    for(int i = 0; i < viewcnt; i++)
                     {
                         if (nRequestcount > outcnt)
                         {
-                            resultcnt = (nCheckcount - outcnt) > int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString()) ? int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString()) : (nCheckcount - outcnt);
-                            Fnc_RequestMaterial_ALL(AMM_Main.strDefault_linecode, strSelSid, strSelLotid, nRequestcount, PickIDs[int.Parse(dataGridView_view.Rows[0].Cells["위치"].Value.ToString().Substring(3, 1)) - 1], dataGridView_view.Rows[0].Cells["위치"].Value.ToString());
+                            resultcnt = (nRequestcount - outcnt) > int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString()) ? int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString()) : (nRequestcount - outcnt);
+                            Fnc_RequestMaterial_ALL(AMM_Main.strDefault_linecode, strSelSid, strSelLotid, resultcnt, PickIDs[int.Parse(dataGridView_view.Rows[0].Cells["위치"].Value.ToString().Substring(3, 1)) - 1], dataGridView_view.Rows[0].Cells["위치"].Value.ToString());
 
                             //outcnt += int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString());
-                            outcnt++;
+                            outcnt = outcnt + resultcnt;
                             if(resultcnt == int.Parse(dataGridView_view.Rows[0].Cells["보유수량"].Value.ToString()))
                             {
                                 dataGridView_view.Rows.RemoveAt(0);
@@ -897,7 +936,7 @@ namespace Amkor_Material_Manager
                         }
                         else
                         {
-                            //break;
+                            break;
                         }
                     }
 
@@ -1894,7 +1933,7 @@ namespace Amkor_Material_Manager
             //string equipid = "TWR" + strGroup;
 
 
-            var MtlList = AMM_Main.AMM.GetMTLInfo(strlinecode);
+            var MtlList = AMM_Main.AMM.MSSql.GetData($"select * from TB_MTL_INFO with(nolock) where UID not in (select UID from TB_PICK_READY_INFO) and sid like '%{sid}'");//AMM_Main.AMM.GetMTLInfo(strlinecode);
 
             List<StorageData> list = new List<StorageData>();
             List<StorageData> list2 = new List<StorageData>();
@@ -2630,7 +2669,7 @@ namespace Amkor_Material_Manager
         }
         public int Fnc_RequestMaterial_ALL(string strlinecode, string strSid, string strLotid, int nCount, string strPickingid, string strEq) //BYK ALL Data 조회에서 자재 반출대기 List로 이동. 
         {
-            var MtlList = AMM_Main.AMM.GetMTLInfo_SID_ALL(strlinecode, strSid, strEq);
+            var MtlList = AMM_Main.AMM.MSSql.GetData($"select * from TB_MTL_INFO with(nolock) where UID not in (select UID from TB_PICK_READY_INFO) and sid like '%{strSid}'"); //GetMTLInfo_SID_ALL(strlinecode, strSid, strEq);
 
             List<StorageData> list_first = new List<StorageData>();
 
@@ -2693,11 +2732,13 @@ namespace Amkor_Material_Manager
 
                 if(Int32.Parse(list[n].Quantity) % 1000 != 0)
                 {
-                    List_Sort1.Add(list[n]);
+                    if(dataGridView_ready.Rows.Cast<DataGridViewRow>().Where(r=>r.Cells["UID"].Value.ToString() == list[n].UID).ToList().Count == 0 )
+                        List_Sort1.Add(list[n]);
                 }
                 else
                 {
-                    List_Sort2.Add(list[n]);
+                    if(dataGridView_ready.Rows.Cast<DataGridViewRow>().Where(r => r.Cells["UID"].Value.ToString() == list[n].UID).ToList().Count == 0)
+                        List_Sort2.Add(list[n]);
 
                 }
 
@@ -2967,8 +3008,6 @@ namespace Amkor_Material_Manager
         {
             if (nReadyMTLcount == 0)
                 return;
-
-            
 
             int nIndex = dataGridView_ready.CurrentCell.RowIndex;
 
@@ -4459,7 +4498,7 @@ namespace Amkor_Material_Manager
             DialogResult dialogResult1 = MessageBox.Show("대기 List를 삭제 하시겠습니까?", "List Delete", MessageBoxButtons.YesNo);
             if (dialogResult1 == DialogResult.Yes)
             {
-                if (nReadyMTLcount == 0)
+                if (dataGridView_ready.Rows.Count == 0)
                     return;
 
                 string strDeleteUID;
