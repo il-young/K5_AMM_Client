@@ -15,6 +15,8 @@ using System.Security.Principal;
 
 using AMM;
 using System.IO;
+using System.Net.Mail;
+using System.Globalization;
 
 namespace Amkor_Material_Manager
 {
@@ -295,7 +297,110 @@ namespace Amkor_Material_Manager
                 AppVerCnt = 0;
                 
             }
-            
+            SendLongTermReportMail();
+        }
+
+        bool longTermReport = false;
+
+        bool ExcelExportComp = false;
+
+        public void MakeLongTermReport()
+        {
+            ExcelExportComp = false;
+            Thread th = new Thread(LongTermReportThread);
+            th.Start();
+        }
+
+        private void LongTermReportThread()
+        {
+            Form_ITS its = new Form_ITS();
+
+            ExcelExportComp = its.SetLongTermReport();
+        }
+
+        
+
+        private void SendLongTermReportMail()
+        {
+            DateTime ExportStartTime = new DateTime();
+
+            try
+            {
+
+                if (Properties.Settings.Default.LongTermReelReportEN == false)
+                    return;
+
+                if (Properties.Settings.Default.LongTimeReelReportInterval1 == 0 && (Properties.Settings.Default.LongTimeReelReportInterval2 != (int)DateTime.Now.DayOfWeek))
+                    return;
+
+                if (Properties.Settings.Default.LongTimeReelReportInterval1 == 1 && (Properties.Settings.Default.LongTimeReelReportInterval2 != DateTime.Now.Day))
+                    return;
+
+                if (Properties.Settings.Default.LongTimeReelReportHour != DateTime.Now.Hour)
+                {
+                    longTermReport = false;
+                    return;
+                }
+
+                if (longTermReport == true)
+                    return;
+                longTermReport = true;
+
+                ExportStartTime = DateTime.Now;
+                MakeLongTermReport();
+
+                while (!ExcelExportComp)
+                {
+                    if ((DateTime.Now - ExportStartTime).TotalSeconds > 60)
+                    {
+                        MessageBox.Show("Excel 파일을 생성하지 못했습니다.");
+                        return;
+                    }
+                    Application.DoEvents();
+                    Thread.Sleep(10);
+                }
+
+                MailMessage message = new MailMessage();
+
+                CultureInfo ciCurr = CultureInfo.CurrentCulture;
+                int weekNum = ciCurr.Calendar.GetWeekOfYear(DateTime.Now, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Sunday);
+
+                for (int i = 0; i < Properties.Settings.Default.LongTimeReelReportMail.Split(';').Length - 1; i++)
+                {
+                    message.To.Add(Properties.Settings.Default.LongTimeReelReportMail.Split(';')[i].Split(',')[1]);
+                }
+
+                message.Subject = Properties.Settings.Default.LongTimeReelReportSubject.Replace("nn", weekNum.ToString("D2"));
+                message.From = new System.Net.Mail.MailAddress("Amkor.Skynet@amkor.co.kr");
+                message.Body = Properties.Settings.Default.LongTimeReelReporthead.Replace("nn", weekNum.ToString("D2")) + Environment.NewLine +
+                    Properties.Settings.Default.LongTimeReelReportTail.Replace("nn", weekNum.ToString("D2"));
+
+                if (Properties.Settings.Default.LongTermReelReportPath == "")
+                {
+                    Properties.Settings.Default.LongTermReelReportPath = System.Environment.CurrentDirectory + "\\LongTermReel";
+                    Properties.Settings.Default.Save();
+                }
+
+                System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Properties.Settings.Default.LongTermReelReportPath);
+
+                System.IO.FileInfo[] fi = di.GetFiles();
+
+                Array.Sort<System.IO.FileInfo>(fi, delegate (System.IO.FileInfo x, System.IO.FileInfo y) { return x.CreationTime.CompareTo(y.CreationTime); });
+
+                fi.Reverse();
+                System.Net.Mail.Attachment attachment = new Attachment(fi[fi.Count() - 1].FullName);
+
+                message.Attachments.Add(attachment);
+                System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("10.101.10.6");
+                smtp.Credentials = new System.Net.NetworkCredential("Amkor.Skynet@amkor.co.kr", "");
+                smtp.Port = 25;
+
+                smtp.Send(message);
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         private void AMM_Main_FormClosing(object sender, FormClosingEventArgs e)

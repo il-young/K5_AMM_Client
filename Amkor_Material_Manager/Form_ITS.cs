@@ -13,6 +13,8 @@ using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Security.Cryptography;
+using System.Diagnostics;
+using Microsoft.Office.Interop.Excel;
 
 namespace Amkor_Material_Manager
 {
@@ -71,7 +73,7 @@ namespace Amkor_Material_Manager
 
         public void Fnc_Init()
         {
-            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Application.StartupPath + @"\Excel");
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(System.Windows.Forms.Application.StartupPath + @"\Excel");
             
             if (!di.Exists) { di.Create(); }
             strExcelfilePath = di.ToString();
@@ -164,7 +166,7 @@ namespace Amkor_Material_Manager
                 label_sid.Visible = false;
                 textBox_sid.Text = "";
 
-                Application.DoEvents();
+                System.Windows.Forms.Application.DoEvents();
 
                 Fnc_Update_timeset();
 
@@ -197,6 +199,8 @@ namespace Amkor_Material_Manager
 
             else if (tabNo == 3)
             {
+                cb_excel.Checked = Properties.Settings.Default.LongTermReelReportExcel;
+
                 textBox_badge.Text = "";
 
                 Fnc_Process_LongtermInfo();
@@ -503,7 +507,7 @@ namespace Amkor_Material_Manager
             // IsDateGathering = true;
             Fnc_Init_datagrid_longterm();
 
-            Application.DoEvents();
+            System.Windows.Forms.Application.DoEvents();
 
             comboBox_month.SelectedIndex = 0;
             comboBox_L_group.SelectedIndex = 0;
@@ -536,11 +540,11 @@ namespace Amkor_Material_Manager
             {
                 Fnc_Init_datagrid(2); //Init
 
-                Application.DoEvents();
+                System.Windows.Forms.Application.DoEvents();
 
                 int[] nCount = new int[] { 0, 0, 0, 0, 0};//210831_Sangik.choi_타워그룹추가	//220829_ilyoung_타워그룹추가
 
-                DataTable MtlList = null;            
+                System.Data.DataTable MtlList = null;            
 
                 string strTowerNo = "", strEquip = "";
                 for (int n = 1; n < 5; n++) //220829_ilyoung_타워그룹추가
@@ -586,7 +590,7 @@ namespace Amkor_Material_Manager
                 dataGridView_sum.Rows.Add(new object[6] {"SUM", strSum[0].ToString(), strSum[1].ToString(), strSum[2].ToString(), strSum[3].ToString(), strSum[4].ToString() });//210831_Sangik.choi_타워그룹추가 //220829_ilyoung_타워그룹추가
                 dataGridView_sum.Rows[dataGridView_sum.RowCount-1].DefaultCellStyle.ForeColor = Color.White;
                 dataGridView_sum.Rows[dataGridView_sum.RowCount - 1].DefaultCellStyle.BackColor = Color.OrangeRed;
-                dataGridView_sum.Rows[dataGridView_sum.RowCount - 1].DefaultCellStyle.Font = new Font("Calibri", 16.00F, FontStyle.Bold);
+                dataGridView_sum.Rows[dataGridView_sum.RowCount - 1].DefaultCellStyle.Font = new System.Drawing.Font("Calibri", 16.00F, FontStyle.Bold);
                 dataGridView_sum.Rows[0].Selected = false;
                 dataGridView_sum.Rows[dataGridView_sum.RowCount - 1].Selected = false;
 
@@ -1117,7 +1121,7 @@ namespace Amkor_Material_Manager
 
         private int Fnc_Process_GetMaterialinfo_All(int nType) //nType 0 : SID, 1: 상세 정보
         {
-            DataTable MtlList = null;
+            System.Data.DataTable MtlList = null;
 
             List<StorageData> list = new List<StorageData>();
             divde_inch[] divde_7_13 = new divde_inch[2];
@@ -1426,7 +1430,7 @@ namespace Amkor_Material_Manager
 
         private void Fnc_Process_GetMaterialinfo_DetailAll()//상세 정보
         {
-            DataTable MtlList = null;
+            System.Data.DataTable MtlList = null;
 
             List<StorageData> list = new List<StorageData>();
 
@@ -1476,7 +1480,7 @@ namespace Amkor_Material_Manager
                     + strdate.Substring(8, 2) + ":" + strdate.Substring(10, 2) + ":" + strdate.Substring(12, 2);
 
                 dataGridView_info.Rows.Add(new object[11] { nIndex++, item.SID, item.LOTID, item.UID, strnQty, item.Input_type, item.Tower_no, item.Production_date, strdate, item.Manufacturer, item.Inch });
-                Application.DoEvents();
+                System.Windows.Forms.Application.DoEvents();
             }
         }
 
@@ -1502,7 +1506,7 @@ namespace Amkor_Material_Manager
         {
             List<StorageData> list = new List<StorageData>();
 
-            DataTable MtlList = null;
+            System.Data.DataTable MtlList = null;
 
             string strEquipid = "TWR";
             bool bSearch = false;
@@ -2102,7 +2106,7 @@ namespace Amkor_Material_Manager
 
             label_updatedate2.Text = "최근 업데이트: " + strToday + " " + strHead;
 
-            var MtlList = new DataTable();
+            var MtlList = new System.Data.DataTable();
 
             if(int.Parse(strEquip.Replace("TWR","")) == comboBox_group2.Items.Count )
             {
@@ -4004,6 +4008,8 @@ namespace Amkor_Material_Manager
             nDbUpdate = 0;
         }*/
 
+
+
         private void textBox_mtlinput_KeyPress(object sender, KeyPressEventArgs e)
         {
             int n = comboBox_searchtype.SelectedIndex;
@@ -4016,7 +4022,7 @@ namespace Amkor_Material_Manager
                 }
 
                 // only allow one decimal point
-                if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+                if ((e.KeyChar == '.') && ((sender as System.Windows.Forms.TextBox).Text.IndexOf('.') > -1))
                 {
                     e.Handled = true;
                 }
@@ -4801,7 +4807,7 @@ namespace Amkor_Material_Manager
                 return;
             }
             ///Picklist 생성
-            DataTable dt = AMM_Main.AMM.GetPickingReadyinfo_ID(strPickID);
+            System.Data.DataTable dt = AMM_Main.AMM.GetPickingReadyinfo_ID(strPickID);
 
             int nCount = dt.Rows.Count;
 
@@ -5489,6 +5495,354 @@ namespace Amkor_Material_Manager
 
         }
 
+        private void pictureBox2_DoubleClick(object sender, EventArgs e)
+        {
+            Form_LongtimeReport Report = new Form_LongtimeReport();
+            Report.ShowDialog();
+        }
+
+        private void cb_excel_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.LongTermReelReportExcel = cb_excel.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Form_LongtimeReport report = new Form_LongtimeReport();
+            report.MakeExcelReportEvent += Report_MakeExcelReportEvent;
+            report.GetDataGridRowCountEvent += Report_GetDataGridRowCountEvent;
+            
+            report.ShowDialog();
+        }
+
+       
+
+
+        private int Report_GetDataGridRowCountEvent()
+        {
+            return dataGridView_longterm.RowCount;
+        }
+
+        private void Report_MakeExcelReportEvent(int month)
+        {
+            comboBox_month.SelectedIndex = month;
+            comboBox_L_group.SelectedIndex = comboBox_L_group.Items.Count - 1;
+            isBackground = true;
+
+            button_display_Click(new object(), new EventArgs());
+            if (Properties.Settings.Default.LongTermReelReportExcel == true)
+                longTermExcelOut();
+            else
+                longTermCSVExport();
+
+            isBackground = false;
+        }
+
+        private void btn_excelExport_Click(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.LongTermReelReportExcel == true)
+                longTermExcelOut();//longTermExcelExport();
+            else
+                longTermCSVExport();
+        }
+
+        private string ExcelColumnIndexToName(int Index)
+        {
+            string range = "";
+            if (Index < 0) return range;
+            for (int i = 1; Index + i > 0; i = 0)
+            {
+                range = ((char)(65 + Index % 26)).ToString() + range;
+                Index /= 26;
+            }
+            if (range.Length > 1) range = ((char)((int)range[0] - 1)).ToString() + range.Substring(1);
+            return range;
+        }
+
+        private void longTermExcelOut()
+        {
+            Microsoft.Office.Interop.Excel.Application application = new Microsoft.Office.Interop.Excel.Application();
+            Workbook workbook = application.Workbooks.Add();// Filename: string.Format("{0}\\{1}", System.Environment.CurrentDirectory, @"\WaferReturn\WaferReturnOutTemp.xlsx"));
+            
+            Worksheet worksheet1 = workbook.Worksheets.get_Item(1);
+            object misValue = System.Reflection.Missing.Value;
+
+
+            worksheet1.Name = "장기보관 Reel 리스트";
+
+
+            if (dataGridView_longterm.Rows.Count != 0)
+            {
+                string[,] item = new string[dataGridView_longterm.Rows.Count, dataGridView_longterm.Columns.Count + 1];
+                string[] columns = new string[dataGridView_longterm.Columns.Count + 1];
+
+
+                Range rd = worksheet1.Range[worksheet1.Cells[1, 1], worksheet1.Cells[1, 11]];
+                rd.Merge();
+                rd.Value2 = "장기보관 Reel 리스트";
+                rd.Font.Bold = true;
+                rd.Font.Size = 16.0;
+                rd.HorizontalAlignment = HorizontalAlignment.Center;
+                worksheet1.get_Range("A1").HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+
+                rd = worksheet1.Range[worksheet1.Cells[2, 1], worksheet1.Cells[2, 2]];
+                rd.Merge();
+                rd.Value2 = $"Total : {dataGridView_longterm.RowCount}";
+                rd.HorizontalAlignment = HorizontalAlignment.Center;
+                worksheet1.get_Range("A2").HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+
+                rd = worksheet1.Range[worksheet1.Cells[2, 10], worksheet1.Cells[2, 11]];
+                rd.Merge();
+                rd.Value2 = $"Date : {DateTime.Now.ToShortDateString()}";
+                rd.HorizontalAlignment = HorizontalAlignment.Center;
+                worksheet1.get_Range("J2").HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+
+                
+
+                int QtyCnt = 0;
+
+
+                if (dataGridView_longterm.Rows.Count > 0)
+                {
+
+                    for (int c = 0; c < dataGridView_longterm.Columns.Count + 1; c++)
+                    {
+                        //컬럼 위치값을 가져오기
+                        columns[c] = ExcelColumnIndexToName(c);
+                    }
+
+                    for (int rowNo = 0; rowNo < dataGridView_longterm.Rows.Count; rowNo++)
+                    {
+                        for (int colNo = 0; colNo < dataGridView_longterm.Columns.Count + 1; colNo++)
+                        {
+                            if (colNo == 0)
+                            {
+                                item[rowNo, colNo] = (rowNo + 1).ToString();
+                            }
+                            else
+                            {
+                                item[rowNo, colNo] = dataGridView_longterm.Rows[rowNo].Cells[colNo - 1].Value.ToString().Trim();
+                            }
+
+                        }
+                    }
+                }
+
+                //해당위치에 컬럼명을 담기
+                //worksheet1.get_Range("A1", columns[MtlList.Columns.Count - 1] + "1").Value2 = headers;
+                //해당위치부터 데이터정보를 담기
+
+                //rd = worksheet1.Range[worksheet1.Cells[4, 13], worksheet1.Cells[4, 14]];
+                //rd.Font.Color = Color.Black;
+                //rd.Font.Size = 20.0;
+                //rd.Merge();
+                //rd.HorizontalAlignment = HorizontalAlignment.Center;
+                //rd.Value2 = QtyCnt;
+                //worksheet1.get_Range("M4").HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+
+
+                /**
+            *dataGridView_longterm.Columns.Add("SID", "SID");
+            *dataGridView_longterm.Columns.Add("Batch#", "Batch#");
+            *dataGridView_longterm.Columns.Add("UID", "UID");
+            *dataGridView_longterm.Columns.Add("Qty", "Qty");
+            *dataGridView_longterm.Columns.Add("투입형태", "투입형태");
+            *dataGridView_longterm.Columns.Add("위치", "위치");
+            *dataGridView_longterm.Columns.Add("제조일", "제조일");
+            *dataGridView_longterm.Columns.Add("투입일", "투입일");
+            *dataGridView_longterm.Columns.Add("제조사", "제조사");
+            *dataGridView_longterm.Columns.Add("인치", "인치");
+             */
+
+
+                worksheet1.get_Range("A3").Value2 = "No";
+                worksheet1.get_Range("B3").Value2 = "SID";
+                worksheet1.get_Range("C3").Value2 = "Batch";
+                worksheet1.get_Range("D3").Value2 = "UID";
+                worksheet1.get_Range("E3").Value2 = "QTY";
+                worksheet1.get_Range("F3").Value2 = "투입형태";
+                worksheet1.get_Range("G3").Value2 = "위치";
+                worksheet1.get_Range("H3").Value2 = "제조일";
+                worksheet1.get_Range("I3").Value2 = "투입일";
+                worksheet1.get_Range("J3").Value2 = "제조사";
+                worksheet1.get_Range("K3").Value2 = "인치";
+
+
+                rd = worksheet1.Range["A3", "K3"];
+                //rd.BorderAround2(XlLineStyle.xlDash);
+                //rd.Borders[XlBordersIndex.xlDiagonalUp].LineStyle = Excel.XlLineStyle.xlContinuous;
+                //rd.Borders[XlBordersIndex.xlDiagonalDown].LineStyle = Excel.XlLineStyle.xlContinuous;
+
+                rd.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+                rd.Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = XlBorderWeight.xlThick;
+                rd.Borders[Excel.XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlThick;
+
+                worksheet1.get_Range("A4", columns[dataGridView_longterm.Columns.Count - 0] + (dataGridView_longterm.Rows.Count + 3).ToString()).Value = item;
+                worksheet1.get_Range("A4", columns[dataGridView_longterm.Columns.Count - 0] + (dataGridView_longterm.Rows.Count + 3).ToString()).HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+                worksheet1.Cells.NumberFormat = @"@";
+                worksheet1.Columns.AutoFit();
+
+                worksheet1.PageSetup.PrintArea = string.Format("A1:{0}", columns[dataGridView_longterm.Columns.Count - 3] + (dataGridView_longterm.Rows.Count + 5).ToString());
+                worksheet1.PageSetup.Zoom = false;
+                worksheet1.PageSetup.FitToPagesWide = 1;        // Zoom이 False일 때만 적용 됨
+
+                string filePath = "";
+
+
+                if (Properties.Settings.Default.LongTermReelReportPath != "")
+                {
+                    filePath = $"{Properties.Settings.Default.LongTermReelReportPath}\\LongTermReel_Over{comboBox_month.SelectedIndex + 1}Mon_{DateTime.Now.ToString("yyyyMMddhhmmss")}.xlsx";
+
+                    if (Directory.Exists(Properties.Settings.Default.LongTermReelReportPath) == false)
+                        Directory.CreateDirectory(Properties.Settings.Default.LongTermReelReportPath);
+
+                    workbook.SaveAs(filePath, Excel.XlFileFormat.xlOpenXMLWorkbook, System.Reflection.Missing.Value, System.Reflection.Missing.Value, false, false, Excel.XlSaveAsAccessMode.xlNoChange, Excel.XlSaveConflictResolution.xlUserResolution, true, System.Reflection.Missing.Value, System.Reflection.Missing.Value, System.Reflection.Missing.Value);
+                }
+                else
+                {
+                    filePath = $"{System.Environment.CurrentDirectory + "\\LongTermReel"}\\LongTermReel_Over{comboBox_month.SelectedIndex + 1}Mon_{DateTime.Now.ToString("yyyyMMddhhmmss")}.xlsx";
+
+                    if (Directory.Exists(System.Environment.CurrentDirectory + "\\LongTermReel") == false)
+                        Directory.CreateDirectory(System.Environment.CurrentDirectory + "\\LongTermReel");
+
+                    Properties.Settings.Default.LongTermReelReportPath = System.Environment.CurrentDirectory + "\\LongTermReel";
+                    Properties.Settings.Default.Save();
+
+                    workbook.SaveAs(filePath, Excel.XlFileFormat.xlOpenXMLWorkbook, System.Reflection.Missing.Value, System.Reflection.Missing.Value, false, false, Excel.XlSaveAsAccessMode.xlNoChange, Excel.XlSaveConflictResolution.xlUserResolution, true, System.Reflection.Missing.Value, System.Reflection.Missing.Value, System.Reflection.Missing.Value);
+                }
+                workbook.Close();
+                application.Quit();
+
+                releaseObject(application);
+                releaseObject(worksheet1);
+                releaseObject(workbook);
+
+                if (isBackground == false)
+                {
+                    if (DialogResult.Yes == MessageBox.Show("파일을 여시겠습니까?", "file open?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                    {
+                        ProcessStartInfo info = new ProcessStartInfo("excel.exe", filePath);
+                        Process.Start(info);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("데이터가 없습니다.");
+            }
+        }
+
+        private static void releaseObject(object obj)
+        {
+            try
+            {
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
+                obj = null;
+            }
+            catch (Exception e)
+            {
+                obj = null;
+            }
+            finally
+            {
+                GC.Collect();
+            }
+        }
+
+        bool isBackground = false;
+
+        public bool SetLongTermReport()
+        {
+            try
+            {
+                isBackground = true;
+                comboBox_month.SelectedIndex = Properties.Settings.Default.LongTimeReelReportMonth - 1;
+                comboBox_L_group.SelectedIndex = comboBox_L_group.Items.Count - 1;
+
+                button_display_Click(new object(), new EventArgs());
+
+                btn_excelExport_Click(new object(), new EventArgs());
+
+                isBackground = true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private void longTermCSVExport()
+        {
+            string csv = "";
+            string filePath = "";
+
+            csv += "Long term reel list report" + Environment.NewLine;
+            csv += Environment.NewLine;
+            csv += $"Total : {dataGridView_longterm.RowCount},,,,,,,,,,Date : {DateTime.Now.ToShortDateString()}" + Environment.NewLine;
+            csv += "No,SID,Batch,UID,QTY,In_type,Location,Production_date,In_date,Manufacturer,Inch" + Environment.NewLine;
+
+            for (int i = 0; i < dataGridView_longterm.RowCount; i++)
+            {
+                csv += $"{i + 1},{dataGridView_longterm.Rows[i].Cells["SID"].Value.ToString().Trim()}," + 
+                    $"{dataGridView_longterm.Rows[i].Cells["Batch#"].Value.ToString().Trim()}," +
+                    $"{dataGridView_longterm.Rows[i].Cells["UID"].Value.ToString().Trim()}," +
+                    $"{dataGridView_longterm.Rows[i].Cells["Qty"].Value.ToString().Trim()}," +
+                    $"{dataGridView_longterm.Rows[i].Cells["투입형태"].Value.ToString().Trim()}," +
+                    $"{dataGridView_longterm.Rows[i].Cells["위치"].Value.ToString().Trim()}," +
+                    $"{dataGridView_longterm.Rows[i].Cells["제조일"].Value.ToString()},"+//DateTime.Parse(dataGridView_longterm.Rows[i].Cells["제조일"].Value.ToString()).ToString("yyyy-MM-dd HH:mm:ss")}," +
+                    $"{DateTime.Parse(dataGridView_longterm.Rows[i].Cells["투입일"].Value.ToString()).ToString("yyyy-MM-dd HH:mm:ss")}," +
+                    $"{dataGridView_longterm.Rows[i].Cells["제조사"].Value.ToString().Trim()}," +
+                    $"{dataGridView_longterm.Rows[i].Cells["인치"].Value.ToString().Trim()}" + Environment.NewLine;
+            }
+
+            if (Properties.Settings.Default.LongTermReelReportPath != "")
+            {
+                filePath = $"{Properties.Settings.Default.LongTermReelReportPath}\\LongTermReel_Over{comboBox_month.SelectedIndex + 1}Mon_{DateTime.Now.ToString("yyyyMMddhhmmss")}.csv";
+
+                if (Directory.Exists(Properties.Settings.Default.LongTermReelReportPath) == false)
+                    Directory.CreateDirectory(Properties.Settings.Default.LongTermReelReportPath);
+
+                System.IO.FileStream fileStream = new FileStream(filePath, FileMode.Create);
+
+                fileStream.Write(Encoding.UTF8.GetBytes(csv), 0, csv.Length);
+
+                fileStream.Dispose();
+            }
+            else
+            {
+                filePath = $"{System.Environment.CurrentDirectory + "\\LongTermReel"}\\LongTermReel_Over{comboBox_month.SelectedIndex + 1}Mon_{DateTime.Now.ToString("yyyyMddhhmmss")}.csv";
+
+                if (Directory.Exists(System.Environment.CurrentDirectory + "\\LongTermReel") == false)
+                    Directory.CreateDirectory(System.Environment.CurrentDirectory + "\\LongTermReel");
+
+                Properties.Settings.Default.LongTermReelReportPath = System.Environment.CurrentDirectory + "\\LongTermReel";
+                Properties.Settings.Default.Save();
+
+                System.IO.FileStream fileStream = new FileStream(filePath, FileMode.Create);
+
+                fileStream.Write(Encoding.UTF8.GetBytes(csv), 0, csv.Length);
+                fileStream.Dispose();
+            }
+
+            if (isBackground == false)
+            {
+                if (DialogResult.Yes == MessageBox.Show("파일을 여시겠습니까?", "file open?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                {
+                    if (Properties.Settings.Default.LongTermReelReportExcel == false)
+                    {
+                        ProcessStartInfo info = new ProcessStartInfo("notepad.exe", filePath);
+                        Process.Start(info);
+                    }
+                    else
+                    {
+                        ProcessStartInfo info = new ProcessStartInfo("excel.exe", filePath);
+                        Process.Start(info);
+                    }
+                }
+            }
+        }
 
 
         //]210810_Sangik.choi_장기보관관리기능추가(이종명수석님)
@@ -5500,7 +5854,7 @@ namespace Amkor_Material_Manager
 
             try
             {
-                DataTable dt;
+                System.Data.DataTable dt;
 
                 dt = MSSql.GetData(GetMaterialListSIMMQuery(TowerLocation, tid));
 

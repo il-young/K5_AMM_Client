@@ -136,6 +136,12 @@
     <Compile Include="Form_Login.Designer.cs">
       <DependentUpon>Form_Login.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form_LongtimeReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_LongtimeReport.designer.cs">
+      <DependentUpon>Form_LongtimeReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form_Monitor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -206,6 +212,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Login.resx">
       <DependentUpon>Form_Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_LongtimeReport.resx">
+      <DependentUpon>Form_LongtimeReport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Monitor.resx">
       <DependentUpon>Form_Monitor.cs</DependentUpon>
