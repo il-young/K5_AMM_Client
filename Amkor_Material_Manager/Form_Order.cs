@@ -2617,6 +2617,17 @@ namespace Amkor_Material_Manager
                             strJudge3 = "NG";
                     }
 
+                    if (!checkBox_tower3.Checked)
+                    {
+                        if (strTowerNo == "3")
+                            strJudge3 = "NG";
+                    }
+
+                    if (!checkBox_tower4.Checked)
+                    {
+                        if (strTowerNo == "4")
+                            strJudge3 = "NG";
+                    }
 
 
                     if (strJudge == "OK" && strJudge2 == "OK" && strJudge3 == "OK")
